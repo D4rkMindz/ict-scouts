@@ -1,4 +1,3 @@
-# Project language
 language: php
 
 php:
@@ -6,43 +5,30 @@ php:
   - 7.0
   - hhvm
 
-# Matrix to test in every php version
 matrix:
-  # Fast finish allows to set the build as "finished" even if the "allow_failures" matrix elements are not finished yet.
   fast_finish: true
   allow_failures:
     - php: hhvm
 
-# Allows use container-based infrastructure
-sudo: false
-
-# Start mysql service
 services:
   - mysql
 
-# Cache composer packages so "composer install" is faster
-cache:
-  directories:
-    - $HOME/.composer/cache/files
-
-# Define an environment variable
 env:
   - SYMFONY_VERSION="3.1.*" DB=mysql
 
-# Update composer
-before-install:
+before_install:
+  - openssl aes-256-cbc -K $encrypted_c37cded0adbe_key -iv $encrypted_c37cded0adbe_iv -in .travis.tar.enc -out .travis.tar -d
+  - tar xf .travis.tar
   - composer self-update
+  - echo before-install
 
-# Install composer dependencies,
-# Create database, schema and fixtures
 install:
   - composer install
   - mkdir -p build/logs/
-  - cp app/config/parameters.yml.dist app/config/parameters.yml
+  - mkdir -p web/build/
   - php bin/console doctrine:database:create --env=test
   - php bin/console doctrine:schema:create --env=test
 
-# Run script
 script:
   - phpunit
 
