@@ -70,6 +70,7 @@ class GoogleOAuthController extends Controller
      *     "/google/updateUsers",
      *     name="google.update_users"
      * )
+     * @Method("GET")
      *
      * @Security("has_role('ROLE_ADMIN')")
      */

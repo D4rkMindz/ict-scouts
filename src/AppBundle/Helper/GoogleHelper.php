@@ -47,6 +47,7 @@ class GoogleHelper extends BaseHelper
      *
      * @param string $scope
      * @param bool   $google if true the pure google client is initialized
+     *
      * @return Google_Client|\HappyR\Google\ApiBundle\Services\GoogleClient|object
      */
     public function initClient($scope, $google = false)
