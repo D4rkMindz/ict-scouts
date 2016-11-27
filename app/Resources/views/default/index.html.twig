@@ -18,12 +18,10 @@
                 Du hast Zugriff auf <b>ROLE_ADMIN</b> und kannst folgendes:<br />
                 <a href="{{ url('google.update_users') }}">Alle User von Google Abrufen</a>
                 <hr />
-            {% endif %}
-            {% if is_granted('ROLE_SCOUT') %}
+            {% elseif is_granted('ROLE_SCOUT') %}
                 Du hast Zugriff auf <b>ROLE_SCOUT</b> und kannst folgendes:<br />
                 <hr />
-            {% endif %}
-            {% if is_granted('ROLE_TALENT') %}
+            {% elseif is_granted('ROLE_TALENT') %}
                 Du hast Zugriff auf <b>ROLE_TALENT</b> und kannst folgendes:<br />
                 <hr />
             {% endif %}

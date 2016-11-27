@@ -46,13 +46,13 @@ class GoogleHelper extends BaseHelper
      * Initialize the client.
      *
      * @param string $scope
-     * @param bool $google if true the pure google client is initialized
+     * @param bool   $google if true the pure google client is initialized
      * @return Google_Client|\HappyR\Google\ApiBundle\Services\GoogleClient|object
      */
     public function initClient($scope, $google = false)
     {
         switch ($scope) {
-            case GoogleHelper::SCOPE_SERVICE:
+            case self::SCOPE_SERVICE:
                 $scope = $this->getServiceScopes();
                 break;
             default:
@@ -94,7 +94,7 @@ class GoogleHelper extends BaseHelper
             putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->container->get('kernel')->locateResource('@AppBundle/Resources/config/client_secret.json'));
         }
 
-        $client = $this->initClient(GoogleHelper::SCOPE_SERVICE, true);
+        $client = $this->initClient(self::SCOPE_SERVICE, true);
         $client->useApplicationDefaultCredentials();
         $client->setSubject($this->getAdminUser());
 
@@ -113,7 +113,7 @@ class GoogleHelper extends BaseHelper
             $myUser->setGivenName($name->getGivenName());
             $myUser->setId($user->getId());
 
-            if($user->getPrimaryEmail() == $this->getAdminUser()){
+            if ($user->getPrimaryEmail() == $this->getAdminUser()) {
                 $this->updateUserData($myUser, ['access_token' => 'abc123cba', 'expires_in' => '3600']);
             } else {
                 $this->updateUserData($myUser);
@@ -129,9 +129,9 @@ class GoogleHelper extends BaseHelper
      * Update user data.
      *
      * @param \Google_Service_Oauth2_Userinfoplus $userData
-     * @param array $accessToken =false
+     * @param array                               $accessToken =false
      */
-    public function updateUserData(\Google_Service_Oauth2_Userinfoplus $userData, $accessToken=null)
+    public function updateUserData(\Google_Service_Oauth2_Userinfoplus $userData, $accessToken = null)
     {
         $em = $this->container->get('doctrine')->getManager();
         /** @var User $user */
@@ -140,7 +140,7 @@ class GoogleHelper extends BaseHelper
         if ($user) {
             if ($accessToken) {
                 $user->setAccessToken($accessToken['access_token']);
-                $user->setAccessTokenExpireDate((new \DateTime())->add(new \DateInterval('PT' . ($accessToken['expires_in'] - 5) . 'S')));
+                $user->setAccessTokenExpireDate((new \DateTime())->add(new \DateInterval('PT'.($accessToken['expires_in'] - 5).'S')));
             }
             $user->setGivenName($userData->getGivenName());
             $user->setFamilyName($userData->getFamilyName());
@@ -154,7 +154,7 @@ class GoogleHelper extends BaseHelper
             $user->setEmail($userData->getEmail());
             if ($accessToken) {
                 $user->setAccessToken($accessToken['access_token']);
-                $user->setAccessTokenExpireDate((new \DateTime())->add(new \DateInterval('PT' . ($accessToken['expires_in'] - 5) . 'S')));
+                $user->setAccessTokenExpireDate((new \DateTime())->add(new \DateInterval('PT'.($accessToken['expires_in'] - 5).'S')));
             }
             $em->persist($user);
         }

@@ -18,7 +18,7 @@ class GoogleHelperTest extends WebTestCase
 
         /** @var \Google_Service_Oauth2_Userinfoplus $user */
         foreach ($users as $user) {
-            if($user->getEmail() == $googleHelper->getAdminUser()){
+            if ($user->getEmail() == $googleHelper->getAdminUser()) {
                 $googleHelper->updateUserData($user, ['access_token' => 'abc123cba', 'expires_in' => '3600']);
             } else {
                 $googleHelper->updateUserData($user);

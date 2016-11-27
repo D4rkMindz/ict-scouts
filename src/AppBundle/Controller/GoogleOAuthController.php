@@ -2,10 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\User;
 use AppBundle\Helper\GoogleHelper;
-use Doctrine\ORM\EntityManager;
-use HappyR\Google\ApiBundle\Services\GoogleClient;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -79,8 +76,7 @@ class GoogleOAuthController extends Controller
     public function updateUsersAction()
     {
         $googleHelper = $this->container->get('app.helper.google');
-        echo '<pre>';
-        var_dump($googleHelper->getAllUsers($this->container->getParameter('google_apps_domain')));
+        $googleHelper->getAllUsers($this->container->getParameter('google_apps_domain'));
 
         return new Response();
     }
