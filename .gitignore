@@ -1,6 +1,9 @@
 /app/config/parameters.yml
 /src/AppBundle/Resources/config/client_secret.json
+/.travis.tar
 /build/
+/web/build/
+/stats/
 /phpunit.xml
 /var/*
 !/var/cache
