@@ -92,7 +92,6 @@ class User implements UserInterface
      */
     private $deletedAt = null;
 
-
     /**
      * Get id.
      *

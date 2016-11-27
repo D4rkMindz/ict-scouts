@@ -26,15 +26,12 @@ class GoogleOAuthController extends Controller
      */
     public function loginAction()
     {
-        /** @var GoogleHelper $googleHelper */
         $googleHelper = $this->container->get('app.helper.google');
-
-        /** @var GoogleClient $client */
         $client = $googleHelper->initClient(false);
         $client->getGoogleClient()->setHostedDomain($this->container->getParameter('google_apps_domain'));
         $client->getGoogleClient()->setScopes($googleHelper->getUserScopes());
 
-	    return $this->redirect($client->createAuthUrl());
+        return $this->redirect($client->createAuthUrl());
     }
 
     /**
@@ -51,67 +48,24 @@ class GoogleOAuthController extends Controller
      */
     public function loginCallbackAction(Request $request)
     {
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-
         if ($request->query->get('code')) {
             $code = $request->query->get('code');
-
-            /** @var GoogleHelper $googleHelper */
             $googleHelper = $this->container->get('app.helper.google');
-
-            /** @var GoogleClient $client */
-            $client = $googleHelper->initClient(false);
-            $client->getGoogleClient()->setHostedDomain($this->container->getParameter('google_apps_domain'));
-            $client->getGoogleClient()->setScopes($googleHelper->getUserScopes());
+            $client = $googleHelper->initClient(GoogleHelper::SCOPE_USER, false);
             $client->authenticate($code);
-
-            $accessToken = $client->getGoogleClient()->getAccessToken();
-
-            $oauth2 = new \Google_Service_Oauth2($client->getGoogleClient());
-            /** @var \Google_Service_Oauth2_Userinfoplus $userData */
-            $userData = $oauth2->userinfo_v2_me->get();
-
+            $userData = (new \Google_Service_Oauth2($client->getGoogleClient()))->userinfo_v2_me->get();
             if ($userData->getHd() != $this->container->getParameter('google_apps_domain')) {
-                echo '<h2>Error</h2><hr />';
-                echo 'Wrong Google Account';
-                echo '<hr />';
+                return new Response('<h2>Error</h2><hr />Wrong Google Account<hr />');
             }
-
-            /** @var User $user */
-            $user = $em->getRepository('AppBundle:User')->findOneBy(['googleId' => $userData->getId()]);
-
-            /** @var \DateTime $accessTokenExpireDate */
-            $accessTokenExpireDate = (new \DateTime())->add(new \DateInterval('PT'.($accessToken['expires_in'] - 5).'S'));
-
-            if ($user) {
-                $user->setAccessToken($accessToken['access_token']);
-                $user->setAccessTokenExpireDate($accessTokenExpireDate);
-                $em->persist($user);
-            } else {
-                $user = new User();
-                $user->setGoogleId($userData->getId());
-                $user->setGivenName($userData->getGivenName());
-                $user->setFamilyName($userData->getFamilyName());
-                $user->setEmail($userData->getEmail());
-                $user->setAccessToken($accessToken['access_token']);
-                $user->setAccessTokenExpireDate($accessTokenExpireDate);
-                $em->persist($user);
-            }
-            $em->flush();
-
-            $request->getSession()->set('access_token', $accessToken['access_token']);
+            $googleHelper->updateUserData($userData, $client->getGoogleClient()->getAccessToken());
+            $request->getSession()->set('access_token', $client->getGoogleClient()->getAccessToken()['access_token']);
             $request->getSession()->save();
-
             $this->addFlash('success', 'Login Successful');
-        } else {
-            $error = $request->query->get('error');
-            echo '<b>Error:</b><br /><pre>';
-            echo $error;
-            echo '</pre>';
-        }
 
-        return $this->redirect('/');
+            return $this->redirect('/');
+        } else {
+            return new Response('<h2>Error:</h2><br /><pre>'.$request->query->get('error').'</pre>');
+        }
     }
 
     /**
@@ -124,10 +78,9 @@ class GoogleOAuthController extends Controller
      */
     public function updateUsersAction()
     {
-        /** @var GoogleHelper $googleHelper */
         $googleHelper = $this->container->get('app.helper.google');
-
-        $googleHelper->getAllUsers($this->container->getParameter('google_apps_domain'));
+        echo '<pre>';
+        var_dump($googleHelper->getAllUsers($this->container->getParameter('google_apps_domain')));
 
         return new Response();
     }

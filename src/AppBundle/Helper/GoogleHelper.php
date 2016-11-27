@@ -2,11 +2,16 @@
 
 namespace AppBundle\Helper;
 
+use AppBundle\Entity\User;
 use AppBundle\Helper\Base\BaseHelper;
 use Google_Client;
 
 class GoogleHelper extends BaseHelper
 {
+    const SCOPE_USER = 'user';
+
+    const SCOPE_SERVICE = 'service';
+
     private $userScopes = [
         \Google_Service_Oauth2::USERINFO_PROFILE,
         \Google_Service_Oauth2::USERINFO_EMAIL,
@@ -40,16 +45,27 @@ class GoogleHelper extends BaseHelper
     /**
      * Initialize the client.
      *
+     * @param string $scope
      * @param bool $google if true the pure google client is initialized
-     *
      * @return Google_Client|\HappyR\Google\ApiBundle\Services\GoogleClient|object
      */
-    public function initClient($google = false)
+    public function initClient($scope, $google = false)
     {
+        switch ($scope) {
+            case GoogleHelper::SCOPE_SERVICE:
+                $scope = $this->getServiceScopes();
+                break;
+            default:
+                $scope = $this->getUserScopes();
+                break;
+        }
+
         if ($google) {
             $return = new Google_Client();
+            $return->addScope($scope);
         } else {
             $return = $this->container->get('happyr.google.api.client');
+            $return->getGoogleClient()->addScope($scope);
         }
 
         return $return;
@@ -78,14 +94,9 @@ class GoogleHelper extends BaseHelper
             putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->container->get('kernel')->locateResource('@AppBundle/Resources/config/client_secret.json'));
         }
 
-        /** @var GoogleHelper $googleHelper */
-        $googleHelper = $this->container->get('app.helper.google');
-
-        /** @var Google_Client $client */
-        $client = $googleHelper->initClient(true);
+        $client = $this->initClient(GoogleHelper::SCOPE_SERVICE, true);
         $client->useApplicationDefaultCredentials();
-        $client->setSubject($googleHelper->getAdminUser());
-        $client->setScopes($googleHelper->getServiceScopes());
+        $client->setSubject($this->getAdminUser());
 
         $service = new \Google_Service_Directory($client);
 
@@ -94,13 +105,59 @@ class GoogleHelper extends BaseHelper
         $returnUsers = [];
         /** @var \Google_Service_Directory_User $user */
         foreach ($users as $user) {
-            /** @var \Google_Service_Directory_UserName $name */
             $name = $user->getName();
-            $returnUsers[] = [
-                'name' => $name->getFullName(),
-                'mail' => $user->getPrimaryEmail(),
-            ];
+
+            $myUser = new \Google_Service_Oauth2_Userinfoplus();
+            $myUser->setEmail($user->getPrimaryEmail());
+            $myUser->setFamilyName($name->getFamilyName());
+            $myUser->setGivenName($name->getGivenName());
+            $myUser->setId($user->getId());
+
+            if($user->getPrimaryEmail() == $this->getAdminUser()){
+                $this->updateUserData($myUser, ['access_token' => 'abc123cba', 'expires_in' => '3600']);
+            } else {
+                $this->updateUserData($myUser);
+            }
+
+            $returnUsers[] = $myUser;
         }
+
         return $returnUsers;
+    }
+
+    /**
+     * Update user data.
+     *
+     * @param \Google_Service_Oauth2_Userinfoplus $userData
+     * @param array $accessToken =false
+     */
+    public function updateUserData(\Google_Service_Oauth2_Userinfoplus $userData, $accessToken=null)
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        /** @var User $user */
+        $user = $em->getRepository('AppBundle:User')->findOneBy(['googleId' => $userData->getId()]);
+
+        if ($user) {
+            if ($accessToken) {
+                $user->setAccessToken($accessToken['access_token']);
+                $user->setAccessTokenExpireDate((new \DateTime())->add(new \DateInterval('PT' . ($accessToken['expires_in'] - 5) . 'S')));
+            }
+            $user->setGivenName($userData->getGivenName());
+            $user->setFamilyName($userData->getFamilyName());
+            $user->setEmail($userData->getEmail());
+            $em->persist($user);
+        } else {
+            $user = new User();
+            $user->setGoogleId($userData->getId());
+            $user->setGivenName($userData->getGivenName());
+            $user->setFamilyName($userData->getFamilyName());
+            $user->setEmail($userData->getEmail());
+            if ($accessToken) {
+                $user->setAccessToken($accessToken['access_token']);
+                $user->setAccessTokenExpireDate((new \DateTime())->add(new \DateInterval('PT' . ($accessToken['expires_in'] - 5) . 'S')));
+            }
+            $em->persist($user);
+        }
+        $em->flush();
     }
 }

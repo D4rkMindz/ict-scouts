@@ -14,7 +14,18 @@ class GoogleHelperTest extends WebTestCase
         /** @var GoogleHelper $googleHelper */
         $googleHelper = $client->getContainer()->get('app.helper.google');
 
-        $this->assertCount(2, $googleHelper->getAllUsers($client->getContainer()->getParameter('google_apps_domain')));
+        $users = $googleHelper->getAllUsers($client->getContainer()->getParameter('google_apps_domain'));
+
+        /** @var \Google_Service_Oauth2_Userinfoplus $user */
+        foreach ($users as $user) {
+            if($user->getEmail() == $googleHelper->getAdminUser()){
+                $googleHelper->updateUserData($user, ['access_token' => 'abc123cba', 'expires_in' => '3600']);
+            } else {
+                $googleHelper->updateUserData($user);
+            }
+        }
+
+        $this->assertCount(2, $users);
     }
 
     public function testGetUserScopes()
@@ -54,8 +65,8 @@ class GoogleHelperTest extends WebTestCase
         /** @var GoogleHelper $googleHelper */
         $googleHelper = $client->getContainer()->get('app.helper.google');
 
-        $this->assertEquals('HappyR\Google\ApiBundle\Services\GoogleClient', get_class($googleHelper->initClient(false)));
-        $this->assertEquals('Google_Client', get_class($googleHelper->initClient(true)));
+        $this->assertEquals('HappyR\Google\ApiBundle\Services\GoogleClient', get_class($googleHelper->initClient(GoogleHelper::SCOPE_USER, false)));
+        $this->assertEquals('Google_Client', get_class($googleHelper->initClient(GoogleHelper::SCOPE_SERVICE, true)));
     }
 
     public function testGetContainer()
