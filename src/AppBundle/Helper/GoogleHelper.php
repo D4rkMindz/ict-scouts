@@ -39,14 +39,14 @@ class GoogleHelper extends BaseHelper
 
     /**
      * Initialize the client.
-     * 
+     *
      * @param bool $google if true the pure google client is initialized
      *
      * @return Google_Client|\HappyR\Google\ApiBundle\Services\GoogleClient|object
      */
     public function initClient($google = false)
     {
-        if ($google){
+        if ($google) {
             $return = new Google_Client();
         } else {
             $return = $this->container->get('happyr.google.api.client');
@@ -74,7 +74,7 @@ class GoogleHelper extends BaseHelper
      */
     public function getAllUsers($domain)
     {
-        if (!getenv('GOOGLE_APPLICATION_CREDENTIALS')){
+        if (!getenv('GOOGLE_APPLICATION_CREDENTIALS')) {
             putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->container->get('kernel')->locateResource('@AppBundle/Resources/config/client_secret.json'));
         }
 
@@ -103,6 +103,4 @@ class GoogleHelper extends BaseHelper
         }
         return $returnUsers;
     }
-
 }
-

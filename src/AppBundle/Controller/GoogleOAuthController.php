@@ -34,7 +34,7 @@ class GoogleOAuthController extends Controller
         $client->getGoogleClient()->setHostedDomain($this->container->getParameter('google_apps_domain'));
         $client->getGoogleClient()->setScopes($googleHelper->getUserScopes());
 
-	return $this->redirect($client->createAuthUrl());
+	    return $this->redirect($client->createAuthUrl());
     }
 
     /**
@@ -72,7 +72,7 @@ class GoogleOAuthController extends Controller
             /** @var \Google_Service_Oauth2_Userinfoplus $userData */
             $userData = $oauth2->userinfo_v2_me->get();
 
-            if ($userData->getHd() != $this->container->getParameter('google_apps_domain')){
+            if ($userData->getHd() != $this->container->getParameter('google_apps_domain')) {
                 echo '<h2>Error</h2><hr />';
                 echo 'Wrong Google Account';
                 echo '<hr />';
@@ -84,7 +84,7 @@ class GoogleOAuthController extends Controller
             /** @var \DateTime $accessTokenExpireDate */
             $accessTokenExpireDate = (new \DateTime())->add(new \DateInterval('PT'.($accessToken['expires_in'] - 5).'S'));
 
-            if ($user){
+            if ($user) {
                 $user->setAccessToken($accessToken['access_token']);
                 $user->setAccessTokenExpireDate($accessTokenExpireDate);
                 $em->persist($user);
@@ -131,6 +131,4 @@ class GoogleOAuthController extends Controller
 
         return new Response();
     }
-
 }
-

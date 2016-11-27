@@ -21,6 +21,4 @@ abstract class BaseHelper
     {
         return $this->container;
     }
-
 }
-

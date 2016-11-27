@@ -17,10 +17,10 @@ parameters:
 
     # Google API
     google_app_name:        ICT-Scouts / Campus
-    google_client_id:       ~
-    google_client_secret:   ~
-    google_redirect_uri:    ~
-    google_developer_key:   ~
+    google_client_id:       some-client-id.apps.googleusercontent.com
+    google_client_secret:   someClientSecret
+    google_redirect_uri:    https://www.ict-scouts.ch/oauth/google/redirect
+    google_developer_key:   some-developer-key
     google_site_name:       ICT-Scouts / Campus (site)
     google_apps_domain:     ict-scouts.ch
     google_apps_admin:      admin@ict-scouts.ch

@@ -363,7 +363,7 @@ class User implements UserInterface
     {
         $return = ['ROLE_USER'];
 
-        if ($this->getRole() > 1){
+        if ($this->getRole() > 1) {
             $return[] = 'ROLE_'.strtoupper(constant('AppBundle\Role::ROLE_'.$this->getRole()));
         }
 
@@ -409,4 +409,3 @@ class User implements UserInterface
     {
     }
 }
-

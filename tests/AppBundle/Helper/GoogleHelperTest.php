@@ -17,7 +17,8 @@ class GoogleHelperTest extends WebTestCase
         $this->assertCount(2, $googleHelper->getAllUsers($client->getContainer()->getParameter('google_apps_domain')));
     }
 
-    public function testGetUserScopes(){
+    public function testGetUserScopes()
+    {
         $client = static::createClient();
 
         /** @var GoogleHelper $googleHelper */
@@ -31,7 +32,8 @@ class GoogleHelperTest extends WebTestCase
         $this->assertEquals($expectedScopes, $googleHelper->getUserScopes());
     }
 
-    public function testGetServiceScopes(){
+    public function testGetServiceScopes()
+    {
         $client = static::createClient();
 
         /** @var GoogleHelper $googleHelper */
@@ -45,7 +47,8 @@ class GoogleHelperTest extends WebTestCase
         $this->assertEquals($expectedScopes, $googleHelper->getServiceScopes());
     }
 
-    public function testInitClient(){
+    public function testInitClient()
+    {
         $client = static::createClient();
 
         /** @var GoogleHelper $googleHelper */
@@ -55,7 +58,8 @@ class GoogleHelperTest extends WebTestCase
         $this->assertEquals('Google_Client', get_class($googleHelper->initClient(true)));
     }
 
-    public function testGetContainer(){
+    public function testGetContainer()
+    {
         $client = static::createClient();
 
         /** @var GoogleHelper $googleHelper */
