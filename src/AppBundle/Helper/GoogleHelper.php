@@ -3,31 +3,61 @@
 namespace AppBundle\Helper;
 
 use AppBundle\Entity\User;
-use AppBundle\Helper\Base\BaseHelper;
+use Doctrine\ORM\EntityManager;
 use Google_Client;
+use HappyR\Google\ApiBundle\Services\GoogleClient;
 
-class GoogleHelper extends BaseHelper
+class GoogleHelper
 {
     const SCOPE_USER = 'user';
-
     const SCOPE_SERVICE = 'service';
 
+    /**
+     * @var array
+     */
     private $userScopes = [
         \Google_Service_Oauth2::USERINFO_PROFILE,
         \Google_Service_Oauth2::USERINFO_EMAIL,
     ];
 
+    /**
+     * @var array
+     */
     private $serviceScopes = [
         \Google_Service_Directory::ADMIN_DIRECTORY_USER_READONLY,
         \Google_Service_Directory::ADMIN_DIRECTORY_GROUP_READONLY,
     ];
 
     /**
+     * @var EntityManager
+     */
+    private $em;
+
+    /**
+     * @var GoogleClient
+     */
+    private $apiClient;
+
+    /**
+     * GoogleHelper constructor.
+     *
+     * @param string        $googleAdminMail
+     * @param EntityManager $entityManager
+     * @param GoogleClient  $apiClient
+     */
+    public function __construct(string $googleAdminMail, EntityManager $entityManager, GoogleClient $apiClient)
+    {
+        $this->adminMail = $googleAdminMail;
+        $this->em        = $entityManager;
+        $this->apiClient = $apiClient;
+    }
+
+    /**
      * Get the user scopes.
      *
      * @return array
      */
-    public function getUserScopes()
+    public function getUserScopes(): array
     {
         return $this->userScopes;
     }
@@ -37,7 +67,7 @@ class GoogleHelper extends BaseHelper
      *
      * @return array
      */
-    public function getServiceScopes()
+    public function getServiceScopes(): array
     {
         return $this->serviceScopes;
     }
@@ -61,12 +91,12 @@ class GoogleHelper extends BaseHelper
                 break;
         }
 
-        if ($google) {
+        if ($google) { // @TODO: Schau mal an obs das noch braucht.
             $return = new Google_Client();
             $return->addScope($scope);
         } else {
-            $return = $this->container->get('happyr.google.api.client');
-            $return->getGoogleClient()->addScope($scope);
+            $this->apiClient->getGoogleClient()->addScope($scope);
+            $return = $this->apiClient;
         }
 
         return $return;
@@ -77,9 +107,9 @@ class GoogleHelper extends BaseHelper
      *
      * @return string
      */
-    public function getAdminUser()
+    public function getAdminUser(): string
     {
-        return $this->container->getParameter('google_apps_admin');
+        return $this->adminMail;
     }
 
     /**
@@ -89,10 +119,14 @@ class GoogleHelper extends BaseHelper
      *
      * @return array
      */
-    public function getAllUsers($domain)
+    public function getAllUsers($domain): array
     {
-        if (!getenv('GOOGLE_APPLICATION_CREDENTIALS')) {
-            putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->container->get('kernel')->locateResource('@AppBundle/Resources/config/client_secret.json'));
+        if (!getenv('GOOGLE_APPLICATION_CREDENTIALS')) { // @TODO: Das müssen wir noch überschreiben.
+            putenv(
+                'GOOGLE_APPLICATION_CREDENTIALS='.$this->container->get('kernel')->locateResource(
+                    '@AppBundle/Resources/config/client_secret.json'
+                )
+            );
         }
 
         $client = $this->initClient(self::SCOPE_SERVICE, true);
@@ -132,21 +166,21 @@ class GoogleHelper extends BaseHelper
      * @param \Google_Service_Oauth2_Userinfoplus $userData
      * @param array                               $accessToken =false
      */
-    public function updateUserData(\Google_Service_Oauth2_Userinfoplus $userData, $accessToken = null)
+    public function updateUserData(\Google_Service_Oauth2_Userinfoplus $userData, $accessToken = null): void
     {
-        $em = $this->container->get('doctrine')->getManager();
         /** @var User $user */
-        $user = $em->getRepository('AppBundle:User')->findOneBy(['googleId' => $userData->getId()]);
+        $user = $this->em->getRepository('AppBundle:User')->findOneBy(['googleId' => $userData->getId()]);
 
         if ($user) {
             if ($accessToken) {
                 $user->setAccessToken($accessToken['access_token']);
-                $user->setAccessTokenExpireDate((new \DateTime())->add(new \DateInterval('PT'.($accessToken['expires_in'] - 5).'S')));
+                $user->setAccessTokenExpireDate(
+                    (new \DateTime())->add(new \DateInterval('PT'.($accessToken['expires_in'] - 5).'S'))
+                );
             }
             $user->setGivenName($userData->getGivenName());
             $user->setFamilyName($userData->getFamilyName());
             $user->setEmail($userData->getEmail());
-            $em->persist($user);
         } else {
             $user = new User();
             $user->setGoogleId($userData->getId());
@@ -155,10 +189,12 @@ class GoogleHelper extends BaseHelper
             $user->setEmail($userData->getEmail());
             if ($accessToken) {
                 $user->setAccessToken($accessToken['access_token']);
-                $user->setAccessTokenExpireDate((new \DateTime())->add(new \DateInterval('PT'.($accessToken['expires_in'] - 5).'S')));
+                $user->setAccessTokenExpireDate(
+                    (new \DateTime())->add(new \DateInterval('PT'.($accessToken['expires_in'] - 5).'S'))
+                );
             }
-            $em->persist($user);
         }
-        $em->flush();
+        $this->em->persist($user);
+        $this->em->flush();
     }
 }

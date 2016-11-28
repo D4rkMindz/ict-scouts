@@ -8,6 +8,5 @@ services:
         class: AppBundle\Security\GoogleAuthenticator
     app.helper.google:
         class: AppBundle\Helper\GoogleHelper
-        calls:
-            - [ setContainer, [ "@service_container" ] ]
+        arguments: ['%google_apps_admin%', 'doctrine.entity_manager', 'happyr.google.api.client']
 
