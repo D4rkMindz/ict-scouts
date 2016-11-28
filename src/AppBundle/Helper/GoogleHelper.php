@@ -7,6 +7,9 @@ use Doctrine\ORM\EntityManager;
 use Google_Client;
 use HappyR\Google\ApiBundle\Services\GoogleClient;
 
+/**
+ * Class GoogleHelper
+ */
 class GoogleHelper
 {
     const SCOPE_USER = 'user';
