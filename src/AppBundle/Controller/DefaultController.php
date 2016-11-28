@@ -13,11 +13,12 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends Controller
 {
     /**
-     * @Route(
-     *     "/",
-     *     name="home"
-     * )
+     * @Route("/", name="home")
      * @Method("GET")
+     *
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {

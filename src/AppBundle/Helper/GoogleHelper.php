@@ -51,7 +51,7 @@ class GoogleHelper
     public function __construct(string $googleAdminMail, EntityManager $entityManager, GoogleClient $apiClient)
     {
         $this->adminMail = $googleAdminMail;
-        $this->em        = $entityManager;
+        $this->em = $entityManager;
         $this->apiClient = $apiClient;
     }
 

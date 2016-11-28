@@ -18,6 +18,8 @@ class GoogleAuthenticator extends AbstractGuardAuthenticator
     /**
      * Called on every request. Return whatever credentials you want,
      * or null to stop authentication.
+     *
+     * @inheritdoc
      */
     public function getCredentials(Request $request)
     {
@@ -30,11 +32,17 @@ class GoogleAuthenticator extends AbstractGuardAuthenticator
         ];
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         return $userProvider->loadUserByUsername($credentials['accessToken']);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function checkCredentials($credentials, UserInterface $user)
     {
         // check credentials - e.g. make sure the password is valid
@@ -44,11 +52,17 @@ class GoogleAuthenticator extends AbstractGuardAuthenticator
         return true;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         // on success, let the request continue
     }
 
+    /**
+     * @inheritdoc
+     */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
         $data = [
@@ -60,6 +74,8 @@ class GoogleAuthenticator extends AbstractGuardAuthenticator
 
     /**
      * Called when authentication is needed, but it's not sent.
+     *
+     * @inheritdoc
      */
     public function start(Request $request, AuthenticationException $authException = null)
     {
@@ -71,6 +87,9 @@ class GoogleAuthenticator extends AbstractGuardAuthenticator
         return new JsonResponse($data, 401);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function supportsRememberMe()
     {
         return false;
