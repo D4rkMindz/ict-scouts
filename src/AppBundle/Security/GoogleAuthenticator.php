@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
 /**
- * Class GoogleAuthenticator
+ * Class GoogleAuthenticator.
  */
 class GoogleAuthenticator extends AbstractGuardAuthenticator
 {
@@ -19,7 +19,7 @@ class GoogleAuthenticator extends AbstractGuardAuthenticator
      * Called on every request. Return whatever credentials you want,
      * or null to stop authentication.
      *
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCredentials(Request $request)
     {
@@ -33,7 +33,7 @@ class GoogleAuthenticator extends AbstractGuardAuthenticator
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
@@ -41,7 +41,7 @@ class GoogleAuthenticator extends AbstractGuardAuthenticator
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
@@ -53,7 +53,7 @@ class GoogleAuthenticator extends AbstractGuardAuthenticator
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
@@ -61,7 +61,7 @@ class GoogleAuthenticator extends AbstractGuardAuthenticator
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
@@ -75,7 +75,7 @@ class GoogleAuthenticator extends AbstractGuardAuthenticator
     /**
      * Called when authentication is needed, but it's not sent.
      *
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function start(Request $request, AuthenticationException $authException = null)
     {
@@ -88,7 +88,7 @@ class GoogleAuthenticator extends AbstractGuardAuthenticator
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function supportsRememberMe()
     {

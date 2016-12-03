@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class GoogleOAuthController
+ * Class GoogleOAuthController.
  */
 class GoogleOAuthController extends Controller
 {

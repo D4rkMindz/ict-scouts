@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class DefaultController
+ * Class DefaultController.
  */
 class DefaultController extends Controller
 {

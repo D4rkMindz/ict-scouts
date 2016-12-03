@@ -8,7 +8,7 @@ use Google_Client;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
- * Class GoogleHelper
+ * Class GoogleHelper.
  */
 class GoogleHelper
 {
@@ -44,14 +44,14 @@ class GoogleHelper
     /**
      * GoogleHelper constructor.
      *
-     * @param Kernel $kernel
-     * @param string $googleAdminMail
+     * @param Kernel        $kernel
+     * @param string        $googleAdminMail
      * @param EntityManager $entityManager
      * @internal param ContainerInterface $container
      */
     public function __construct(Kernel $kernel, string $googleAdminMail, EntityManager $entityManager)
     {
-        if (!getenv('GOOGLE_APPLICATION_CREDENTIALS')) { // @TODO: Das müssen wir noch überschreiben.
+        if (!getenv('GOOGLE_APPLICATION_CREDENTIALS')) {
             putenv(
                 'GOOGLE_APPLICATION_CREDENTIALS='.realpath($kernel->locateResource(
                     '@AppBundle/Resources/config/client_secret.json'
