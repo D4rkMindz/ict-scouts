@@ -58,24 +58,35 @@ class GoogleHelperTest extends WebTestCase
         $this->assertEquals($expectedScopes, $googleHelper->getServiceScopes());
     }
 
-    public function testInitClient()
+    public function testSetScopeUser()
     {
         $client = static::createClient();
 
         /** @var GoogleHelper $googleHelper */
         $googleHelper = $client->getContainer()->get('app.helper.google');
 
-        $this->assertEquals('HappyR\Google\ApiBundle\Services\GoogleClient', get_class($googleHelper->initClient(GoogleHelper::SCOPE_USER, false)));
-        $this->assertEquals('Google_Client', get_class($googleHelper->initClient(GoogleHelper::SCOPE_SERVICE, true)));
+        $googleHelper->setScope($googleHelper::SCOPE_USER);
+        $this->assertEquals($googleHelper->getUserScopes(), $googleHelper->getClient()->getScopes());
     }
 
-    public function testGetContainer()
+    public function testSetScopeService()
     {
         $client = static::createClient();
 
         /** @var GoogleHelper $googleHelper */
         $googleHelper = $client->getContainer()->get('app.helper.google');
 
-        $this->assertEquals($client->getContainer(), $googleHelper->getContainer());
+        $googleHelper->setScope($googleHelper::SCOPE_SERVICE);
+        $this->assertEquals($googleHelper->getServiceScopes(), $googleHelper->getClient()->getScopes());
+    }
+
+    public function testGetClient()
+    {
+        $client = static::createClient();
+
+        /** @var GoogleHelper $googleHelper */
+        $googleHelper = $client->getContainer()->get('app.helper.google');
+
+        $this->assertEquals('Google_Client', get_class($googleHelper->getClient()));
     }
 }
