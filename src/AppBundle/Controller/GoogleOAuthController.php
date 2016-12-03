@@ -25,6 +25,7 @@ class GoogleOAuthController extends Controller
         $googleHelper = $this->container->get('app.helper.google');
         $client = $googleHelper->setScope($googleHelper->getUserScopes());
         $client->setHostedDomain($this->container->getParameter('google_apps_domain'));
+
         return $this->redirect($client->createAuthUrl());
     }
 

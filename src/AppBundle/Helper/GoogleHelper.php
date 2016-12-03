@@ -47,7 +47,6 @@ class GoogleHelper
      * @param Kernel        $kernel
      * @param string        $googleAdminMail
      * @param EntityManager $entityManager
-     * @internal param ContainerInterface $container
      */
     public function __construct(Kernel $kernel, string $googleAdminMail, EntityManager $entityManager)
     {
