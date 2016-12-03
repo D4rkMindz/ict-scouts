@@ -5,7 +5,7 @@ namespace AppBundle\Helper;
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Google_Client;
-use HappyR\Google\ApiBundle\Services\GoogleClient;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Class GoogleHelper
@@ -37,22 +37,32 @@ class GoogleHelper
     private $em;
 
     /**
-     * @var GoogleClient
+     * @var Google_Client
      */
-    private $apiClient;
+    private $client;
 
     /**
      * GoogleHelper constructor.
      *
-     * @param string        $googleAdminMail
+     * @param Kernel $kernel
+     * @param string $googleAdminMail
      * @param EntityManager $entityManager
-     * @param GoogleClient  $apiClient
+     * @internal param ContainerInterface $container
      */
-    public function __construct(string $googleAdminMail, EntityManager $entityManager, GoogleClient $apiClient)
+    public function __construct(Kernel $kernel, string $googleAdminMail, EntityManager $entityManager)
     {
+        if (!getenv('GOOGLE_APPLICATION_CREDENTIALS')) { // @TODO: Das müssen wir noch überschreiben.
+            putenv(
+                'GOOGLE_APPLICATION_CREDENTIALS='.realpath($kernel->locateResource(
+                    '@AppBundle/Resources/config/client_secret.json'
+                ))
+            );
+        }
+
         $this->adminMail = $googleAdminMail;
         $this->em = $entityManager;
-        $this->apiClient = $apiClient;
+        $this->client = new \Google_Client();
+        $this->client->useApplicationDefaultCredentials();
     }
 
     /**
@@ -76,33 +86,32 @@ class GoogleHelper
     }
 
     /**
+     * @return Google_Client
+     */
+    public function getClient(): Google_Client
+    {
+        return $this->client;
+    }
+
+    /**
      * Initialize the client.
      *
      * @param string $scope
-     * @param bool   $google if true the pure google client is initialized
      *
-     * @return Google_Client|\HappyR\Google\ApiBundle\Services\GoogleClient|object
+     * @return Google_Client
      */
-    public function initClient($scope, $google = false)
+    public function setScope($scope)
     {
         switch ($scope) {
             case self::SCOPE_SERVICE:
-                $scope = $this->getServiceScopes();
+                $this->client->addScope($this->getServiceScopes());
                 break;
             default:
-                $scope = $this->getUserScopes();
+                $this->client->addScope($this->getUserScopes());
                 break;
         }
 
-        if ($google) { // @TODO: Schau mal an obs das noch braucht.
-            $return = new Google_Client();
-            $return->addScope($scope);
-        } else {
-            $this->apiClient->getGoogleClient()->addScope($scope);
-            $return = $this->apiClient;
-        }
-
-        return $return;
+        return $this->client;
     }
 
     /**
@@ -124,19 +133,10 @@ class GoogleHelper
      */
     public function getAllUsers($domain): array
     {
-        if (!getenv('GOOGLE_APPLICATION_CREDENTIALS')) { // @TODO: Das müssen wir noch überschreiben.
-            putenv(
-                'GOOGLE_APPLICATION_CREDENTIALS='.$this->container->get('kernel')->locateResource(
-                    '@AppBundle/Resources/config/client_secret.json'
-                )
-            );
-        }
+        $this->setScope(self::SCOPE_SERVICE);
+        $this->client->setSubject($this->getAdminUser());
 
-        $client = $this->initClient(self::SCOPE_SERVICE, true);
-        $client->useApplicationDefaultCredentials();
-        $client->setSubject($this->getAdminUser());
-
-        $service = new \Google_Service_Directory($client);
+        $service = new \Google_Service_Directory($this->client);
 
         $users = $service->users->listUsers(['domain' => $domain])->getUsers();
 
@@ -169,7 +169,7 @@ class GoogleHelper
      * @param \Google_Service_Oauth2_Userinfoplus $userData
      * @param array                               $accessToken =false
      */
-    public function updateUserData(\Google_Service_Oauth2_Userinfoplus $userData, $accessToken = null): void
+    public function updateUserData(\Google_Service_Oauth2_Userinfoplus $userData, $accessToken = null)
     {
         /** @var User $user */
         $user = $this->em->getRepository('AppBundle:User')->findOneBy(['googleId' => $userData->getId()]);

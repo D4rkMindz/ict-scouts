@@ -8,5 +8,5 @@ services:
         class: AppBundle\Security\GoogleAuthenticator
     app.helper.google:
         class: AppBundle\Helper\GoogleHelper
-        arguments: ['%google_apps_admin%', 'doctrine.entity_manager', 'happyr.google.api.client']
+        arguments: ['@kernel', '%google_apps_admin%', '@doctrine.orm.entity_manager']
 
