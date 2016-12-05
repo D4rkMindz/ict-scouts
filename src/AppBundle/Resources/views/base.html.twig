@@ -1,0 +1,37 @@
+{% spaceless %}
+    <!DOCTYPE html>
+    <html lang="{{ app.request.locale }}">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% include 'AppBundle::meta.html.twig' %}
+        <title>{% block title %}ICT-Scouts{% endblock %}</title>
+        {% block stylesheets %}
+        {% endblock %}
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        {% block predict %}
+            {% if not is_granted('ROLE_USER') %}
+                <link rel="preconnect" href="{{ path('login') }}">
+            {% endif %}
+        {% endblock %}
+    </head>
+    <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    </nav>
+    <main>
+        {% block body %}{% endblock %}
+    </main>
+    <footer>
+        {% block modals %}
+        {% endblock %}
+    </footer>
+    {% block config %}
+        <script>var config = {'debug': {{ app.environment == 'dev' ? 'true': 'false' }}}</script>
+    {% endblock %}
+    {% block javascripts %}
+    {% endblock %}
+    </body>
+    </html>
+{% endspaceless %}
