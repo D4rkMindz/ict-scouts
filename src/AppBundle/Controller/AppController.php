@@ -15,7 +15,6 @@ class AppController extends Controller
 {
     /**
      * @Route("/", name="home")
-     * @Method("GET")
      *
      * @param Request $request
      *
@@ -24,7 +23,9 @@ class AppController extends Controller
     public function indexAction(Request $request)
     {
         // replace this example code with whatever you need
-        return $this->render('@App/App/index.html.twig', [
+        return $this->render(
+            '@App/App/index.html.twig',
+            [
                 'user' => $this->getUser(),
             ]
         );
