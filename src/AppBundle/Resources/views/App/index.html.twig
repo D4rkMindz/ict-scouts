@@ -1,7 +1,7 @@
 {% extends '@App/base.html.twig' %}
 
 {% block body %}
-    <div id="wrapper">
+    <div class="container">
         <h1>Willkommen</h1>
         {% if user is null %}
             Du bist nicht angemeldet.<br />Klicke <a href="{{ url('login') }}">Hier</a> um dich anzumelden.
