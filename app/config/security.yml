@@ -22,15 +22,15 @@ security:
         main:
             anonymous: ~
             logout:
-                path: logout
+                path: /logout
 
             guard:
                 authenticators:
                     - app.security.gogole_authenticator
 
             form_login:
-                login_path: login
-                check_path: login
+                login_path: /login
+                check_path: /login
 
             # activate different ways to authenticate
 
