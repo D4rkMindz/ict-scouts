@@ -20,22 +20,37 @@
         {% endblock %}
     </head>
     <body>
-    <nav>
-        <div class="nav-wrapper">
-            <a href="{{ path('home') }}" class="brand-logo">ICT-Scouts</a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                {% if user is null %}
-                    <a href="{{ url('login') }}">Login</a>
-                {% else %}
-                    <a href="{{ url('logout') }}">Logout</a>
-                {% endif %}
-            </ul>
+    <nav class="indigo">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="{{ path('home') }}" class="brand-logo">ICT-Scouts</a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    {% if user is null %}
+                        <a href="{{ url('login') }}">Login</a>
+                    {% else %}
+                        <a href="{{ url('logout') }}">Logout</a>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
     </nav>
     <main>
         {% block body %}{% endblock %}
     </main>
-    <footer>
+    <footer class="page-footer indigo">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">Impressum</h5>
+                    <p class="grey-text text-lighten-4">Lorem Ipsum.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2016 Copyright Förderverein ICT Scouts / Campus
+            </div>
+        </div>
         {% block modals %}
         {% endblock %}
     </footer>
