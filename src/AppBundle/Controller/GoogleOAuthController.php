@@ -23,7 +23,7 @@ class GoogleOAuthController extends Controller
     public function loginAction()
     {
         $googleHelper = $this->container->get('app.helper.google');
-        $client = $googleHelper->setScope($googleHelper->getUserScopes());
+        $client = $googleHelper->auth($googleHelper::USER);
         $client->setHostedDomain($this->container->getParameter('google_apps_domain'));
 
         return $this->redirect($client->createAuthUrl());
@@ -44,7 +44,7 @@ class GoogleOAuthController extends Controller
         if ($request->query->get('code')) {
             $code = $request->query->get('code');
             $googleHelper = $this->container->get('app.helper.google');
-            $client = $googleHelper->getClient();
+            $client = $googleHelper->auth($googleHelper::USER);
             $client->authenticate($code);
             $userData = (new \Google_Service_Oauth2($client))->userinfo_v2_me->get();
             if ($userData->getHd() != $this->container->getParameter('google_apps_domain')) {
