@@ -50,7 +50,7 @@ class GoogleHelper
     /**
      * GoogleHelper constructor.
      *
-     * @param Kernel $kernel
+     * @param Kernel        $kernel
      * @param EntityManager $entityManager
      */
     public function __construct(Kernel $kernel, EntityManager $entityManager)
@@ -74,8 +74,9 @@ class GoogleHelper
      *
      * @param string $type GoogleHelper::USER oder GoogleHelper::SERVICE
      *
-     * @return Google_Client
      * @throws \Exception
+     *
+     * @return Google_Client
      */
     public function auth(string $type) : Google_Client
     {
@@ -83,12 +84,12 @@ class GoogleHelper
             throw new \Exception('Connection type must be "'.self::USER.'" or "'.self::SERVICE.'".');
         }
 
-        switch($type){
-            case self::SERVICE :
+        switch ($type) {
+            case self::SERVICE:
                 $this->client->useApplicationDefaultCredentials();
                 $this->setScope(self::SERVICE);
                 break;
-            case self::USER :
+            case self::USER:
                 $this->client->setApplicationName($this->parameters->get('google_app_name'));
                 $this->client->setClientId($this->parameters->get('google_client_id'));
                 $this->client->setClientSecret($this->parameters->get('google_client_secret'));
