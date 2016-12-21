@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -17,6 +18,7 @@ class GoogleOAuthController extends Controller
      * Login action.
      *
      * @Route("/login", name="login")
+     * @Method("GET")
      *
      * @param Request $request
      *
@@ -35,6 +37,7 @@ class GoogleOAuthController extends Controller
      * Login callback action.
      *
      * @Route("/oauth/google/redirect", name="google.login_callback")
+     * @Method("GET")
      *
      * @param Request $request
      *
@@ -65,6 +68,7 @@ class GoogleOAuthController extends Controller
     /**
      * @Route("/google/updateUsers", name="google.update_users")
      * @Security("has_role('ROLE_ADMIN')")
+     * @Method("GET")
      *
      * @param Request $request
      *
