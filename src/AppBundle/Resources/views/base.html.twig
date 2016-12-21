@@ -1,0 +1,76 @@
+{% spaceless %}
+    <!DOCTYPE html>
+    <html lang="{{ app.request.locale }}">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% include 'AppBundle::meta.html.twig' %}
+        <title>{% block title %}ICT-Scouts{% endblock %}</title>
+        {% block stylesheets %}
+        {% endblock %}
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/materialize/dist/css/materialize.min.css') }}"
+              type="text/css" media="screen,projection"/>
+        {% block predict %}
+            {% if not is_granted('ROLE_USER') %}
+                <link rel="preconnect" href="{{ path('login') }}">
+            {% endif %}
+        {% endblock %}
+    </head>
+    <body>
+    <nav class="indigo">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+                <a href="{{ path('home') }}" class="brand-logo">ICT-Scouts</a>
+                <ul class="right hide-on-med-and-down">
+                    {% if user is null %}
+                        <a href="{{ url('login') }}">Login</a>
+                    {% else %}
+                        <a href="{{ url('logout') }}">Logout</a>
+                    {% endif %}
+                </ul>
+                <ul class="side-nav" id="nav-mobile">
+                    {% if user is null %}
+                        <a href="{{ url('login') }}">Login</a>
+                    {% else %}
+                        <a href="{{ url('logout') }}">Logout</a>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main>
+        {% block body %}{% endblock %}
+    </main>
+    <footer class="page-footer indigo">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">Impressum</h5>
+                    <p class="grey-text text-lighten-4">Lorem Ipsum.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2016 Copyright Förderverein ICT Scouts / Campus
+            </div>
+        </div>
+        {% block modals %}
+        {% endblock %}
+    </footer>
+    {% block config %}
+        <script>var config = {'debug': {{ app.environment == 'dev' ? 'true': 'false' }}}</script>
+    {% endblock %}
+    {% block javascripts %}
+        <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/vendor/materialize/dist/js/materialize.min.js') }}"></script>
+        <script src="{{ asset('bundles/app/module.js') }}"></script>
+        <script src="{{ asset('bundles/app/app.js') }}"></script>
+    {% endblock %}
+    </body>
+    </html>
+{% endspaceless %}

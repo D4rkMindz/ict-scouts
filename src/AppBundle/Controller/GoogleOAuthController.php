@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -18,9 +17,12 @@ class GoogleOAuthController extends Controller
      * Login action.
      *
      * @Route("/login", name="login")
-     * @Method("GET")
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
-    public function loginAction()
+    public function loginAction(Request $request): Response
     {
         $googleHelper = $this->container->get('app.helper.google');
         $client = $googleHelper->auth($googleHelper::USER);
@@ -33,13 +35,12 @@ class GoogleOAuthController extends Controller
      * Login callback action.
      *
      * @Route("/oauth/google/redirect", name="google.login_callback")
-     * @Method("GET")
      *
      * @param Request $request
      *
      * @return Response
      */
-    public function loginCallbackAction(Request $request)
+    public function loginCallbackAction(Request $request): Response
     {
         if ($request->query->get('code')) {
             $code = $request->query->get('code');
@@ -64,11 +65,12 @@ class GoogleOAuthController extends Controller
     /**
      * @Route("/google/updateUsers", name="google.update_users")
      * @Security("has_role('ROLE_ADMIN')")
-     * @Method("GET")
+     *
+     * @param Request $request
      *
      * @return Response
      */
-    public function updateUsersAction()
+    public function updateUsersAction(Request $request): Response
     {
         $googleHelper = $this->container->get('app.helper.google');
         $googleHelper->getAllUsers($this->container->getParameter('google_apps_domain'));
