@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Class User
+ * Class User.
  *
  * @ORM\Table(name="app_user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
@@ -24,37 +24,37 @@ class User implements UserInterface, \Serializable
     private $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="google_id", type="string", length=255, unique=true)
+     *
+     * @var string
      */
     private $googleId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="role", type="smallint", nullable=false, options={"default":1})
+     *
+     * @var int
      */
     private $role = 1;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="given_name", type="string", length=100)
+     *
+     * @var string
      */
     private $givenName;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="family_name", type="string", length=100)
+     *
+     * @var string
      */
     private $familyName;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="email", type="string", length=255)
+     *
+     * @var string
      */
     private $email;
 
@@ -65,7 +65,7 @@ class User implements UserInterface, \Serializable
      *          @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      *     },
      *     inverseJoinColumns={
-                @ORM\JoinColumn(name="group_id", referencedColumnName="id")
+    *           @ORM\JoinColumn(name="group_id", referencedColumnName="id")
      *     }
      * )
      *
@@ -391,7 +391,6 @@ class User implements UserInterface, \Serializable
      */
     public function getSalt()
     {
-        return null;
     }
 
     /**
@@ -415,7 +414,7 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * String representation of object
+     * String representation of object.
      *
      * @see \Serializable::serialize()
      */
@@ -433,7 +432,7 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Constructs the object
+     * Constructs the object.
      *
      * @see \Serializable::unserialize()
      */

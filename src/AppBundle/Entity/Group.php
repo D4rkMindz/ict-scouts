@@ -104,6 +104,8 @@ class Group implements RoleInterface, \Serializable
 
     /**
      * @see \Serializable::unserialize()
+     *
+     * @param string $serialized
      */
     public function unserialize($serialized)
     {

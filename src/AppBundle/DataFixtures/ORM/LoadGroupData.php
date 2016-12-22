@@ -26,5 +26,4 @@ class LoadGroupData extends AbstractFixture
 
         $manager->flush();
     }
-    
 }
