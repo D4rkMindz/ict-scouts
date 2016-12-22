@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ashura
- * Date: 22.12.16
- * Time: 14:02
- */
 
 namespace AppBundle\DataFixtures\ORM;
 
@@ -13,7 +7,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
- * Class LoadGroupData
+ * Class LoadGroupData.
  */
 class LoadGroupData extends AbstractFixture
 {
@@ -32,4 +26,5 @@ class LoadGroupData extends AbstractFixture
 
         $manager->flush();
     }
+    
 }

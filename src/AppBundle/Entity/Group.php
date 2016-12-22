@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ashura
- * Date: 22.12.16
- * Time: 14:04
- */
 
 namespace AppBundle\Entity;
 
@@ -13,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 
 /**
- * Class Group
+ * Class Group.
  *
  * @ORM\Table(name="app_group")
  * @ORM\Entity
@@ -25,28 +19,28 @@ class Group implements RoleInterface, \Serializable
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @var int $id
+     * @var int
      */
     protected $id;
 
     /**
      * @ORM\Column(name="name", type="string", length=50)
      *
-     * @var string $name
+     * @var string
      */
     protected $name;
 
     /**
      * @ORM\Column(name="role", type="string", length=50, unique=true)
      *
-     * @var string $roles
+     * @var string
      */
     protected $role;
 
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="groups", cascade={"all"})
      *
-     * @var ArrayCollection $users
+     * @var ArrayCollection
      */
     protected $users;
 
@@ -58,9 +52,7 @@ class Group implements RoleInterface, \Serializable
     }
 
     /**
-     * Get id
-     *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -101,12 +93,12 @@ class Group implements RoleInterface, \Serializable
     public function serialize()
     {
         return serialize(
-            array(
+            [
                 $this->id,
                 $this->name,
                 $this->role,
                 $this->users,
-            )
+            ]
         );
     }
 
