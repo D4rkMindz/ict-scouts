@@ -43,4 +43,34 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('John Doe', $user->getUsername());
         $this->assertEquals(null, $user->eraseCredentials());
     }
+
+    public function testSerialization()
+    {
+        $user = new User();
+        $user->setGoogleId(123456789);
+        $user->setRole(2);
+        $user->setGivenName('John');
+        $user->setFamilyName('Doe');
+        $user->setEmail('john.doe@example.com');
+        $user->setAccessToken('abc123cba');
+        $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
+        $user->setAccessTokenExpireDate($tokenExpireDate);
+        $createdAtDate = new \DateTime();
+        $user->setCreatedAt($createdAtDate);
+        $updatedAtDate = new \DateTime();
+        $user->setUpdatedAt($updatedAtDate);
+        $deletedAtDate = new \DateTime();
+        $user->setDeletedAt(null);
+
+        $serialized = $user->serialize();
+
+        $this->assertTrue(is_string($serialized));
+
+        $newUser = new User();
+        $newUser->unserialize($serialized);
+
+        $this->assertTrue($newUser instanceof User);
+        $this->assertEquals(null, $newUser->getId());
+        $this->assertEquals(123456789, $newUser->getGoogleId());
+    }
 }

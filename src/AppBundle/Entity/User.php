@@ -2,16 +2,17 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * User.
+ * Class User
  *
- * @ORM\Table(name="user")
+ * @ORM\Table(name="app_user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User implements UserInterface
+class User implements UserInterface, \Serializable
 {
     /**
      * @var int
@@ -56,6 +57,21 @@ class User implements UserInterface
      * @ORM\Column(name="email", type="string", length=255)
      */
     private $email;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Group", inversedBy="users", cascade={"all"})
+     * @ORM\JoinTable(
+     *     name="app_user_has_app_group", joinColumns={
+     *          @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+                @ORM\JoinColumn(name="group_id", referencedColumnName="id")
+     *     }
+     * )
+     *
+     * @var ArrayCollection
+     */
+    private $groups;
 
     /**
      * @var string
@@ -223,6 +239,22 @@ class User implements UserInterface
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getGroups(): ArrayCollection
+    {
+        return $this->groups;
+    }
+
+    /**
+     * @param ArrayCollection $groups
+     */
+    public function setGroups(ArrayCollection $groups)
+    {
+        $this->groups = $groups;
+    }
+
+    /**
      * Set accessToken.
      *
      * @param string $accessToken
@@ -343,33 +375,6 @@ class User implements UserInterface
     }
 
     /**
-     * Returns the roles granted to the user.
-     *
-     * <code>
-     * public function getRoles()
-     * {
-     *     return array('ROLE_USER');
-     * }
-     * </code>
-     *
-     * Alternatively, the roles might be stored on a ``roles`` property,
-     * and populated in any number of different ways when the user object
-     * is created.
-     *
-     * @return array string[] The user roles
-     */
-    public function getRoles()
-    {
-        $return = ['ROLE_USER'];
-
-        if ($this->getRole() > 1) {
-            $return[] = 'ROLE_'.strtoupper(constant('AppBundle\Role::ROLE_'.$this->getRole()));
-        }
-
-        return $return;
-    }
-
-    /**
      * Returns the password used to authenticate the user.
      *
      * This should be the encoded password. On authentication, a plain-text
@@ -386,6 +391,7 @@ class User implements UserInterface
      */
     public function getSalt()
     {
+        return null;
     }
 
     /**
@@ -406,5 +412,47 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
+    }
+
+    /**
+     * String representation of object
+     *
+     * @see \Serializable::serialize()
+     */
+    public function serialize()
+    {
+        return serialize(
+            [
+                'id'         => $this->id,
+                'googleId'   => $this->googleId,
+                'givenName'  => $this->givenName,
+                'familyName' => $this->familyName,
+                'email'      => $this->email,
+            ]
+        );
+    }
+
+    /**
+     * Constructs the object
+     *
+     * @see \Serializable::unserialize()
+     */
+    public function unserialize($serialized)
+    {
+        list(
+            $this->id,
+            $this->googleId,
+            $this->givenName,
+            $this->familyName,
+            $this->email
+            ) = unserialize($serialized);
+    }
+
+    /**
+     * @return array
+     */
+    public function getRoles()
+    {
+        return $this->groups->toArray();
     }
 }
