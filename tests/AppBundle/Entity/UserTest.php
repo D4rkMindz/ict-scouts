@@ -3,7 +3,6 @@
 namespace Tests\AppBundle\Entity;
 
 use AppBundle\Entity\User;
-use AppBundle\Role;
 
 class UserTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,7 +10,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $user = new User();
         $user->setGoogleId(123456789);
-        $user->setRole(2);
         $user->setGivenName('John');
         $user->setFamilyName('Doe');
         $user->setEmail('john.doe@example.com');
@@ -27,7 +25,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(null, $user->getId());
         $this->assertEquals(123456789, $user->getGoogleId());
-        $this->assertEquals(2, $user->getRole());
         $this->assertEquals('John', $user->getGivenName());
         $this->assertEquals('Doe', $user->getFamilyName());
         $this->assertEquals('john.doe@example.com', $user->getEmail());
@@ -37,7 +34,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($updatedAtDate, $user->getUpdatedAt());
         $this->assertEquals(null, $user->getDeletedAt());
 
-        $this->assertEquals(['ROLE_USER', 'ROLE_'.strtoupper(Role::ROLE_2)], $user->getRoles());
         $this->assertEquals(null, $user->getPassword());
         $this->assertEquals(null, $user->getSalt());
         $this->assertEquals('John Doe', $user->getUsername());
@@ -48,7 +44,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $user = new User();
         $user->setGoogleId(123456789);
-        $user->setRole(2);
         $user->setGivenName('John');
         $user->setFamilyName('Doe');
         $user->setEmail('john.doe@example.com');

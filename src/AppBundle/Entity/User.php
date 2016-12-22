@@ -31,13 +31,6 @@ class User implements UserInterface, \Serializable
     private $googleId;
 
     /**
-     * @ORM\Column(name="role", type="smallint", nullable=false, options={"default":1})
-     *
-     * @var int
-     */
-    private $role = 1;
-
-    /**
      * @ORM\Column(name="given_name", type="string", length=100)
      *
      * @var string
@@ -140,30 +133,6 @@ class User implements UserInterface, \Serializable
     public function getGoogleId()
     {
         return $this->googleId;
-    }
-
-    /**
-     * Set role.
-     *
-     * @param int $userRole
-     *
-     * @return User
-     */
-    public function setRole($userRole)
-    {
-        $this->role = $userRole;
-
-        return $this;
-    }
-
-    /**
-     * Get role.
-     *
-     * @return int
-     */
-    public function getRole()
-    {
-        return $this->role;
     }
 
     /**
@@ -438,13 +407,12 @@ class User implements UserInterface, \Serializable
      */
     public function unserialize($serialized)
     {
-        list(
-            $this->id,
-            $this->googleId,
-            $this->givenName,
-            $this->familyName,
-            $this->email
-            ) = unserialize($serialized);
+        $userArray = unserialize($serialized);
+        $this->id = $userArray['id'];
+        $this->googleId = $userArray['googleId'];
+        $this->givenName = $userArray['givenName'];
+        $this->familyName = $userArray['familyName'];
+        $this->email = $userArray['email'];
     }
 
     /**
