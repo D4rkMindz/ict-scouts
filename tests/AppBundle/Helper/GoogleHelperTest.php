@@ -65,7 +65,7 @@ class GoogleHelperTest extends WebTestCase
         /** @var GoogleHelper $googleHelper */
         $googleHelper = $client->getContainer()->get('app.helper.google');
 
-        $googleHelper->setScope($googleHelper::SCOPE_USER);
+        $googleHelper->setScope($googleHelper::USER);
         $this->assertEquals($googleHelper->getUserScopes(), $googleHelper->getClient()->getScopes());
     }
 
@@ -76,7 +76,7 @@ class GoogleHelperTest extends WebTestCase
         /** @var GoogleHelper $googleHelper */
         $googleHelper = $client->getContainer()->get('app.helper.google');
 
-        $googleHelper->setScope($googleHelper::SCOPE_SERVICE);
+        $googleHelper->setScope($googleHelper::SERVICE);
         $this->assertEquals($googleHelper->getServiceScopes(), $googleHelper->getClient()->getScopes());
     }
 
@@ -88,5 +88,42 @@ class GoogleHelperTest extends WebTestCase
         $googleHelper = $client->getContainer()->get('app.helper.google');
 
         $this->assertEquals('Google_Client', get_class($googleHelper->getClient()));
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testAuthException()
+    {
+        $client = static::createClient();
+
+        /** @var GoogleHelper $googleHelper */
+        $googleHelper = $client->getContainer()->get('app.helper.google');
+
+        $googleHelper->auth('foo');
+    }
+
+    public function testAuthService()
+    {
+        $client = static::createClient();
+
+        /** @var GoogleHelper $googleHelper */
+        $googleHelper = $client->getContainer()->get('app.helper.google');
+
+        $googleHelper->auth($googleHelper::SERVICE);
+
+        $this->assertEquals('', $googleHelper->getClient()->getClientId());
+    }
+
+    public function testAuthUser()
+    {
+        $client = static::createClient();
+
+        /** @var GoogleHelper $googleHelper */
+        $googleHelper = $client->getContainer()->get('app.helper.google');
+
+        $googleHelper->auth($googleHelper::USER);
+
+        $this->assertEquals($client->getContainer()->getParameter('google_client_id'), $googleHelper->getClient()->getClientId());
     }
 }
