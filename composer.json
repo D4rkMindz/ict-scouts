@@ -1,20 +1,26 @@
 {
     "name": "preimers/ict-scouts",
     "description": "ICT-Scouts Campus WebApp",
+    "version": "0.1-dev",
     "license": "proprietary",
     "type": "project",
     "authors": [
         {
             "name": "Patrick Reimers",
-            "email": "patrick@reimers.me",
+            "email": "patrick.reimers@ict-scouts.ch",
             "role": "Developer"
         },
         {
             "name":  "Dominik Müller",
-            "email": "ashura@aimei.ch",
+            "email": "dominik.mueller@ict-scouts.ch",
             "role":  "Developer"
         }
     ],
+    "homepage": "http://www.ict-scouts.ch",
+    "support": {
+        "issues": "https://github.com/PReimers/ict-scouts/issues",
+        "source": "https://github.com/PReimers/ict-scouts"
+    },
     "autoload": {
         "psr-4": {
             "AppBundle\\": "src/AppBundle"
