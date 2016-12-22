@@ -5,6 +5,7 @@ namespace AppBundle\Helper;
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Google_Client;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
@@ -12,8 +13,8 @@ use Symfony\Component\HttpKernel\Kernel;
  */
 class GoogleHelper
 {
-    const SCOPE_USER = 'user';
-    const SCOPE_SERVICE = 'service';
+    const USER = 'user';
+    const SERVICE = 'service';
 
     /**
      * @var array
@@ -42,13 +43,17 @@ class GoogleHelper
     private $client;
 
     /**
+     * @var ParameterBagInterface
+     */
+    private $parameters;
+
+    /**
      * GoogleHelper constructor.
      *
      * @param Kernel        $kernel
-     * @param string        $googleAdminMail
      * @param EntityManager $entityManager
      */
-    public function __construct(Kernel $kernel, string $googleAdminMail, EntityManager $entityManager)
+    public function __construct(Kernel $kernel, EntityManager $entityManager)
     {
         if (!getenv('GOOGLE_APPLICATION_CREDENTIALS')) {
             putenv(
@@ -58,10 +63,43 @@ class GoogleHelper
             );
         }
 
-        $this->adminMail = $googleAdminMail;
+        $this->parameters = $kernel->getContainer()->getParameterBag();
+        $this->adminMail = $this->parameters->get('google_apps_admin');
         $this->em = $entityManager;
-        $this->client = new \Google_Client();
-        $this->client->useApplicationDefaultCredentials();
+        $this->client = new Google_Client();
+    }
+
+    /**
+     * Set Authentication parameters for any API request.
+     *
+     * @param string $type GoogleHelper::USER oder GoogleHelper::SERVICE
+     *
+     * @throws \Exception
+     *
+     * @return Google_Client
+     */
+    public function auth(string $type) : Google_Client
+    {
+        if (self::USER != $type && self::SERVICE != $type) {
+            throw new \Exception('Connection type must be "'.self::USER.'" or "'.self::SERVICE.'".');
+        }
+
+        switch ($type) {
+            case self::SERVICE:
+                $this->client->useApplicationDefaultCredentials();
+                $this->setScope(self::SERVICE);
+                break;
+            case self::USER:
+                $this->client->setApplicationName($this->parameters->get('google_app_name'));
+                $this->client->setClientId($this->parameters->get('google_client_id'));
+                $this->client->setClientSecret($this->parameters->get('google_client_secret'));
+                $this->client->setRedirectUri($this->parameters->get('google_redirect_uri'));
+                $this->client->setDeveloperKey($this->parameters->get('google_developer_key'));
+                $this->setScope(self::USER);
+                break;
+        }
+
+        return $this->client;
     }
 
     /**
@@ -99,10 +137,10 @@ class GoogleHelper
      *
      * @return Google_Client
      */
-    public function setScope($scope)
+    public function setScope($scope) : Google_Client
     {
         switch ($scope) {
-            case self::SCOPE_SERVICE:
+            case self::SERVICE:
                 $this->client->addScope($this->getServiceScopes());
                 break;
             default:
@@ -132,7 +170,7 @@ class GoogleHelper
      */
     public function getAllUsers($domain): array
     {
-        $this->setScope(self::SCOPE_SERVICE);
+        $this->auth(self::SERVICE);
         $this->client->setSubject($this->getAdminUser());
 
         $service = new \Google_Service_Directory($this->client);
