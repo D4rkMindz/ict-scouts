@@ -65,7 +65,7 @@ class User implements UserInterface, \Serializable
      *          @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      *     },
      *     inverseJoinColumns={
-    *           @ORM\JoinColumn(name="group_id", referencedColumnName="id")
+     *          @ORM\JoinColumn(name="group_id", referencedColumnName="id")
      *     }
      * )
      *
