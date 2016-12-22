@@ -1,0 +1,28 @@
+{% spaceless %}
+    <div class="container">
+        <div class="nav-wrapper">
+            <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+            <a href="{{ path('home') }}" class="brand-logo">ICT-Scouts</a>
+            <ul class="right hide-on-med-and-down">
+                {% if not is_granted('ROLE_USER') %}
+                    <li><a href="{{ url('login') }}">Login</a></li>
+                {% else %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li {% if app.request.get('_route') == 'admin_home' %}class="active"{% endif %}><a href="{{ path('admin_home') }}">Admin</a></li>
+                    {% endif %}
+                    <li><a href="{{ url('logout') }}">Logout</a></li>
+                {% endif %}
+            </ul>
+            <ul class="side-nav" id="nav-mobile">
+                {% if not is_granted('ROLE_USER') %}
+                    <li><a href="{{ url('login') }}">Login</a></li>
+                {% else %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li {% if app.request.get('_route') == 'admin_home' %}class="active"{% endif %}><a href="{{ path('admin_home') }}">Admin</a></li>
+                    {% endif %}
+                    <li><a href="{{ url('logout') }}">Logout</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+{% endspaceless %}
