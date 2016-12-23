@@ -62,4 +62,12 @@ class KernelTest extends WebTestCase
     {
         return $this->container;
     }
+
+    /**
+     * Dummy test.
+     */
+    public function testDummy()
+    {
+        $this->assertTrue(true);
+    }
 }

@@ -22,6 +22,6 @@ doctrine:
         port:     ""
         path:     "%kernel.root_dir%/../var/cache/test/mock.db"
         dbname:   "%database_name%"
-        user:     ""
-        password: ""
+        user:     ~
+        password: ~
         charset:  "UTF8"

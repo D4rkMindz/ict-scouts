@@ -3,12 +3,12 @@
 namespace Tests\AppBundle\Entity;
 
 use AppBundle\Entity\User;
-use AppBundle\KernelTest;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * Class UserTest.
  */
-class UserTest extends KernelTest
+class UserTest extends WebTestCase
 {
     public function testGetterAndSetter()
     {
