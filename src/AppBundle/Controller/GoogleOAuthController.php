@@ -64,21 +64,4 @@ class GoogleOAuthController extends Controller
             return new Response('<h2>Error:</h2><br /><pre>'.$request->query->get('error').'</pre>');
         }
     }
-
-    /**
-     * @Route("/google/updateUsers", name="google.update_users")
-     * @Security("has_role('ROLE_ADMIN')")
-     * @Method("GET")
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function updateUsersAction(Request $request): Response
-    {
-        $googleHelper = $this->container->get('app.helper.google');
-        $googleHelper->getAllUsers($this->container->getParameter('google_apps_domain'));
-
-        return new Response();
-    }
 }
