@@ -208,19 +208,31 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return ArrayCollection
+     * @return array|ArrayCollection
      */
-    public function getGroups(): ArrayCollection
+    public function getGroups()
     {
         return $this->groups;
     }
 
     /**
-     * @param ArrayCollection $groups
+     * @param array|ArrayCollection $groups
      */
-    public function setGroups(ArrayCollection $groups)
+    public function setGroups(array $groups)
     {
         $this->groups = $groups;
+    }
+
+    /**
+     * @param Group $group
+     *
+     * @return $this
+     */
+    public function addGroup(Group $group)
+    {
+        $this->groups[] = $group;
+
+        return $this;
     }
 
     /**

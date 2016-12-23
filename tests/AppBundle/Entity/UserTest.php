@@ -3,15 +3,21 @@
 namespace Tests\AppBundle\Entity;
 
 use AppBundle\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Tests\AppBundle\KernelTest;
 
 /**
  * Class UserTest.
  */
-class UserTest extends WebTestCase
+class UserTest extends KernelTest
 {
     public function testGetterAndSetter()
     {
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $group = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_ADMIN']);
+        $group1 = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_SCOUT']);
+
+        $authorizationChecker = $this->getContainer()->get('security.authorization_checker');
+
         $user = new User();
         $user->setGoogleId(123456789);
         $user->setGivenName('John');
@@ -26,8 +32,10 @@ class UserTest extends WebTestCase
         $user->setUpdatedAt($updatedAtDate);
         $deletedAtDate = new \DateTime();
         $user->setDeletedAt(null);
+        $user->setGroups([$group]);
+        $user->addGroup($group1);
 
-        $this->assertEquals(null, $user->getId());
+        $this->assertNull($user->getId());
         $this->assertEquals(123456789, $user->getGoogleId());
         $this->assertEquals('John', $user->getGivenName());
         $this->assertEquals('Doe', $user->getFamilyName());
@@ -36,8 +44,16 @@ class UserTest extends WebTestCase
         $this->assertEquals($tokenExpireDate, $user->getAccessTokenExpireDate());
         $this->assertEquals($createdAtDate, $user->getCreatedAt());
         $this->assertEquals($updatedAtDate, $user->getUpdatedAt());
-        $this->assertEquals(null, $user->getDeletedAt());
+        $this->assertNull($user->getDeletedAt());
+        $this->assertTrue(is_array($user->getGroups()));
+        $this->assertEquals(count($user->getGroups()), 2);
 
+        $em->persist($user);
+        $em->flush();
+
+        $this->assertTrue(is_array($user->getRoles()));
+        $this->assertEquals(count($user->getRoles()), 2);
+        $this->assertEquals(1, $user->getId());
         $this->assertEquals(null, $user->getPassword());
         $this->assertEquals(null, $user->getSalt());
         $this->assertEquals('John Doe', $user->getUsername());
