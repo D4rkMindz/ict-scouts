@@ -14,3 +14,14 @@ web_profiler:
 
 swiftmailer:
     disable_delivery: true
+
+doctrine:
+    dbal:
+        driver:   "pdo_sqlite"
+        host:     ""
+        port:     ""
+        path:     "%kernel.root_dir%/../var/cache/test/mock.db"
+        dbname:   "%database_name%"
+        user:     ""
+        password: ""
+        charset:  "UTF8"

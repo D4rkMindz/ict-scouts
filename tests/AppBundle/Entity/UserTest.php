@@ -3,8 +3,12 @@
 namespace Tests\AppBundle\Entity;
 
 use AppBundle\Entity\User;
+use AppBundle\KernelTest;
 
-class UserTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class UserTest.
+ */
+class UserTest extends KernelTest
 {
     public function testGetterAndSetter()
     {
