@@ -4,7 +4,6 @@ namespace AppBundle\DataFixtures\ORM;
 
 use Tests\AppBundle\KernelTest;
 
-
 /**
  * Class LoadGroupDataTest.
  */

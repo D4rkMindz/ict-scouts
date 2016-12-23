@@ -1,18 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ashura
- * Date: 23.12.16
- * Time: 07:21
- */
 
 namespace Tests\AppBundle;
 
-
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  * Class KernelTest.
@@ -38,9 +31,9 @@ class KernelTest extends WebTestCase
         $this->application = new \Symfony\Bundle\FrameworkBundle\Console\Application(self::$kernel);
         $this->application->setAutoExit(false);
 
-        $this->runConsole("doctrine:schema:drop", ["--force" => true]);
-        $this->runConsole("doctrine:schema:create");
-        $this->runConsole("doctrine:fixtures:load");
+        $this->runConsole('doctrine:schema:drop', ['--force' => true]);
+        $this->runConsole('doctrine:schema:create');
+        $this->runConsole('doctrine:fixtures:load');
 
         $this->container = self::$kernel->getContainer();
     }
@@ -53,10 +46,10 @@ class KernelTest extends WebTestCase
      *
      * @return mixed
      */
-    protected function runConsole($command, Array $options = [])
+    protected function runConsole($command, array $options = [])
     {
-        $options["-e"] = "test";
-        $options["-q"] = null;
+        $options['-e'] = 'test';
+        $options['-q'] = null;
         $options       = array_merge($options, ['command' => $command]);
 
         return $this->application->run(new ArrayInput($options));
