@@ -1,41 +1,55 @@
 <?php
 
-namespace Tests\AppBundle\Controller\Admin;
+namespace Tests\AppBundle\Security;
 
 use AppBundle\Entity\User;
+use AppBundle\Security\GoogleAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Tests\AppBundle\KernelTest;
 
-class AdminControllerTest extends KernelTest
+class GoogleAuthenticatorTest extends KernelTest
 {
     /** @var Client */
     private $client = null;
+
+    /** @var GoogleAuthenticator */
+    private $authenticator = null;
 
     public function setUp()
     {
         parent::setup();
         $this->client = static::createClient();
+
+        $this->authenticator = new GoogleAuthenticator();
     }
 
-    public function testIndex()
+    public function testOnAuthenticationFailure()
     {
-        $this->logIn();
+        $this->failingLogIn();
 
         $crawler = $this->client->request('GET', '/admin/');
 
-        $this->assertTrue($this->client->getResponse()->isSuccessful());
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Admin")')->count());
+        $this->assertFalse($this->authenticator->supportsRememberMe());
     }
 
-    public function testUserSync()
+    public function testStart()
+    {
+        $this->authenticator->start(new Request());
+
+        $this->assertFalse($this->authenticator->supportsRememberMe());
+    }
+
+    public function testSupportsRememberMe()
     {
         $this->logIn();
 
-        $crawler = $this->client->request('GET', '/admin/user/sync');
+        $crawler = $this->client->request('GET', '/');
 
-        $this->assertTrue($this->client->getResponse()->isRedirect('/admin/'));
+        $this->assertFalse($this->authenticator->supportsRememberMe());
     }
 
     private function logIn()
@@ -63,6 +77,18 @@ class AdminControllerTest extends KernelTest
 
         $token = new UsernamePasswordToken($user->getUsername(), ['accessToken' => 'abc123cba'], $firewall, array('ROLE_ADMIN'));
         $session->set('_security_'.$firewall, serialize($token));
+        $session->set('access_token', 'abc123cba');
+        $session->save();
+
+        $cookie = new Cookie($session->getName(), $session->getId());
+        $this->client->getCookieJar()->set($cookie);
+    }
+
+    private function failingLogIn()
+    {
+        $session = $this->getContainer()->get('session');
+
+        $session->set('access_token', 'cba123abc');
         $session->save();
 
         $cookie = new Cookie($session->getName(), $session->getId());
