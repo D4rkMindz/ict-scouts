@@ -432,6 +432,14 @@ class User implements UserInterface, \Serializable
      */
     public function getRoles()
     {
-        return $this->groups->toArray();
+        $roles = [
+            'ROLE_USER',
+        ];
+        /** @var Group $group */
+        foreach ($this->groups as $group) {
+            $roles[] = $group->getRole();
+        }
+
+        return array_unique($roles);
     }
 }
