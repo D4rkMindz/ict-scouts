@@ -50,7 +50,7 @@ class KernelTest extends WebTestCase
     {
         $options['-e'] = 'test';
         $options['-q'] = null;
-        $options       = array_merge($options, ['command' => $command]);
+        $options = array_merge($options, ['command' => $command]);
 
         return $this->application->run(new ArrayInput($options));
     }
