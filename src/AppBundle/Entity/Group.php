@@ -62,27 +62,47 @@ class Group implements RoleInterface, \Serializable
     /**
      * @return string
      */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
     public function getRole(): string
     {
         return $this->role;
     }
 
     /**
-     * @return ArrayCollection
+     * @return array|ArrayCollection
      */
-    public function getUsers(): ArrayCollection
+    public function getUsers()
     {
         return $this->users;
     }
 
     /**
-     * @param ArrayCollection $users
+     * @param array|ArrayCollection $users
      *
      * @return $this
      */
-    public function setUsers(ArrayCollection $users)
+    public function setUsers(array $users)
     {
         $this->users = $users;
+
+        return $this;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return $this
+     */
+    public function addUser(User $user)
+    {
+        $this->users[] = $user;
 
         return $this;
     }
