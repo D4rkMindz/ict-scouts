@@ -32,6 +32,9 @@ class GroupTest extends KernelTest
         $em->persist($group);
         $em->flush();
 
+        $group = $em->getRepository('AppBundle:Group')->findOneBy(['name' => 'test']);
+
+        $this->assertEquals(1, count($group->getUsers()));
         $this->assertNotNull($group->getId());
     }
 
