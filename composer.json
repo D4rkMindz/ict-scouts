@@ -1,20 +1,26 @@
 {
     "name": "preimers/ict-scouts",
     "description": "ICT-Scouts Campus WebApp",
+    "version": "0.1-dev",
     "license": "proprietary",
     "type": "project",
     "authors": [
         {
             "name": "Patrick Reimers",
-            "email": "patrick@reimers.me",
+            "email": "patrick.reimers@ict-scouts.ch",
             "role": "Developer"
         },
         {
             "name":  "Dominik Müller",
-            "email": "ashura@aimei.ch",
+            "email": "dominik.mueller@ict-scouts.ch",
             "role":  "Developer"
         }
     ],
+    "homepage": "http://www.ict-scouts.ch",
+    "support": {
+        "issues": "https://github.com/PReimers/ict-scouts/issues",
+        "source": "https://github.com/PReimers/ict-scouts"
+    },
     "autoload": {
         "psr-4": {
             "AppBundle\\": "src/AppBundle"
@@ -41,10 +47,10 @@
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "^2.0",
-        "google/apiclient": "2.*"
+        "google/apiclient": "2.*",
+        "doctrine/doctrine-fixtures-bundle": "^2.3"
     },
     "require-dev": {
-        "doctrine/doctrine-fixtures-bundle": "^2.3",
         "phpunit/phpunit": "5.7.*",
         "satooshi/php-coveralls": "^1.0",
         "sensio/generator-bundle": "^3.0",
