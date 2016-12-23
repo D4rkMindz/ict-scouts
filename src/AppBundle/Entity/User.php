@@ -2,16 +2,17 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * User.
+ * Class User.
  *
- * @ORM\Table(name="user")
+ * @ORM\Table(name="app_user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User implements UserInterface
+class User implements UserInterface, \Serializable
 {
     /**
      * @var int
@@ -23,39 +24,47 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="google_id", type="string", length=255, unique=true)
+     *
+     * @var string
      */
     private $googleId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="role", type="smallint", nullable=false, options={"default":1})
-     */
-    private $role = 1;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="given_name", type="string", length=100)
+     *
+     * @var string
      */
     private $givenName;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="family_name", type="string", length=100)
+     *
+     * @var string
      */
     private $familyName;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="email", type="string", length=255)
+     *
+     * @var string
      */
     private $email;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Group", inversedBy="users", cascade={"all"})
+     * @ORM\JoinTable(
+     *     name="app_user_has_app_group", joinColumns={
+     *          @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *          @ORM\JoinColumn(name="group_id", referencedColumnName="id")
+     *     }
+     * )
+     *
+     * @var ArrayCollection
+     */
+    private $groups;
 
     /**
      * @var string
@@ -124,30 +133,6 @@ class User implements UserInterface
     public function getGoogleId()
     {
         return $this->googleId;
-    }
-
-    /**
-     * Set role.
-     *
-     * @param int $userRole
-     *
-     * @return User
-     */
-    public function setRole($userRole)
-    {
-        $this->role = $userRole;
-
-        return $this;
-    }
-
-    /**
-     * Get role.
-     *
-     * @return int
-     */
-    public function getRole()
-    {
-        return $this->role;
     }
 
     /**
@@ -220,6 +205,34 @@ class User implements UserInterface
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * @return array|ArrayCollection
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    /**
+     * @param array|ArrayCollection $groups
+     */
+    public function setGroups(array $groups)
+    {
+        $this->groups = $groups;
+    }
+
+    /**
+     * @param Group $group
+     *
+     * @return $this
+     */
+    public function addGroup(Group $group)
+    {
+        $this->groups[] = $group;
+
+        return $this;
     }
 
     /**
@@ -343,33 +356,6 @@ class User implements UserInterface
     }
 
     /**
-     * Returns the roles granted to the user.
-     *
-     * <code>
-     * public function getRoles()
-     * {
-     *     return array('ROLE_USER');
-     * }
-     * </code>
-     *
-     * Alternatively, the roles might be stored on a ``roles`` property,
-     * and populated in any number of different ways when the user object
-     * is created.
-     *
-     * @return array string[] The user roles
-     */
-    public function getRoles()
-    {
-        $return = ['ROLE_USER'];
-
-        if ($this->getRole() > 1) {
-            $return[] = 'ROLE_'.strtoupper(constant('AppBundle\Role::ROLE_'.$this->getRole()));
-        }
-
-        return $return;
-    }
-
-    /**
      * Returns the password used to authenticate the user.
      *
      * This should be the encoded password. On authentication, a plain-text
@@ -406,5 +392,46 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
+    }
+
+    /**
+     * String representation of object.
+     *
+     * @see \Serializable::serialize()
+     */
+    public function serialize()
+    {
+        return serialize(
+            [
+                'id'         => $this->id,
+                'googleId'   => $this->googleId,
+                'givenName'  => $this->givenName,
+                'familyName' => $this->familyName,
+                'email'      => $this->email,
+            ]
+        );
+    }
+
+    /**
+     * Constructs the object.
+     *
+     * @see \Serializable::unserialize()
+     */
+    public function unserialize($serialized)
+    {
+        $userArray = unserialize($serialized);
+        $this->id = $userArray['id'];
+        $this->googleId = $userArray['googleId'];
+        $this->givenName = $userArray['givenName'];
+        $this->familyName = $userArray['familyName'];
+        $this->email = $userArray['email'];
+    }
+
+    /**
+     * @return array
+     */
+    public function getRoles()
+    {
+        return $this->groups->toArray();
     }
 }
