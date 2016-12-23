@@ -6,7 +6,6 @@ use AppBundle\Entity\User;
 use AppBundle\Security\GoogleAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Tests\AppBundle\KernelTest;
@@ -75,7 +74,7 @@ class GoogleAuthenticatorTest extends KernelTest
         $em->persist($user);
         $em->flush();
 
-        $token = new UsernamePasswordToken($user->getUsername(), ['accessToken' => 'abc123cba'], $firewall, array('ROLE_ADMIN'));
+        $token = new UsernamePasswordToken($user->getUsername(), ['accessToken' => 'abc123cba'], $firewall, ['ROLE_ADMIN']);
         $session->set('_security_'.$firewall, serialize($token));
         $session->set('access_token', 'abc123cba');
         $session->save();

@@ -61,8 +61,9 @@ class AdminControllerTest extends KernelTest
         $em->persist($user);
         $em->flush();
 
-        $token = new UsernamePasswordToken($user->getUsername(), ['accessToken' => 'abc123cba'], $firewall, array('ROLE_ADMIN'));
+        $token = new UsernamePasswordToken($user->getUsername(), ['accessToken' => 'abc123cba'], $firewall, ['ROLE_ADMIN']);
         $session->set('_security_'.$firewall, serialize($token));
+        $session->set('access_token', 'abc123cba');
         $session->save();
 
         $cookie = new Cookie($session->getName(), $session->getId());
