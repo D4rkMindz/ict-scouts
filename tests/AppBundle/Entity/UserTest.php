@@ -52,7 +52,7 @@ class UserTest extends KernelTest
         $em->flush();
 
         $this->assertTrue(is_array($user->getRoles()));
-        $this->assertEquals(count($user->getRoles()), 3);
+        $this->assertEquals(count($user->getRoles()), 2);
         $this->assertEquals(1, $user->getId());
         $this->assertEquals(null, $user->getPassword());
         $this->assertEquals(null, $user->getSalt());

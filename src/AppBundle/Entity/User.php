@@ -428,13 +428,13 @@ class User implements UserInterface, \Serializable
     }
 
     /**
+     * Get asigned Roles.
+     *
      * @return array
      */
     public function getRoles()
     {
-        $roles = [
-            'ROLE_USER',
-        ];
+        $roles = [];
         /** @var Group $group */
         foreach ($this->groups as $group) {
             $roles[] = $group->getRole();

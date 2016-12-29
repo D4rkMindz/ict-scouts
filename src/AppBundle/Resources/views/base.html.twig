@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="{{ asset('assets/vendor/materialize/dist/css/materialize.min.css') }}"
               type="text/css" media="screen,projection"/>
         {% block predict %}
-            {% if not is_granted('ROLE_USER') %}
+            {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                 <link rel="preconnect" href="{{ path('login') }}">
             {% endif %}
         {% endblock %}
