@@ -6,17 +6,7 @@
         {% if user is null %}
             Du bist nicht angemeldet.<br />Klicke <a href="{{ url('login') }}">Hier</a> um dich anzumelden.
         {% else %}
-            Hallo {{ user.username }}<hr />
-            {% if is_granted('ROLE_ADMIN') %}
-                Du hast Zugriff auf <b>ROLE_ADMIN</b> und kannst folgendes:<br />
-                <a href="{{ url('google.update_users') }}">Alle User von Google Abrufen</a>
-                <hr />
-            {% endif %}
-            {% if is_granted('ROLE_USER') %}
-                Du hast Zugriff auf <b>ROLE_USER</b> und kannst folgendes:<br />
-                <a href="{{ url('logout') }}">Logout</a>
-                <hr />
-            {% endif %}
+            Hallo {{ user.username }}
         {% endif %}
     </div>
 {% endblock %}

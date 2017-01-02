@@ -14,33 +14,14 @@
         <link rel="stylesheet" href="{{ asset('assets/vendor/materialize/dist/css/materialize.min.css') }}"
               type="text/css" media="screen,projection"/>
         {% block predict %}
-            {% if not is_granted('ROLE_USER') %}
+            {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                 <link rel="preconnect" href="{{ path('login') }}">
             {% endif %}
         {% endblock %}
     </head>
     <body>
     <nav class="indigo">
-        <div class="container">
-            <div class="nav-wrapper">
-                <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
-                <a href="{{ path('home') }}" class="brand-logo">ICT-Scouts</a>
-                <ul class="right hide-on-med-and-down">
-                    {% if user is null %}
-                        <a href="{{ url('login') }}">Login</a>
-                    {% else %}
-                        <a href="{{ url('logout') }}">Logout</a>
-                    {% endif %}
-                </ul>
-                <ul class="side-nav" id="nav-mobile">
-                    {% if user is null %}
-                        <a href="{{ url('login') }}">Login</a>
-                    {% else %}
-                        <a href="{{ url('logout') }}">Logout</a>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
+        {{ include('AppBundle::nav.html.twig') }}
     </nav>
     <main>
         {% block body %}{% endblock %}
