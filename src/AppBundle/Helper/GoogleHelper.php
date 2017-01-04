@@ -196,7 +196,6 @@ class GoogleHelper
         $users = $this->em->getRepository('AppBundle:User')->findAll();
         /** @var User $user */
         foreach ($users as $user) {
-
             if (!in_array($user, $googleUsers)) {
                 $this->em->remove($user);
             }
@@ -286,6 +285,7 @@ class GoogleHelper
 
             $this->em->persist($user);
             $this->em->flush();
+
             return true;
         } else {
             return false;
