@@ -196,7 +196,7 @@ class GoogleHelper
 
         $users = $this->em->getRepository('AppBundle:User')->findAll();
         /** @var User $user */
-        foreach ($users AS $user) {
+        foreach ($users as $user) {
 
             if (!in_array($user, $googleUsers)) {
                 $this->em->remove($user);
@@ -235,7 +235,7 @@ class GoogleHelper
      * Set group based on Google organisation unit.
      *
      * @param User   $user
-     * @param String $ou
+     * @param string $ou
      *
      * @return User
      */
@@ -250,13 +250,13 @@ class GoogleHelper
 
         if ('/Support' == $ou && !in_array($adminGroup, $userGroups)) {
             $group = $adminGroup;
-        } elseif('/Scouts' == $ou && !in_array($scoutGroup, $userGroups)) {
+        } elseif ('/Scouts' == $ou && !in_array($scoutGroup, $userGroups)) {
             $group = $scoutGroup;
-        } elseif('/ict-campus/ICT Talents' == $ou && !in_array($talentGroup, $userGroups)) {
+        } elseif ('/ict-campus/ICT Talents' == $ou && !in_array($talentGroup, $userGroups)) {
             $group = $talentGroup;
         }
 
-        if($group){
+        if ($group) {
             $user->addGroup($group);
             $this->em->persist($user);
         }
