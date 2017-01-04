@@ -2,7 +2,6 @@
 
 namespace AppBundle\Helper;
 
-use AppBundle\Entity\Group;
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Google_Client;
