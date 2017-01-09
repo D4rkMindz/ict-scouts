@@ -234,10 +234,8 @@ class GoogleHelper
      *
      * @param User   $user
      * @param string $ou
-     *
-     * @return User
      */
-    public function updateUserGroups(User $user, $ou): User
+    public function updateUserGroups(User &$user, $ou)
     {
         $group = null;
         $userGroups = (!$user->getGroups() ? [] : $user->getGroups());
@@ -258,8 +256,6 @@ class GoogleHelper
             $user->addGroup($group);
             $this->em->persist($user);
         }
-
-        return $user;
     }
 
     /**
