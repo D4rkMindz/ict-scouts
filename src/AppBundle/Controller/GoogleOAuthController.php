@@ -53,7 +53,9 @@ class GoogleOAuthController extends Controller
             if ($userData->getHd() != $this->container->getParameter('google_apps_domain')) {
                 return new Response('<h2>Error</h2><hr />Wrong Google Account<hr />');
             }
-            $googleHelper->updateUserData($userData, $client->getAccessToken());
+            if (!$googleHelper->updateUserAccessToken($userData->getId(), $client->getAccessToken())) {
+                return new Response('<h2>Error</h2><hr />Account not Found - If you think this is an error please contact an Administrator<hr />');
+            }
             $request->getSession()->set('access_token', $client->getAccessToken()['access_token']);
             $request->getSession()->save();
             $this->addFlash('success', 'Login Successful');
