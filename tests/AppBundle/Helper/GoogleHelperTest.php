@@ -205,10 +205,10 @@ class GoogleHelperTest extends WebTestCase
 
         /** @var GoogleHelper $googleHelper */
         $googleHelper = $client->getContainer()->get('app.helper.google');
-        $janeDoe = $googleHelper->updateUserGroups($janeDoe, '/');
-        $janeAdmin = $googleHelper->updateUserGroups($janeAdmin, '/Support');
-        $janeScout = $googleHelper->updateUserGroups($janeScout, '/Scouts');
-        $janeTalent = $googleHelper->updateUserGroups($janeTalent, '/ict-campus/ICT Talents');
+        $googleHelper->updateUserGroups($janeDoe, '/');
+        $googleHelper->updateUserGroups($janeAdmin, '/Support');
+        $googleHelper->updateUserGroups($janeScout, '/Scouts');
+        $googleHelper->updateUserGroups($janeTalent, '/ict-campus/ICT Talents');
 
         $adminGroup = $client->getContainer()->get('doctrine.orm.entity_manager')->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_ADMIN']);
         $scoutGroup = $client->getContainer()->get('doctrine.orm.entity_manager')->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_SCOUT']);
