@@ -27,6 +27,13 @@ Informationen und Arbeitsschritte für Entwickler der Applikation.
    * Fülle die Informationen welche gefragt werden aus.
 6. Starte den Webserver. `php bin/console server:run`
 
+## Wichtige Befehle
+
+* Cache löschen: `php bin/console cache:clear`
+* Datenbankeinträge neu einfüllen: `php bin/console doctrine:fixtures:load`
+* Datenbankstruktur überschreiben: `php bin/console doctrine:schmea:update --force` Statt `--force` kann man auch 
+`--dump-sql` angeben umd den SQL-Befehl zu sehen welcher ausgeführt werden würde.
+
 ## Strukturbeschreibung
 
 `/app`: Autoloader, Kernel und Konfigurationen der Symfony 3 Applikation.
@@ -43,7 +50,8 @@ Informationen und Arbeitsschritte für Entwickler der Applikation.
 
 `/app/config/config_test.yml`: Einstellungen für Testingumgebung.
 
-`/app/config/parameters.yml`: Nicht indexierte, installationsabhängige Konfigurationen mit Passwörtern, Datenbankverbindungsdefinitionen, etc..
+`/app/config/parameters.yml`: Nicht indexierte, installationsabhängige Konfigurationen mit Passwörtern, 
+Datenbankverbindungsdefinitionen, etc..
 
 `/app/config/parameters.yml.dist`: Indexierte `parameters.yml`-Vorlage.
 
@@ -87,7 +95,8 @@ Informationen und Arbeitsschritte für Entwickler der Applikation.
 
 `/src/AppBundle/Resources/config`: Bundle-spezifische Konfigurationen.
 
-`/src/AppBundle/Resources/public`: Öffentliche Dateien. Gemacht für CSS und JS. Beim generieren der Symlinks wird der Inhalt dieses Ordners für das Frontend zugänglich sein.
+`/src/AppBundle/Resources/public`: Öffentliche Dateien. Gemacht für CSS und JS. Beim generieren der Symlinks wird der 
+Inhalt dieses Ordners für das Frontend zugänglich sein.
 
 `/src/AppBundle/Resources/views`: Templates für das Front-end.
 
