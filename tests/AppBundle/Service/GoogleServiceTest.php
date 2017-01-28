@@ -1,22 +1,22 @@
 <?php
 
-namespace Tests\AppBundle\Helper;
+namespace Tests\AppBundle\Service;
 
 use AppBundle\Entity\User;
-use AppBundle\Helper\GoogleHelper;
+use AppBundle\Service\GoogleService;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class GoogleHelperTest extends WebTestCase
+class GoogleServiceTest extends WebTestCase
 {
     public function testGetAllUsers()
     {
         $client = static::createClient();
 
-        /** @var GoogleHelper $googleHelper */
-        $googleHelper = $client->getContainer()->get('app.helper.google');
-        $googleHelper->getAllUsers($client->getContainer()->getParameter('google_apps_domain'));
+        /** @var GoogleService $googleService */
+        $googleService = $client->getContainer()->get('app.service.google');
+        $googleService->getAllUsers($client->getContainer()->getParameter('google_apps_domain'));
 
-        $user = $client->getContainer()->get('doctrine.orm.entity_manager')->getRepository('AppBundle:User')->findOneBy(['email' => $googleHelper->getAdminUser()]);
+        $user = $client->getContainer()->get('doctrine.orm.entity_manager')->getRepository('AppBundle:User')->findOneBy(['email' => $googleService->getAdminUser()]);
 
         $this->assertNotNull($user);
 
@@ -29,62 +29,62 @@ class GoogleHelperTest extends WebTestCase
     {
         $client = static::createClient();
 
-        /** @var GoogleHelper $googleHelper */
-        $googleHelper = $client->getContainer()->get('app.helper.google');
+        /** @var GoogleService $googleService */
+        $googleService = $client->getContainer()->get('app.service.google');
 
         $expectedScopes = [
             \Google_Service_Oauth2::USERINFO_PROFILE,
             \Google_Service_Oauth2::USERINFO_EMAIL,
         ];
 
-        $this->assertEquals($expectedScopes, $googleHelper->getUserScopes());
+        $this->assertEquals($expectedScopes, $googleService->getUserScopes());
     }
 
     public function testGetServiceScopes()
     {
         $client = static::createClient();
 
-        /** @var GoogleHelper $googleHelper */
-        $googleHelper = $client->getContainer()->get('app.helper.google');
+        /** @var GoogleService $googleService */
+        $googleService = $client->getContainer()->get('app.service.google');
 
         $expectedScopes = [
             \Google_Service_Directory::ADMIN_DIRECTORY_USER_READONLY,
             \Google_Service_Directory::ADMIN_DIRECTORY_GROUP_READONLY,
         ];
 
-        $this->assertEquals($expectedScopes, $googleHelper->getServiceScopes());
+        $this->assertEquals($expectedScopes, $googleService->getServiceScopes());
     }
 
     public function testSetScopeUser()
     {
         $client = static::createClient();
 
-        /** @var GoogleHelper $googleHelper */
-        $googleHelper = $client->getContainer()->get('app.helper.google');
-        $googleHelper->setScope($googleHelper::USER);
+        /** @var GoogleService $googleService */
+        $googleService = $client->getContainer()->get('app.service.google');
+        $googleService->setScope($googleService::USER);
 
-        $this->assertEquals($googleHelper->getUserScopes(), $googleHelper->getClient()->getScopes());
+        $this->assertEquals($googleService->getUserScopes(), $googleService->getClient()->getScopes());
     }
 
     public function testSetScopeService()
     {
         $client = static::createClient();
 
-        /** @var GoogleHelper $googleHelper */
-        $googleHelper = $client->getContainer()->get('app.helper.google');
-        $googleHelper->setScope($googleHelper::SERVICE);
+        /** @var GoogleService $googleService */
+        $googleService = $client->getContainer()->get('app.service.google');
+        $googleService->setScope($googleService::SERVICE);
 
-        $this->assertEquals($googleHelper->getServiceScopes(), $googleHelper->getClient()->getScopes());
+        $this->assertEquals($googleService->getServiceScopes(), $googleService->getClient()->getScopes());
     }
 
     public function testGetClient()
     {
         $client = static::createClient();
 
-        /** @var GoogleHelper $googleHelper */
-        $googleHelper = $client->getContainer()->get('app.helper.google');
+        /** @var GoogleService $googleService */
+        $googleService = $client->getContainer()->get('app.service.google');
 
-        $this->assertEquals('Google_Client', get_class($googleHelper->getClient()));
+        $this->assertEquals('Google_Client', get_class($googleService->getClient()));
     }
 
     /**
@@ -94,32 +94,32 @@ class GoogleHelperTest extends WebTestCase
     {
         $client = static::createClient();
 
-        /** @var GoogleHelper $googleHelper */
-        $googleHelper = $client->getContainer()->get('app.helper.google');
+        /** @var GoogleService $googleService */
+        $googleService = $client->getContainer()->get('app.service.google');
 
-        $googleHelper->auth('foo');
+        $googleService->auth('foo');
     }
 
     public function testAuthService()
     {
         $client = static::createClient();
 
-        /** @var GoogleHelper $googleHelper */
-        $googleHelper = $client->getContainer()->get('app.helper.google');
-        $googleHelper->auth($googleHelper::SERVICE);
+        /** @var GoogleService $googleService */
+        $googleService = $client->getContainer()->get('app.service.google');
+        $googleService->auth($googleService::SERVICE);
 
-        $this->assertEquals('', $googleHelper->getClient()->getClientId());
+        $this->assertEquals('', $googleService->getClient()->getClientId());
     }
 
     public function testAuthUser()
     {
         $client = static::createClient();
 
-        /** @var GoogleHelper $googleHelper */
-        $googleHelper = $client->getContainer()->get('app.helper.google');
-        $googleHelper->auth($googleHelper::USER);
+        /** @var GoogleService $googleService */
+        $googleService = $client->getContainer()->get('app.service.google');
+        $googleService->auth($googleService::USER);
 
-        $this->assertEquals($client->getContainer()->getParameter('google_client_id'), $googleHelper->getClient()->getClientId());
+        $this->assertEquals($client->getContainer()->getParameter('google_client_id'), $googleService->getClient()->getClientId());
     }
 
     public function testCreateUser()
@@ -136,9 +136,9 @@ class GoogleHelperTest extends WebTestCase
 
         $this->assertNull($user);
 
-        /** @var GoogleHelper $googleHelper */
-        $googleHelper = $client->getContainer()->get('app.helper.google');
-        $googleHelper->createUser($googleUser);
+        /** @var GoogleService $googleService */
+        $googleService = $client->getContainer()->get('app.service.google');
+        $googleService->createUser($googleUser);
 
         $user = $client->getContainer()->get('doctrine.orm.entity_manager')->getRepository('AppBundle:User')->findOneBy(['googleId' => $googleUser->getId()]);
 
@@ -155,9 +155,9 @@ class GoogleHelperTest extends WebTestCase
         $googleUser->setGivenName('Jane');
         $googleUser->setId('123456789011');
 
-        /** @var GoogleHelper $googleHelper */
-        $googleHelper = $client->getContainer()->get('app.helper.google');
-        $googleHelper->createUser($googleUser);
+        /** @var GoogleService $googleService */
+        $googleService = $client->getContainer()->get('app.service.google');
+        $googleService->createUser($googleUser);
 
         /** @var User $user */
         $user = $client->getContainer()->get('doctrine.orm.entity_manager')->getRepository('AppBundle:User')->findOneBy(['googleId' => $googleUser->getId()]);
@@ -165,14 +165,14 @@ class GoogleHelperTest extends WebTestCase
         $this->assertNotNull($user);
         $this->assertNull($user->getAccessToken());
         $this->assertNull($user->getAccessTokenExpireDate());
-        $this->assertTrue($googleHelper->updateUserAccessToken($googleUser->getId(), ['access_token' => 'abc123cba', 'expires_in' => '3599']));
+        $this->assertTrue($googleService->updateUserAccessToken($googleUser->getId(), ['access_token' => 'abc123cba', 'expires_in' => '3599']));
 
         $user = $client->getContainer()->get('doctrine.orm.entity_manager')->getRepository('AppBundle:User')->findOneBy(['googleId' => $googleUser->getId()]);
 
         $this->assertNotNull($user);
         $this->assertEquals('abc123cba', $user->getAccessToken());
         $this->assertLessThanOrEqual((new \DateTime())->add(new \DateInterval('PT3594S')), $user->getAccessTokenExpireDate());
-        $this->assertFalse($googleHelper->updateUserAccessToken(42, ['access_token' => 'cba321abc', 'expires_in' => '3599']));
+        $this->assertFalse($googleService->updateUserAccessToken(42, ['access_token' => 'cba321abc', 'expires_in' => '3599']));
     }
 
     public function testUpdateUserGroups()
@@ -203,12 +203,12 @@ class GoogleHelperTest extends WebTestCase
         $janeDoe->setGivenName('Jane');
         $janeDoe->setGoogleId('123456789011');
 
-        /** @var GoogleHelper $googleHelper */
-        $googleHelper = $client->getContainer()->get('app.helper.google');
-        $googleHelper->updateUserGroups($janeDoe, '/');
-        $googleHelper->updateUserGroups($janeAdmin, '/Support');
-        $googleHelper->updateUserGroups($janeScout, '/Scouts');
-        $googleHelper->updateUserGroups($janeTalent, '/ict-campus/ICT Talents');
+        /** @var GoogleService $googleService */
+        $googleService = $client->getContainer()->get('app.service.google');
+        $googleService->updateUserGroups($janeDoe, '/');
+        $googleService->updateUserGroups($janeAdmin, '/Support');
+        $googleService->updateUserGroups($janeScout, '/Scouts');
+        $googleService->updateUserGroups($janeTalent, '/ict-campus/ICT Talents');
 
         $adminGroup = $client->getContainer()->get('doctrine.orm.entity_manager')->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_ADMIN']);
         $scoutGroup = $client->getContainer()->get('doctrine.orm.entity_manager')->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_SCOUT']);

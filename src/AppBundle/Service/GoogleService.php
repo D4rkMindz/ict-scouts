@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Helper;
+namespace AppBundle\Service;
 
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
@@ -9,9 +9,9 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
- * Class GoogleHelper.
+ * Class GoogleService.
  */
-class GoogleHelper
+class GoogleService
 {
     const USER = 'user';
     const SERVICE = 'service';
@@ -48,7 +48,7 @@ class GoogleHelper
     private $parameters;
 
     /**
-     * GoogleHelper constructor.
+     * GoogleService constructor.
      *
      * @param Kernel        $kernel
      * @param EntityManager $entityManager
@@ -72,7 +72,7 @@ class GoogleHelper
     /**
      * Set Authentication parameters for any API request.
      *
-     * @param string $type GoogleHelper::USER oder GoogleHelper::SERVICE
+     * @param string $type GoogleService::USER oder GoogleService::SERVICE
      *
      * @throws \Exception
      *
