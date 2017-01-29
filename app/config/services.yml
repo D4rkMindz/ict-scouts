@@ -6,7 +6,7 @@ parameters:
 services:
     app.security.gogole_authenticator:
         class: AppBundle\Security\GoogleAuthenticator
-    app.helper.google:
-        class: AppBundle\Helper\GoogleHelper
+    app.service.google:
+        class: AppBundle\Service\GoogleService
         arguments: ['@kernel', '@doctrine.orm.entity_manager']
 
