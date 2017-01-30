@@ -1,7 +1,6 @@
 language: php
 
 php:
-  - 7.0
   - 7.1
 
 matrix:
@@ -11,7 +10,7 @@ services:
   - mysql
 
 env:
-  - SYMFONY_VERSION="3.1.*" DB=mysql
+  - SYMFONY_VERSION="3.2.*" DB=mysql
 
 before_install:
   - openssl aes-256-cbc -K $encrypted_c37cded0adbe_key -iv $encrypted_c37cded0adbe_iv -in .travis.tar.enc -out .travis.tar -d
