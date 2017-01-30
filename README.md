@@ -10,4 +10,29 @@ ICT-Scouts Campus WebApp
   * php7.1-curl
   * php7.1-xml
   * php7.1-mbstring
+* [Composer](https://getcomposer.org/)
 * MySQL 5.6 oder MariaDB 10.0.27
+
+## Entwicklung
+
+Informationen und Arbeitsschritte für Entwickler der Applikation.
+
+### Installation
+
+1. Klone Repository: `git clone https://github.com/PReimers/ict-scouts`
+2. Gehe in den Ordner: `cd ict-scouts`
+3. Überprüfe ob deine PHP-Installation kompatibel ist mit der Symfony-Version. `php bin/symfony_requirements`
+4. Starte Datenbankserver. (Individuell)
+5. Installiere Composer-Dependencies. `composer install`
+   * Fülle die Informationen welche gefragt werden aus.
+6. Starte den Webserver. `php bin/console server:run`
+
+## Wichtige Befehle
+
+* Cache löschen: `php bin/console cache:clear`
+* Datenbankeinträge neu einfüllen: `php bin/console doctrine:fixtures:load`
+* Datenbankstruktur überschreiben: `php bin/console doctrine:schmea:update --force` Statt `--force` kann man auch 
+`--dump-sql` angeben umd den SQL-Befehl zu sehen welcher ausgeführt werden würde.
+
+
+Mehr Informationen in der [Dokumentation](src/AppBundle/Resources/doc/index.rst).
