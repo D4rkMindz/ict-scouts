@@ -1,4 +1,5 @@
 /app/config/parameters.yml
+/app/config/parameters.yml.remote
 /src/AppBundle/Resources/config/client_secret.json
 /.travis.tar
 /build/
