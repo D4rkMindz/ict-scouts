@@ -25,7 +25,8 @@ class Scout
     /**
      * @var User
      *
-     * @ORM\Column(name="app_user_id", type="string", length=255)
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User", inversedBy="scouts", cascade={"all"})
+     * @ORM\JoinColumn(name="app_user_id")
      */
     private $user;
 
