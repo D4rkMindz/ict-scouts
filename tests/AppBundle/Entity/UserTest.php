@@ -26,12 +26,6 @@ class UserTest extends KernelTest
         $user->setAccessToken('abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
         $user->setAccessTokenExpireDate($tokenExpireDate);
-        $createdAtDate = new \DateTime();
-        $user->setCreatedAt($createdAtDate);
-        $updatedAtDate = new \DateTime();
-        $user->setUpdatedAt($updatedAtDate);
-        $deletedAtDate = new \DateTime();
-        $user->setDeletedAt(null);
         $user->setGroups([$group]);
         $user->addGroup($group1);
 
@@ -42,10 +36,7 @@ class UserTest extends KernelTest
         $this->assertEquals('john.doe@example.com', $user->getEmail());
         $this->assertEquals('abc123cba', $user->getAccessToken());
         $this->assertEquals($tokenExpireDate, $user->getAccessTokenExpireDate());
-        $this->assertEquals($createdAtDate, $user->getCreatedAt());
-        $this->assertEquals($updatedAtDate, $user->getUpdatedAt());
-        $this->assertNull($user->getDeletedAt());
-        $this->assertTrue(is_array($user->getGroups()));
+	    $this->assertTrue(is_array($user->getGroups()));
         $this->assertEquals(count($user->getGroups()), 2);
 
         $em->persist($user);
@@ -70,12 +61,6 @@ class UserTest extends KernelTest
         $user->setAccessToken('abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
         $user->setAccessTokenExpireDate($tokenExpireDate);
-        $createdAtDate = new \DateTime();
-        $user->setCreatedAt($createdAtDate);
-        $updatedAtDate = new \DateTime();
-        $user->setUpdatedAt($updatedAtDate);
-        $deletedAtDate = new \DateTime();
-        $user->setDeletedAt(null);
 
         $serialized = $user->serialize();
 
