@@ -49,14 +49,11 @@ class AdminControllerTest extends KernelTest
         $user = new User();
         $user->setAccessToken('abc123cba');
         $user->setAccessTokenExpireDate((new \DateTime())->add(new \DateInterval('PT3595S')));
-        $user->setCreatedAt(new \DateTime());
-        $user->setDeletedAt(null);
         $user->setGoogleId(123456789);
         $user->setEmail('john.doe@'.$this->getContainer()->getParameter('google_apps_domain'));
         $user->setFamilyName('Doe');
         $user->setGivenName('John');
         $user->setGroups([$group]);
-        $user->setUpdatedAt(new \DateTime());
 
         $em->persist($user);
         $em->flush();
