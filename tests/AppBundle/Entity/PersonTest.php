@@ -72,8 +72,8 @@ class PersonTest extends KernelTest
 	    $newPerson->unserialize($serialized);
 
 	    $this->assertTrue($newPerson instanceof Person);
-	    $this->assertEquals(null, $person->getId());
-	    $this->assertEquals('Doe', $person->getFamilyName());
-	    $this->assertEquals($zip->getZip(), $person->getZip()->getZip());
+	    $this->assertEquals(null, $newPerson->getId());
+	    $this->assertEquals('Doe', $newPerson->getFamilyName());
+	    $this->assertEquals($zip->getZip(), $newPerson->getZip()->getZip());
     }
 }

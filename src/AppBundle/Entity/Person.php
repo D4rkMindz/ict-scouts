@@ -250,33 +250,33 @@ class Person
         return $this->birthDate;
     }
 
-	/**
-	 * @see \Serializable::serialize()
-	 */
-	public function serialize()
-	{
-		return serialize(
-			[
-				$this->id,
-				$this->familyName,
-				$this->givenName,
-				$this->address,
-				$this->zip,
-				$this->phone,
-				$this->mail,
-				$this->birthDate
-			]
-		);
-	}
+    /**
+     * @see \Serializable::serialize()
+     */
+    public function serialize()
+    {
+        return serialize(
+            [
+                $this->id,
+                $this->familyName,
+                $this->givenName,
+                $this->address,
+                $this->zip,
+                $this->phone,
+                $this->mail,
+                $this->birthDate
+            ]
+        );
+    }
 
-	/**
-	 * @see \Serializable::unserialize()
-	 *
-	 * @param string $serialized
-	 */
-	public function unserialize($serialized)
-	{
-		list($this->id, $this->familyName, $this->givenName, $this->address, $this->zip, $this->phone, $this->mail, $this->birthDate) = unserialize($serialized);
-	}
+    /**
+     * @see \Serializable::unserialize()
+     *
+     * @param string $serialized
+     */
+    public function unserialize($serialized)
+    {
+        list($this->id, $this->familyName, $this->givenName, $this->address, $this->zip, $this->phone, $this->mail, $this->birthDate) = unserialize($serialized);
+    }
 }
 

@@ -31,20 +31,6 @@ class User implements UserInterface, \Serializable
     private $googleId;
 
     /**
-     * @ORM\Column(name="given_name", type="string", length=100)
-     *
-     * @var string
-     */
-    private $givenName;
-
-    /**
-     * @ORM\Column(name="family_name", type="string", length=100)
-     *
-     * @var string
-     */
-    private $familyName;
-
-    /**
      * @ORM\Column(name="email", type="string", length=255)
      *
      * @var string
@@ -112,54 +98,6 @@ class User implements UserInterface, \Serializable
     public function getGoogleId()
     {
         return $this->googleId;
-    }
-
-    /**
-     * Set givenName.
-     *
-     * @param string $givenName
-     *
-     * @return User
-     */
-    public function setGivenName($givenName)
-    {
-        $this->givenName = $givenName;
-
-        return $this;
-    }
-
-    /**
-     * Get givenName.
-     *
-     * @return string
-     */
-    public function getGivenName()
-    {
-        return $this->givenName;
-    }
-
-    /**
-     * Set familyName.
-     *
-     * @param string $familyName
-     *
-     * @return User
-     */
-    public function setFamilyName($familyName)
-    {
-        $this->familyName = $familyName;
-
-        return $this;
-    }
-
-    /**
-     * Get familyName.
-     *
-     * @return string
-     */
-    public function getFamilyName()
-    {
-        return $this->familyName;
     }
 
     /**
@@ -288,7 +226,7 @@ class User implements UserInterface, \Serializable
      */
     public function getUsername()
     {
-        return $this->getGivenName().' '.$this->getFamilyName();
+        return $this->getEmail();
     }
 
     /**
@@ -312,8 +250,6 @@ class User implements UserInterface, \Serializable
             [
                 'id'         => $this->id,
                 'googleId'   => $this->googleId,
-                'givenName'  => $this->givenName,
-                'familyName' => $this->familyName,
                 'email'      => $this->email,
             ]
         );
@@ -329,8 +265,6 @@ class User implements UserInterface, \Serializable
         $userArray = unserialize($serialized);
         $this->id = $userArray['id'];
         $this->googleId = $userArray['googleId'];
-        $this->givenName = $userArray['givenName'];
-        $this->familyName = $userArray['familyName'];
         $this->email = $userArray['email'];
     }
 

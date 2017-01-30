@@ -64,8 +64,6 @@ class GoogleAuthenticatorTest extends KernelTest
         $user->setAccessTokenExpireDate((new \DateTime())->add(new \DateInterval('PT3595S')));
         $user->setGoogleId(123456789);
         $user->setEmail('john.doe@'.$this->getContainer()->getParameter('google_apps_domain'));
-        $user->setFamilyName('Doe');
-        $user->setGivenName('John');
         $user->setGroups([$group]);
 
         $em->persist($user);

@@ -20,8 +20,6 @@ class UserTest extends KernelTest
 
         $user = new User();
         $user->setGoogleId(123456789);
-        $user->setGivenName('John');
-        $user->setFamilyName('Doe');
         $user->setEmail('john.doe@example.com');
         $user->setAccessToken('abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
@@ -31,8 +29,6 @@ class UserTest extends KernelTest
 
         $this->assertNull($user->getId());
         $this->assertEquals(123456789, $user->getGoogleId());
-        $this->assertEquals('John', $user->getGivenName());
-        $this->assertEquals('Doe', $user->getFamilyName());
         $this->assertEquals('john.doe@example.com', $user->getEmail());
         $this->assertEquals('abc123cba', $user->getAccessToken());
         $this->assertEquals($tokenExpireDate, $user->getAccessTokenExpireDate());
@@ -47,7 +43,7 @@ class UserTest extends KernelTest
         $this->assertEquals(1, $user->getId());
         $this->assertEquals(null, $user->getPassword());
         $this->assertEquals(null, $user->getSalt());
-        $this->assertEquals('John Doe', $user->getUsername());
+        $this->assertEquals('john.doe@example.com', $user->getUsername());
         $this->assertEquals(null, $user->eraseCredentials());
     }
 
@@ -55,8 +51,6 @@ class UserTest extends KernelTest
     {
         $user = new User();
         $user->setGoogleId(123456789);
-        $user->setGivenName('John');
-        $user->setFamilyName('Doe');
         $user->setEmail('john.doe@example.com');
         $user->setAccessToken('abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));

@@ -182,8 +182,6 @@ class GoogleService
 
             $myUser = new \Google_Service_Oauth2_Userinfoplus();
             $myUser->setEmail($user->getPrimaryEmail());
-            $myUser->setFamilyName($name->getFamilyName());
-            $myUser->setGivenName($name->getGivenName());
             $myUser->setId($user->getId());
 
             $dbUser = $this->createUser($myUser);
@@ -218,8 +216,6 @@ class GoogleService
         if (!$user) {
             $user = new User();
             $user->setGoogleId($userData->getId());
-            $user->setGivenName($userData->getGivenName());
-            $user->setFamilyName($userData->getFamilyName());
             $user->setEmail($userData->getEmail());
 
             $this->em->persist($user);
