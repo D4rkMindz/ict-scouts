@@ -25,8 +25,8 @@ class GoogleOAuthController extends Controller
      */
     public function loginAction(Request $request): Response
     {
-        $googleHelper = $this->container->get('app.helper.google');
-        $client = $googleHelper->auth($googleHelper::USER);
+        $googleService = $this->container->get('app.service.google');
+        $client = $googleService->auth($googleService::USER);
         $client->setHostedDomain($this->container->getParameter('google_apps_domain'));
 
         return $this->redirect($client->createAuthUrl());
@@ -46,14 +46,16 @@ class GoogleOAuthController extends Controller
     {
         if ($request->query->get('code')) {
             $code = $request->query->get('code');
-            $googleHelper = $this->container->get('app.helper.google');
-            $client = $googleHelper->auth($googleHelper::USER);
+            $googleService = $this->get('app.service.google');
+            $client = $googleService->auth($googleService::USER);
             $client->authenticate($code);
             $userData = (new \Google_Service_Oauth2($client))->userinfo_v2_me->get();
             if ($userData->getHd() != $this->container->getParameter('google_apps_domain')) {
                 return new Response('<h2>Error</h2><hr />Wrong Google Account<hr />');
             }
-            $googleHelper->updateUserData($userData, $client->getAccessToken());
+            if (!$googleService->updateUserAccessToken($userData->getId(), $client->getAccessToken())) {
+                return new Response('<h2>Error</h2><hr />Account not Found - If you think this is an error please contact an Administrator<hr />');
+            }
             $request->getSession()->set('access_token', $client->getAccessToken()['access_token']);
             $request->getSession()->save();
             $this->addFlash('success', 'Login Successful');

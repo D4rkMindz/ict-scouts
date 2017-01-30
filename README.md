@@ -6,10 +6,10 @@ ICT-Scouts Campus WebApp
 
 ## Systemvoraussetzungen
 
-* PHP 7.0
-  * php7.0-curl
-  * php7.0-xml
-  * php7.0-mbstring
+* PHP 7.1
+  * php7.1-curl
+  * php7.1-xml
+  * php7.1-mbstring
 * [Composer](https://getcomposer.org/)
 * MySQL 5.6 oder MariaDB 10.0.27
 

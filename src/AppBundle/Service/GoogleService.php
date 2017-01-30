@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Helper;
+namespace AppBundle\Service;
 
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
@@ -9,9 +9,9 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
- * Class GoogleHelper.
+ * Class GoogleService.
  */
-class GoogleHelper
+class GoogleService
 {
     const USER = 'user';
     const SERVICE = 'service';
@@ -48,7 +48,7 @@ class GoogleHelper
     private $parameters;
 
     /**
-     * GoogleHelper constructor.
+     * GoogleService constructor.
      *
      * @param Kernel        $kernel
      * @param EntityManager $entityManager
@@ -72,13 +72,13 @@ class GoogleHelper
     /**
      * Set Authentication parameters for any API request.
      *
-     * @param string $type GoogleHelper::USER oder GoogleHelper::SERVICE
+     * @param string $type GoogleService::USER oder GoogleService::SERVICE
      *
      * @throws \Exception
      *
      * @return Google_Client
      */
-    public function auth(string $type) : Google_Client
+    public function auth(string $type): Google_Client
     {
         if (self::USER != $type && self::SERVICE != $type) {
             throw new \Exception('Connection type must be "'.self::USER.'" or "'.self::SERVICE.'".');
@@ -137,7 +137,7 @@ class GoogleHelper
      *
      * @return Google_Client
      */
-    public function setScope($scope) : Google_Client
+    public function setScope($scope): Google_Client
     {
         switch ($scope) {
             case self::SERVICE:
@@ -165,10 +165,8 @@ class GoogleHelper
      * Get all users from provided domain.
      *
      * @param $domain
-     *
-     * @return array
      */
-    public function getAllUsers($domain): array
+    public function getAllUsers($domain)
     {
         $this->auth(self::SERVICE);
         $this->client->setSubject($this->getAdminUser());
@@ -177,7 +175,7 @@ class GoogleHelper
 
         $users = $service->users->listUsers(['domain' => $domain])->getUsers();
 
-        $returnUsers = [];
+        $googleUsers = [];
         /** @var \Google_Service_Directory_User $user */
         foreach ($users as $user) {
             $name = $user->getName();
@@ -188,28 +186,90 @@ class GoogleHelper
             $myUser->setGivenName($name->getGivenName());
             $myUser->setId($user->getId());
 
-            if ($user->getPrimaryEmail() == $this->getAdminUser()) {
-                $this->updateUserData($myUser, ['access_token' => 'abc123cba', 'expires_in' => '3600']);
-            } else {
-                $this->updateUserData($myUser);
-            }
+            $dbUser = $this->createUser($myUser);
 
-            $returnUsers[] = $myUser;
+            $this->updateUserGroups($dbUser, $user->getOrgUnitPath());
+
+            $googleUsers[] = $dbUser;
         }
 
-        return $returnUsers;
+        $users = $this->em->getRepository('AppBundle:User')->findAll();
+        /** @var User $user */
+        foreach ($users as $user) {
+            if (!in_array($user, $googleUsers)) {
+                $this->em->remove($user);
+            }
+        }
+        $this->em->flush();
+    }
+
+    /**
+     * Create user based on users in GSuite.
+     *
+     * @param \Google_Service_Oauth2_Userinfoplus $userData
+     *
+     * @return User
+     */
+    public function createUser(\Google_Service_Oauth2_Userinfoplus $userData): User
+    {
+        /** @var User $user */
+        $user = $this->em->getRepository('AppBundle:User')->findOneBy(['googleId' => $userData->getId()]);
+
+        if (!$user) {
+            $user = new User();
+            $user->setGoogleId($userData->getId());
+            $user->setGivenName($userData->getGivenName());
+            $user->setFamilyName($userData->getFamilyName());
+            $user->setEmail($userData->getEmail());
+
+            $this->em->persist($user);
+            $this->em->flush();
+        }
+
+        return $user;
+    }
+
+    /**
+     * Set group based on Google organisation unit.
+     *
+     * @param User   $user
+     * @param string $ou
+     */
+    public function updateUserGroups(User &$user, $ou)
+    {
+        $group = null;
+        $userGroups = (!$user->getGroups() ? [] : $user->getGroups());
+
+        $adminGroup = $this->em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_ADMIN']);
+        $scoutGroup = $this->em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_SCOUT']);
+        $talentGroup = $this->em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_TALENT']);
+
+        if ('/Support' == $ou && !in_array($adminGroup, $userGroups)) {
+            $group = $adminGroup;
+        } elseif ('/Scouts' == $ou && !in_array($scoutGroup, $userGroups)) {
+            $group = $scoutGroup;
+        } elseif ('/ict-campus/ICT Talents' == $ou && !in_array($talentGroup, $userGroups)) {
+            $group = $talentGroup;
+        }
+
+        if ($group) {
+            $user->addGroup($group);
+            $this->em->persist($user);
+        }
     }
 
     /**
      * Update user data.
      *
-     * @param \Google_Service_Oauth2_Userinfoplus $userData
-     * @param array                               $accessToken =false
+     * @param int   $googleId
+     * @param array $accessToken =false
+     *
+     * @return bool
      */
-    public function updateUserData(\Google_Service_Oauth2_Userinfoplus $userData, $accessToken = null)
+    public function updateUserAccessToken($googleId, $accessToken): bool
     {
         /** @var User $user */
-        $user = $this->em->getRepository('AppBundle:User')->findOneBy(['googleId' => $userData->getId()]);
+        $user = $this->em->getRepository('AppBundle:User')->findOneBy(['googleId' => $googleId]);
 
         if ($user) {
             if ($accessToken) {
@@ -218,23 +278,13 @@ class GoogleHelper
                     (new \DateTime())->add(new \DateInterval('PT'.($accessToken['expires_in'] - 5).'S'))
                 );
             }
-            $user->setGivenName($userData->getGivenName());
-            $user->setFamilyName($userData->getFamilyName());
-            $user->setEmail($userData->getEmail());
+
+            $this->em->persist($user);
+            $this->em->flush();
+
+            return true;
         } else {
-            $user = new User();
-            $user->setGoogleId($userData->getId());
-            $user->setGivenName($userData->getGivenName());
-            $user->setFamilyName($userData->getFamilyName());
-            $user->setEmail($userData->getEmail());
-            if ($accessToken) {
-                $user->setAccessToken($accessToken['access_token']);
-                $user->setAccessTokenExpireDate(
-                    (new \DateTime())->add(new \DateInterval('PT'.($accessToken['expires_in'] - 5).'S'))
-                );
-            }
+            return false;
         }
-        $this->em->persist($user);
-        $this->em->flush();
     }
 }
