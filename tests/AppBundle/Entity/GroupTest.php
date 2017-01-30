@@ -17,7 +17,7 @@ class GroupTest extends KernelTest
     public function testGetterAndSetter()
     {
         $user = new User();
-        $user->setEmail('test@test.com')->setGoogleId(123)->setGivenName('test')->setFamilyName('test');
+        $user->setEmail('test@test.com')->setGoogleId(123);
         $group = new Group('test', 'ROLE_TEST');
 
         $group->setUsers([]);

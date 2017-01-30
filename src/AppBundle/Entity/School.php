@@ -156,5 +156,31 @@ class School
     {
         return $this->zip;
     }
+
+    /**
+     * @see \Serializable::serialize()
+     */
+    public function serialize()
+    {
+        return serialize(
+            [
+                $this->id,
+                $this->name,
+                $this->address,
+                $this->address2,
+                $this->zip,
+            ]
+        );
+    }
+
+    /**
+     * @see \Serializable::unserialize()
+     *
+     * @param string $serialized
+     */
+    public function unserialize($serialized)
+    {
+        list($this->id, $this->name, $this->address, $this->address2, $this->zip) = unserialize($serialized);
+    }
 }
 

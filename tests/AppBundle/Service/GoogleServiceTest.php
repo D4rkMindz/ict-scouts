@@ -128,8 +128,6 @@ class GoogleServiceTest extends WebTestCase
 
         $googleUser = new \Google_Service_Oauth2_Userinfoplus();
         $googleUser->setEmail('jane.doe@example.com');
-        $googleUser->setFamilyName('Doe');
-        $googleUser->setGivenName('Jane');
         $googleUser->setId('123456789011');
 
         $user = $client->getContainer()->get('doctrine.orm.entity_manager')->getRepository('AppBundle:User')->findOneBy(['googleId' => $googleUser->getId()]);
@@ -151,8 +149,6 @@ class GoogleServiceTest extends WebTestCase
 
         $googleUser = new \Google_Service_Oauth2_Userinfoplus();
         $googleUser->setEmail('jane.doe@example.com');
-        $googleUser->setFamilyName('Doe');
-        $googleUser->setGivenName('Jane');
         $googleUser->setId('123456789011');
 
         /** @var GoogleService $googleService */
@@ -181,26 +177,18 @@ class GoogleServiceTest extends WebTestCase
 
         $janeTalent = new User();
         $janeTalent->setEmail('jane.talent@example.com');
-        $janeTalent->setFamilyName('Talent');
-        $janeTalent->setGivenName('Jane');
         $janeTalent->setGoogleId('123456789014');
 
         $janeScout = new User();
         $janeScout->setEmail('jane.scout@example.com');
-        $janeScout->setFamilyName('Scout');
-        $janeScout->setGivenName('Jane');
         $janeScout->setGoogleId('123456789013');
 
         $janeAdmin = new User();
         $janeAdmin->setEmail('jane.admin@example.com');
-        $janeAdmin->setFamilyName('Admin');
-        $janeAdmin->setGivenName('Jane');
         $janeAdmin->setGoogleId('123456789012');
 
         $janeDoe = new User();
         $janeDoe->setEmail('jane.doe@example.com');
-        $janeDoe->setFamilyName('Doe');
-        $janeDoe->setGivenName('Jane');
         $janeDoe->setGoogleId('123456789011');
 
         /** @var GoogleService $googleService */
