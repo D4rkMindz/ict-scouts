@@ -25,7 +25,7 @@ class Talent
     /**
      * @var School
      *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\School", inversedBy="talents", cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\School", inversedBy="talents", cascade={"all"})
      * @ORM\JoinColumn(name="school_id", nullable=true)
      */
     private $school;
