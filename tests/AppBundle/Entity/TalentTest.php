@@ -4,7 +4,6 @@ namespace Tests\AppBundle\Entity;
 
 use AppBundle\Entity\Person;
 use AppBundle\Entity\School;
-use AppBundle\Entity\Scout;
 use AppBundle\Entity\Talent;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Zip;
