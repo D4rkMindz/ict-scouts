@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TalentStatusHistory
+ * TalentStatusHistory.
  *
  * @ORM\Table(name="talent_status_history")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\TalentStatusHistoryRepository")
@@ -47,11 +47,11 @@ class TalentStatusHistory
     /**
      * TalentStatusHistory constructor.
      *
-     * @param Talent $talent
+     * @param Talent       $talent
      * @param TalentStatus $status
-     * @param \DateTime $date (optional)
+     * @param \DateTime    $date   (optional)
      */
-    public function __construct(Talent $talent, TalentStatus $status, $date=null)
+    public function __construct(Talent $talent, TalentStatus $status, $date = null)
     {
         $this->talent = $talent;
         $this->status = $status;
@@ -59,7 +59,7 @@ class TalentStatusHistory
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -69,7 +69,7 @@ class TalentStatusHistory
     }
 
     /**
-     * Get talent
+     * Get talent.
      *
      * @return string
      */
@@ -79,7 +79,7 @@ class TalentStatusHistory
     }
 
     /**
-     * Get status
+     * Get status.
      *
      * @return string
      */
@@ -89,7 +89,7 @@ class TalentStatusHistory
     }
 
     /**
-     * Get changeDate
+     * Get changeDate.
      *
      * @return \DateTime
      */
@@ -98,4 +98,3 @@ class TalentStatusHistory
         return $this->changeDate;
     }
 }
-

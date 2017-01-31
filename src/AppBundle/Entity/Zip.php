@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Zip
+ * Zip.
  *
  * @ORM\Table(name="zip")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ZipRepository")
@@ -35,14 +35,14 @@ class Zip
      */
     private $city;
 
-	public function __construct(string $zip, string $city)
-	{
-		$this->zip = $zip;
-		$this->city = $city;
-	}
+    public function __construct(string $zip, string $city)
+    {
+        $this->zip = $zip;
+        $this->city = $city;
+    }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -52,7 +52,7 @@ class Zip
     }
 
     /**
-     * Get zip
+     * Get zip.
      *
      * @return string
      */
@@ -62,7 +62,7 @@ class Zip
     }
 
     /**
-     * Get city
+     * Get city.
      *
      * @return string
      */
@@ -71,28 +71,27 @@ class Zip
         return $this->city;
     }
 
-	/**
-	 * @see \Serializable::serialize()
-	 */
-	public function serialize()
-	{
-		return serialize(
-			[
-				$this->id,
-				$this->zip,
-				$this->city,
-			]
-		);
-	}
+    /**
+     * @see \Serializable::serialize()
+     */
+    public function serialize()
+    {
+        return serialize(
+            [
+                $this->id,
+                $this->zip,
+                $this->city,
+            ]
+        );
+    }
 
-	/**
-	 * @see \Serializable::unserialize()
-	 *
-	 * @param string $serialized
-	 */
-	public function unserialize($serialized)
-	{
-		list($this->id, $this->zip, $this->city) = unserialize($serialized);
-	}
+    /**
+     * @see \Serializable::unserialize()
+     *
+     * @param string $serialized
+     */
+    public function unserialize($serialized)
+    {
+        list($this->id, $this->zip, $this->city) = unserialize($serialized);
+    }
 }
-

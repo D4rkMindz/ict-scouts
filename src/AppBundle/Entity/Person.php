@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Person
+ * Person.
  *
  * @ORM\Table(name="person")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PersonRepository")
@@ -71,9 +71,8 @@ class Person
      */
     private $birthDate;
 
-
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -83,7 +82,7 @@ class Person
     }
 
     /**
-     * Set familyName
+     * Set familyName.
      *
      * @param string $familyName
      *
@@ -97,7 +96,7 @@ class Person
     }
 
     /**
-     * Get familyName
+     * Get familyName.
      *
      * @return string
      */
@@ -107,7 +106,7 @@ class Person
     }
 
     /**
-     * Set givenName
+     * Set givenName.
      *
      * @param string $givenName
      *
@@ -121,7 +120,7 @@ class Person
     }
 
     /**
-     * Get givenName
+     * Get givenName.
      *
      * @return string
      */
@@ -131,7 +130,7 @@ class Person
     }
 
     /**
-     * Set address
+     * Set address.
      *
      * @param string $address
      *
@@ -145,7 +144,7 @@ class Person
     }
 
     /**
-     * Get address
+     * Get address.
      *
      * @return string
      */
@@ -155,7 +154,7 @@ class Person
     }
 
     /**
-     * Set zip
+     * Set zip.
      *
      * @param Zip $zip
      *
@@ -169,7 +168,7 @@ class Person
     }
 
     /**
-     * Get zip
+     * Get zip.
      *
      * @return Zip
      */
@@ -179,7 +178,7 @@ class Person
     }
 
     /**
-     * Set phone
+     * Set phone.
      *
      * @param string $phone
      *
@@ -193,7 +192,7 @@ class Person
     }
 
     /**
-     * Get phone
+     * Get phone.
      *
      * @return string
      */
@@ -203,7 +202,7 @@ class Person
     }
 
     /**
-     * Set mail
+     * Set mail.
      *
      * @param string $mail
      *
@@ -217,7 +216,7 @@ class Person
     }
 
     /**
-     * Get mail
+     * Get mail.
      *
      * @return string
      */
@@ -227,7 +226,7 @@ class Person
     }
 
     /**
-     * Set birthDate
+     * Set birthDate.
      *
      * @param \DateTime $birthDate
      *
@@ -241,7 +240,7 @@ class Person
     }
 
     /**
-     * Get birthDate
+     * Get birthDate.
      *
      * @return \DateTime
      */
@@ -264,7 +263,7 @@ class Person
                 $this->zip,
                 $this->phone,
                 $this->mail,
-                $this->birthDate
+                $this->birthDate,
             ]
         );
     }
@@ -279,4 +278,3 @@ class Person
         list($this->id, $this->familyName, $this->givenName, $this->address, $this->zip, $this->phone, $this->mail, $this->birthDate) = unserialize($serialized);
     }
 }
-

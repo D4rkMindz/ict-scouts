@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Talent
+ * Talent.
  *
  * @ORM\Table(name="talent")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\TalentRepository")
@@ -52,7 +52,7 @@ class Talent
     }
 
     /**
-     * Get person
+     * Get person.
      *
      * @return Person
      */
@@ -62,7 +62,7 @@ class Talent
     }
 
     /**
-     * Set school
+     * Set school.
      *
      * @param string $school
      *
@@ -76,7 +76,7 @@ class Talent
     }
 
     /**
-     * Get school
+     * Get school.
      *
      * @return School
      */
@@ -86,7 +86,7 @@ class Talent
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return User
      */
@@ -96,9 +96,9 @@ class Talent
     }
 
     /**
-     * Set veggie
+     * Set veggie.
      *
-     * @param boolean $veggie
+     * @param bool $veggie
      *
      * @return Talent
      */
@@ -110,7 +110,7 @@ class Talent
     }
 
     /**
-     * Get veggie
+     * Get veggie.
      *
      * @return bool
      */
@@ -119,4 +119,3 @@ class Talent
         return $this->veggie;
     }
 }
-

@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Module
+ * Module.
  *
  * @ORM\Table(name="module")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ModuleRepository")
@@ -34,7 +34,7 @@ class Module
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -44,7 +44,7 @@ class Module
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -76,4 +76,3 @@ class Module
         list($this->id, $this->name) = unserialize($serialized);
     }
 }
-

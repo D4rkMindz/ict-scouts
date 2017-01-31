@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * School
+ * School.
  *
  * @ORM\Table(name="school")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\SchoolRepository")
@@ -50,9 +50,8 @@ class School
      */
     private $zip;
 
-
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -62,7 +61,7 @@ class School
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -76,7 +75,7 @@ class School
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -86,7 +85,7 @@ class School
     }
 
     /**
-     * Set address
+     * Set address.
      *
      * @param string $address
      *
@@ -100,7 +99,7 @@ class School
     }
 
     /**
-     * Get address
+     * Get address.
      *
      * @return string
      */
@@ -110,7 +109,7 @@ class School
     }
 
     /**
-     * Set address2
+     * Set address2.
      *
      * @param string $address2
      *
@@ -124,7 +123,7 @@ class School
     }
 
     /**
-     * Get address2
+     * Get address2.
      *
      * @return string
      */
@@ -134,7 +133,7 @@ class School
     }
 
     /**
-     * Set zip
+     * Set zip.
      *
      * @param Zip $zip
      *
@@ -148,7 +147,7 @@ class School
     }
 
     /**
-     * Get zip
+     * Get zip.
      *
      * @return Zip
      */
@@ -183,4 +182,3 @@ class School
         list($this->id, $this->name, $this->address, $this->address2, $this->zip) = unserialize($serialized);
     }
 }
-
