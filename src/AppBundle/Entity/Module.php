@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,6 +29,13 @@ class Module
      */
     private $name;
 
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Scout", mappedBy="modules", cascade={"all"})
+     */
+    private $scouts;
+
     public function __construct($name)
     {
         $this->name = $name;
@@ -51,6 +59,38 @@ class Module
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return array|ArrayCollection
+     */
+    public function getScouts()
+    {
+        return $this->scouts;
+    }
+
+    /**
+     * @param array|ArrayCollection $scouts
+     *
+     * @return $this
+     */
+    public function setScouts(array $scouts)
+    {
+        $this->scouts = $scouts;
+
+        return $this;
+    }
+
+    /**
+     * @param Scout $scout
+     *
+     * @return $this
+     */
+    public function addScout(Scout $scout)
+    {
+        $this->scouts[] = $scout;
+
+        return $this;
     }
 
     /**

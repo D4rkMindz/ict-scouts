@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle\Entity;
 
+use AppBundle\Entity\Module;
 use AppBundle\Entity\Person;
 use AppBundle\Entity\Scout;
 use AppBundle\Entity\User;
@@ -22,6 +23,8 @@ class ScoutTest extends KernelTest
         $group = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_SCOUT']);
 
         $zip = new Zip('0101', 'TestCity');
+        $module = new Module('Module 1');
+        $module2 = new Module('Module 2');
         $em->persist($zip);
         $em->flush();
 
@@ -50,8 +53,11 @@ class ScoutTest extends KernelTest
         $em->flush();
 
         $scout = new Scout($person, $user);
+        $scout->setModules([$module]);
+        $scout->addModule($module2);
 
         $this->assertEquals($person->getFamilyName(), $scout->getPerson()->getFamilyName());
         $this->assertEquals($user->getEmail(), $scout->getUser()->getEmail());
+        $this->assertCount(2, $scout->getModules());
     }
 }
