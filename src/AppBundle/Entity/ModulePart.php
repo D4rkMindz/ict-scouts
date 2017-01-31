@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ModulePart
+ * ModulePart.
  *
  * @ORM\Table(name="module_part")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ModulePartRepository")
@@ -67,7 +67,7 @@ class ModulePart
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -77,7 +77,7 @@ class ModulePart
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -87,7 +87,7 @@ class ModulePart
     }
 
     /**
-     * Get module
+     * Get module.
      *
      * @return Module
      */
@@ -97,7 +97,7 @@ class ModulePart
     }
 
     /**
-     * Set workshop
+     * Set workshop.
      *
      * @param string $workshop
      *
@@ -111,7 +111,7 @@ class ModulePart
     }
 
     /**
-     * Get workshop
+     * Get workshop.
      *
      * @return Workshop
      */
@@ -121,7 +121,7 @@ class ModulePart
     }
 
     /**
-     * Set camp
+     * Set camp.
      *
      * @param string $camp
      *
@@ -135,7 +135,7 @@ class ModulePart
     }
 
     /**
-     * Get camp
+     * Get camp.
      *
      * @return Camp
      */
@@ -145,7 +145,7 @@ class ModulePart
     }
 
     /**
-     * Set cast
+     * Set cast.
      *
      * @param string $cast
      *
@@ -159,7 +159,7 @@ class ModulePart
     }
 
     /**
-     * Get cast
+     * Get cast.
      *
      * @return Cast
      */
@@ -168,4 +168,3 @@ class ModulePart
         return $this->cast;
     }
 }
-

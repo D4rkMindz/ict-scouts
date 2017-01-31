@@ -32,7 +32,7 @@ class UserTest extends KernelTest
         $this->assertEquals('john.doe@example.com', $user->getEmail());
         $this->assertEquals('abc123cba', $user->getAccessToken());
         $this->assertEquals($tokenExpireDate, $user->getAccessTokenExpireDate());
-	    $this->assertTrue(is_array($user->getGroups()));
+        $this->assertTrue(is_array($user->getGroups()));
         $this->assertEquals(count($user->getGroups()), 2);
 
         $em->persist($user);

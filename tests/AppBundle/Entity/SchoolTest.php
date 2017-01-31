@@ -17,36 +17,11 @@ class SchoolTest extends KernelTest
      */
     public function testGetterAndSetter()
     {
-	    $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-	    $zip = new Zip('0101', 'TestCity');
-	    $em->persist($zip);
-	    $em->flush();
-
-	    $school = new School();
-	    $school->setName('Global School');
-	    $school->setAddress('Test Street 101');
-	    $school->setAddress2('Main Building');
-	    $school->setZip($zip);
-
-	    $this->assertNull($school->getId());
-	    $this->assertEquals('Global School', $school->getName());
-	    $this->assertEquals('Test Street 101', $school->getAddress());
-	    $this->assertEquals('Main Building', $school->getAddress2());
-	    $this->assertEquals($zip->getZip(), $school->getZip()->getZip());
-
-	    $em->persist($school);
-	    $em->flush();
-
-	    $this->assertEquals(1, $school->getId());
-    }
-
-    /**
-     * Tests serialization of the Group class.
-     */
-    public function testSerialization()
-    {
-	    $zip = new Zip('0101', 'TestCity');
+        $zip = new Zip('0101', 'TestCity');
+        $em->persist($zip);
+        $em->flush();
 
         $school = new School();
         $school->setName('Global School');
@@ -54,16 +29,41 @@ class SchoolTest extends KernelTest
         $school->setAddress2('Main Building');
         $school->setZip($zip);
 
-	    $serialized = $school->serialize();
+        $this->assertNull($school->getId());
+        $this->assertEquals('Global School', $school->getName());
+        $this->assertEquals('Test Street 101', $school->getAddress());
+        $this->assertEquals('Main Building', $school->getAddress2());
+        $this->assertEquals($zip->getZip(), $school->getZip()->getZip());
 
-	    $this->assertTrue(is_string($serialized));
+        $em->persist($school);
+        $em->flush();
 
-	    $newSchool = new School();
-	    $newSchool->unserialize($serialized);
+        $this->assertEquals(1, $school->getId());
+    }
 
-	    $this->assertTrue($newSchool instanceof School);
-	    $this->assertEquals(null, $newSchool->getId());
-	    $this->assertEquals('Global School', $newSchool->getName());
-	    $this->assertEquals($zip->getZip(), $school->getZip()->getZip());
+    /**
+     * Tests serialization of the Group class.
+     */
+    public function testSerialization()
+    {
+        $zip = new Zip('0101', 'TestCity');
+
+        $school = new School();
+        $school->setName('Global School');
+        $school->setAddress('Test Street 101');
+        $school->setAddress2('Main Building');
+        $school->setZip($zip);
+
+        $serialized = $school->serialize();
+
+        $this->assertTrue(is_string($serialized));
+
+        $newSchool = new School();
+        $newSchool->unserialize($serialized);
+
+        $this->assertTrue($newSchool instanceof School);
+        $this->assertEquals(null, $newSchool->getId());
+        $this->assertEquals('Global School', $newSchool->getName());
+        $this->assertEquals($zip->getZip(), $school->getZip()->getZip());
     }
 }

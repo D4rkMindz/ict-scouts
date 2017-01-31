@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Workshop
+ * Workshop.
  *
  * @ORM\Table(name="workshop")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\WorkshopRepository")
@@ -58,7 +58,7 @@ class Workshop
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -68,7 +68,7 @@ class Workshop
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -82,7 +82,7 @@ class Workshop
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -92,7 +92,7 @@ class Workshop
     }
 
     /**
-     * Set address
+     * Set address.
      *
      * @param string $address
      *
@@ -106,7 +106,7 @@ class Workshop
     }
 
     /**
-     * Get address
+     * Get address.
      *
      * @return string
      */
@@ -116,7 +116,7 @@ class Workshop
     }
 
     /**
-     * Set address2
+     * Set address2.
      *
      * @param string $address2
      *
@@ -130,7 +130,7 @@ class Workshop
     }
 
     /**
-     * Get address2
+     * Get address2.
      *
      * @return string
      */
@@ -140,7 +140,7 @@ class Workshop
     }
 
     /**
-     * Set zip
+     * Set zip.
      *
      * @param Zip $zip
      *
@@ -154,7 +154,7 @@ class Workshop
     }
 
     /**
-     * Get zip
+     * Get zip.
      *
      * @return Zip
      */
@@ -189,4 +189,3 @@ class Workshop
         list($this->id, $this->name, $this->address, $this->address2, $this->zip) = unserialize($serialized);
     }
 }
-

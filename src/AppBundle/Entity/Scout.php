@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Scout
+ * Scout.
  *
  * @ORM\Table(name="scout")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ScoutRepository")
@@ -37,7 +37,7 @@ class Scout
     }
 
     /**
-     * Get personId
+     * Get personId.
      *
      * @return Person
      */
@@ -47,7 +47,7 @@ class Scout
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return User
      */
@@ -56,4 +56,3 @@ class Scout
         return $this->user;
     }
 }
-

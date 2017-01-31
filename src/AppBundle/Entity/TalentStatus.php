@@ -52,6 +52,4 @@ class TalentStatus
     {
         return $this->name;
     }
-
 }
-

@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Cast
+ * Cast.
  *
  * @ORM\Table(name="cast")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CastRepository")
@@ -34,7 +34,7 @@ class Cast
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -44,7 +44,7 @@ class Cast
     }
 
     /**
-     * Set url
+     * Set url.
      *
      * @param string $url
      *
@@ -58,7 +58,7 @@ class Cast
     }
 
     /**
-     * Get url
+     * Get url.
      *
      * @return string
      */
@@ -90,4 +90,3 @@ class Cast
         list($this->id, $this->url) = unserialize($serialized);
     }
 }
-

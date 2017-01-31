@@ -79,6 +79,5 @@ class TalentStatusHistoryTest extends KernelTest
         $em->flush();
 
         $this->assertNotNull($talentStatusHistory->getId());
-
     }
 }
