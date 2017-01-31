@@ -178,8 +178,6 @@ class GoogleService
         $googleUsers = [];
         /** @var \Google_Service_Directory_User $user */
         foreach ($users as $user) {
-            $name = $user->getName();
-
             $myUser = new \Google_Service_Oauth2_Userinfoplus();
             $myUser->setEmail($user->getPrimaryEmail());
             $myUser->setId($user->getId());
