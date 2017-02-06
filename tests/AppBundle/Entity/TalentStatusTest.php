@@ -17,10 +17,10 @@ class TalentStatusTest extends KernelTest
     {
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $talentStatus = new TalentStatus('Aktiv');
+        $talentStatus = new TalentStatus('foo');
 
         $this->assertNull($talentStatus->getId());
-        $this->assertEquals('Aktiv', $talentStatus->getName());
+        $this->assertEquals('foo', $talentStatus->getName());
 
         $em->persist($talentStatus);
         $em->flush();

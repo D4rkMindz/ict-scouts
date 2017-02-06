@@ -63,7 +63,7 @@ class TalentStatusHistoryTest extends KernelTest
         $talent->setSchool($school);
         $talent->setVeggie(true);
 
-        $talentStatus = new TalentStatus('Aktiv');
+        $talentStatus = $em->getRepository('AppBundle:TalentStatus')->find(TalentStatus::ACTIVE);
 
         $em->persist($talentStatus);
         $em->flush();

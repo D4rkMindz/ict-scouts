@@ -12,6 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TalentStatus
 {
+    const ACTIVE = 1;
+    const INACTIVE = 2;
+    const FORMER = 3;
+
     /**
      * @var int
      *

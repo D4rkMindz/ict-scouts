@@ -33,7 +33,7 @@ class Talent
     /**
      * @var User
      *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User", inversedBy="talents", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User", inversedBy="talent", cascade={"all"})
      * @ORM\JoinColumn(name="app_user_id", nullable=false)
      */
     private $user;
@@ -49,6 +49,7 @@ class Talent
     {
         $this->person = $person;
         $this->user = $user;
+
     }
 
     /**

@@ -9,4 +9,6 @@ services:
     app.service.google:
         class: AppBundle\Service\GoogleService
         arguments: ['@kernel', '@doctrine.orm.entity_manager']
-
+    app.service.google.user:
+        class: AppBundle\Service\GoogleUserService
+        arguments: ['@kernel', '@doctrine.orm.entity_manager']

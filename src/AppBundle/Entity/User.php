@@ -67,6 +67,20 @@ class User implements UserInterface, \Serializable
     private $accessTokenExpireDate;
 
     /**
+     * @var Scout
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Scout", mappedBy="user", cascade={"all"})
+     */
+    private $scout;
+
+    /**
+     * @var Talent
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Talent", mappedBy="user", cascade={"all"})
+     */
+    private $talent;
+
+    /**
      * Get id.
      *
      * @return int
@@ -198,6 +212,54 @@ class User implements UserInterface, \Serializable
     public function getAccessTokenExpireDate()
     {
         return $this->accessTokenExpireDate;
+    }
+
+    /**
+     * Set scout.
+     *
+     * @param Scout $scout
+     *
+     * @return User
+     */
+    public function setScout(Scout $scout)
+    {
+        $this->scout = $scout;
+
+        return $this;
+    }
+
+    /**
+     * Get scout.
+     *
+     * @return Scout
+     */
+    public function getScout()
+    {
+        return $this->scout;
+    }
+
+    /**
+     * Set talent.
+     *
+     * @param Talent $talent
+     *
+     * @return User
+     */
+    public function setTalent(Talent $talent)
+    {
+        $this->talent = $talent;
+
+        return $this;
+    }
+
+    /**
+     * Get talent.
+     *
+     * @return Talent
+     */
+    public function getTalent()
+    {
+        return $this->talent;
     }
 
     /**

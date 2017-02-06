@@ -46,7 +46,7 @@ class AdminController extends Controller
      */
     public function userSyncAction(Request $request): RedirectResponse
     {
-        $googleService = $this->get('app.service.google');
+        $googleService = $this->get('app.service.google.user');
         $googleService->getAllUsers($this->getParameter('google_apps_domain'));
 
         return $this->redirectToRoute('admin_home');
