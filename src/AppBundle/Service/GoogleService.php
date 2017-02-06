@@ -2,7 +2,6 @@
 
 namespace AppBundle\Service;
 
-use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Google_Client;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;

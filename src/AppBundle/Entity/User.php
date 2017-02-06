@@ -320,6 +320,8 @@ class User implements UserInterface, \Serializable
     /**
      * Constructs the object.
      *
+     * @param string $serialized
+     *
      * @see \Serializable::unserialize()
      */
     public function unserialize($serialized)

@@ -9,10 +9,7 @@ use AppBundle\Entity\Talent;
 use AppBundle\Entity\TalentStatus;
 use AppBundle\Entity\TalentStatusHistory;
 use AppBundle\Entity\User;
-use AppBundle\Repository\TalentStatusRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
-use phpDocumentor\Reflection\Types\Array_;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
@@ -200,11 +197,11 @@ class GoogleUserService
      * Update AccessToken data.
      *
      * @param int   $googleId
-     * @param array $accessToken =false
+     * @param array $accessToken =null
      *
      * @return bool
      */
-    public function updateUserAccessToken($googleId, $accessToken): bool
+    public function updateUserAccessToken($googleId, array $accessToken=null): bool
     {
         /** @var User $user */
         $user = $this->em->getRepository('AppBundle:User')->findOneBy(['googleId' => $googleId]);
