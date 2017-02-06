@@ -3,9 +3,9 @@
 namespace Tests\AppBundle\Service;
 
 use AppBundle\Service\GoogleUserService;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Tests\AppBundle\KernelTest;
 
-class GoogleUserServiceTest extends WebTestCase
+class GoogleUserServiceTest extends KernelTest
 {
 
     public function testGetGoogleService()

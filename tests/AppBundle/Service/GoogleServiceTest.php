@@ -2,11 +2,10 @@
 
 namespace Tests\AppBundle\Service;
 
-use AppBundle\Entity\User;
 use AppBundle\Service\GoogleService;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Tests\AppBundle\KernelTest;
 
-class GoogleServiceTest extends WebTestCase
+class GoogleServiceTest extends KernelTest
 {
     public function testGetUserScopes()
     {
