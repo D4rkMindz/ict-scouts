@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * TalentStatusHistory.
  *
  * @ORM\Table(name="talent_status_history")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\TalentStatusHistoryRepository")
+ * @ORM\Entity
  */
 class TalentStatusHistory
 {

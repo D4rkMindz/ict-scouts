@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Zip.
  *
  * @ORM\Table(name="zip")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ZipRepository")
+ * @ORM\Entity
  */
 class Zip
 {

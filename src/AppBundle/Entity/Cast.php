@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Cast.
  *
  * @ORM\Table(name="cast")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CastRepository")
+ * @ORM\Entity
  */
 class Cast
 {

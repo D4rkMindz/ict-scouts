@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Scout.
  *
  * @ORM\Table(name="scout")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ScoutRepository")
+ * @ORM\Entity
  */
 class Scout
 {
