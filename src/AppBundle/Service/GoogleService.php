@@ -2,7 +2,6 @@
 
 namespace AppBundle\Service;
 
-use Doctrine\ORM\EntityManager;
 use Google_Client;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpKernel\Kernel;
@@ -44,7 +43,7 @@ class GoogleService
     /**
      * GoogleService constructor.
      *
-     * @param Kernel        $kernel
+     * @param Kernel $kernel
      */
     public function __construct(Kernel $kernel)
     {
