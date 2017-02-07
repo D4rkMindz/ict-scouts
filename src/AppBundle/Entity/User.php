@@ -149,7 +149,7 @@ class User implements UserInterface, \Serializable
     /**
      * @param array|ArrayCollection $groups
      */
-    public function setGroups(array $groups)
+    public function setGroups($groups)
     {
         $this->groups = $groups;
     }

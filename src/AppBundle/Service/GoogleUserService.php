@@ -9,6 +9,8 @@ use AppBundle\Entity\Talent;
 use AppBundle\Entity\TalentStatus;
 use AppBundle\Entity\TalentStatusHistory;
 use AppBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Kernel;
 
@@ -107,7 +109,7 @@ class GoogleUserService
     {
         $groups = $this->updateUserGroups($user, $googleUser->getOrgUnitPath());
 
-        if (in_array($this->scoutGroup, $groups)) {
+        if ($groups->contains($this->scoutGroup)) {
             $scout = $user->getScout();
 
             if (!$scout) {
@@ -118,7 +120,7 @@ class GoogleUserService
             }
         }
 
-        if (in_array($this->talentGroup, $groups)) {
+        if ($groups->contains($this->talentGroup)) {
             $talent = $user->getTalent();
 
             if (!$talent) {
@@ -143,28 +145,30 @@ class GoogleUserService
      * @param User   $user
      * @param string $ou
      *
-     * @return array
+     * @return Collection
      */
-    public function updateUserGroups(User &$user, $ou) : array
+    public function updateUserGroups(User &$user, $ou): Collection
     {
         $group = null;
-        $userGroups = (!$user->getGroups() ? [] : $user->getGroups());
+        $userGroups = (!$user->getGroups() ? new ArrayCollection() : $user->getGroups());
 
-        if ('/Support' == $ou && !in_array($this->adminGroup, $userGroups)) {
+        if ('/Support' == $ou && !$userGroups->contains($this->adminGroup)) {
             $group = $this->adminGroup;
-        } elseif ('/Scouts' == $ou && !in_array($this->scoutGroup, $userGroups)) {
+        } elseif ('/Scouts' == $ou && !$userGroups->contains($this->scoutGroup)) {
             $group = $this->scoutGroup;
-        } elseif ('/ict-campus/ICT Talents' == $ou && !in_array($this->talentGroup, $userGroups)) {
+        } elseif ('/ict-campus/ICT Talents' == $ou && !$userGroups->contains($this->talentGroup)) {
             $group = $this->talentGroup;
         }
 
         if ($group) {
             $user->addGroup($group);
             $this->em->persist($user);
-            $this->em->flush();
         } else {
             $user->setGroups($userGroups);
+            $this->em->persist($user);
         }
+
+        $this->em->flush();
 
         return $user->getGroups();
     }
