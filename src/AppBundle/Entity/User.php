@@ -80,6 +80,11 @@ class User implements UserInterface, \Serializable
      */
     private $talent;
 
+    public function __construct()
+    {
+        $this->groups = new ArrayCollection();
+    }
+
     /**
      * Get id.
      *

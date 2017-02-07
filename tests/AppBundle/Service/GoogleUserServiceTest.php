@@ -79,14 +79,16 @@ class GoogleUserServiceTest extends KernelTest
         $googleUserService = $client->getContainer()->get('app.service.google.user');
 
         $user = new User();
-        $user->setGoogleId(2345678901);
+        $user->setGoogleId(111222333444);
         $user->setEmail('john.doe@example.com');
         $em->persist($user);
         $em->flush();
 
-        $this->assertEmpty($googleUserService->updateUserGroups($user, '/not-existing-ou'));
-        $this->assertCount(1, $googleUserService->updateUserGroups($user, '/ict-campus/ICT Talents'));
-        $this->assertCount(2, $googleUserService->updateUserGroups($user, '/Scouts'));
-        $this->assertCount(3, $googleUserService->updateUserGroups($user, '/Support'));
+        $googleUserService->updateUserGroups($user, '/ict-campus/ICT Talents');
+        $this->assertCount(1,$user->getGroups());
+        $googleUserService->updateUserGroups($user, '/Scouts');
+        $this->assertCount(2,$user->getGroups());
+        $googleUserService->updateUserGroups($user, '/Support');
+        $this->assertCount(3,$user->getGroups());
     }
 }

@@ -93,6 +93,7 @@ class GoogleUserService
                 $dbUser->setGoogleId($user->getId());
                 $dbUser->setEmail($user->getPrimaryEmail());
                 $this->em->persist($dbUser);
+                $this->em->flush();
             }
 
             $this->updateUser($dbUser, $user);
@@ -107,9 +108,9 @@ class GoogleUserService
      */
     private function updateUser(User $user, \Google_Service_Directory_User $googleUser)
     {
-        $groups = $this->updateUserGroups($user, $googleUser->getOrgUnitPath());
+        $this->updateUserGroups($user, $googleUser->getOrgUnitPath());
 
-        if ($groups->contains($this->scoutGroup)) {
+        if ($user->getGroups()->contains($this->scoutGroup)) {
             $scout = $user->getScout();
 
             if (!$scout) {
@@ -120,7 +121,7 @@ class GoogleUserService
             }
         }
 
-        if ($groups->contains($this->talentGroup)) {
+        if ($user->getGroups()->contains($this->talentGroup)) {
             $talent = $user->getTalent();
 
             if (!$talent) {
@@ -144,13 +145,11 @@ class GoogleUserService
      *
      * @param User   $user
      * @param string $ou
-     *
-     * @return Collection
      */
-    public function updateUserGroups(User &$user, $ou): Collection
+    public function updateUserGroups(User &$user, $ou)
     {
         $group = null;
-        $userGroups = (!$user->getGroups() ? new ArrayCollection() : $user->getGroups());
+        $userGroups = (!$user->getGroups() ? 'foo' : $user->getGroups());
 
         if ('/Support' == $ou && !$userGroups->contains($this->adminGroup)) {
             $group = $this->adminGroup;
@@ -163,14 +162,7 @@ class GoogleUserService
         if ($group) {
             $user->addGroup($group);
             $this->em->persist($user);
-        } else {
-            $user->setGroups($userGroups);
-            $this->em->persist($user);
         }
-
-        $this->em->flush();
-
-        return $user->getGroups();
     }
 
     /**
