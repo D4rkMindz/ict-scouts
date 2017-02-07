@@ -94,8 +94,6 @@ class GoogleUserService
             }
 
             $this->updateUser($dbUser, $user);
-
-            $this->em->flush();
         }
     }
 
@@ -163,6 +161,7 @@ class GoogleUserService
         if ($group) {
             $user->addGroup($group);
             $this->em->persist($user);
+            $this->em->flush();
         } else {
             $user->setGroups($userGroups);
         }
@@ -201,7 +200,7 @@ class GoogleUserService
      *
      * @return bool
      */
-    public function updateUserAccessToken($googleId, array $accessToken=null): bool
+    public function updateUserAccessToken($googleId, array $accessToken = null): bool
     {
         /** @var User $user */
         $user = $this->em->getRepository('AppBundle:User')->findOneBy(['googleId' => $googleId]);

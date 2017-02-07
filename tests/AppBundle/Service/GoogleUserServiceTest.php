@@ -9,7 +9,6 @@ use Tests\AppBundle\KernelTest;
 
 class GoogleUserServiceTest extends KernelTest
 {
-
     public function testGetGoogleService()
     {
         $client = static::createClient();

@@ -49,7 +49,6 @@ class Talent
     {
         $this->person = $person;
         $this->user = $user;
-
     }
 
     /**
