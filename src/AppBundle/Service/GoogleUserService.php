@@ -9,10 +9,9 @@ use AppBundle\Entity\Talent;
 use AppBundle\Entity\TalentStatus;
 use AppBundle\Entity\TalentStatusHistory;
 use AppBundle\Entity\User;
-use AppBundle\Repository\TalentStatusRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
-use phpDocumentor\Reflection\Types\Array_;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
@@ -94,11 +93,10 @@ class GoogleUserService
                 $dbUser->setGoogleId($user->getId());
                 $dbUser->setEmail($user->getPrimaryEmail());
                 $this->em->persist($dbUser);
+                $this->em->flush();
             }
 
             $this->updateUser($dbUser, $user);
-
-            $this->em->flush();
         }
     }
 
@@ -110,9 +108,9 @@ class GoogleUserService
      */
     private function updateUser(User $user, \Google_Service_Directory_User $googleUser)
     {
-        $groups = $this->updateUserGroups($user, $googleUser->getOrgUnitPath());
+        $this->updateUserGroups($user, $googleUser->getOrgUnitPath());
 
-        if (in_array($this->scoutGroup, $groups)) {
+        if ($user->getGroups()->contains($this->scoutGroup)) {
             $scout = $user->getScout();
 
             if (!$scout) {
@@ -123,7 +121,7 @@ class GoogleUserService
             }
         }
 
-        if (in_array($this->talentGroup, $groups)) {
+        if ($user->getGroups()->contains($this->talentGroup)) {
             $talent = $user->getTalent();
 
             if (!$talent) {
@@ -147,30 +145,24 @@ class GoogleUserService
      *
      * @param User   $user
      * @param string $ou
-     *
-     * @return array
      */
-    public function updateUserGroups(User &$user, $ou) : array
+    public function updateUserGroups(User &$user, $ou)
     {
         $group = null;
-        $userGroups = (!$user->getGroups() ? [] : $user->getGroups());
+        $userGroups = (!$user->getGroups() ? 'foo' : $user->getGroups());
 
-        if ('/Support' == $ou && !in_array($this->adminGroup, $userGroups)) {
+        if ('/Support' == $ou && !$userGroups->contains($this->adminGroup)) {
             $group = $this->adminGroup;
-        } elseif ('/Scouts' == $ou && !in_array($this->scoutGroup, $userGroups)) {
+        } elseif ('/Scouts' == $ou && !$userGroups->contains($this->scoutGroup)) {
             $group = $this->scoutGroup;
-        } elseif ('/ict-campus/ICT Talents' == $ou && !in_array($this->talentGroup, $userGroups)) {
+        } elseif ('/ict-campus/ICT Talents' == $ou && !$userGroups->contains($this->talentGroup)) {
             $group = $this->talentGroup;
         }
 
         if ($group) {
             $user->addGroup($group);
             $this->em->persist($user);
-        } else {
-            $user->setGroups($userGroups);
         }
-
-        return $user->getGroups();
     }
 
     /**
@@ -200,11 +192,11 @@ class GoogleUserService
      * Update AccessToken data.
      *
      * @param int   $googleId
-     * @param array $accessToken =false
+     * @param array $accessToken =null
      *
      * @return bool
      */
-    public function updateUserAccessToken($googleId, $accessToken): bool
+    public function updateUserAccessToken($googleId, array $accessToken = null): bool
     {
         /** @var User $user */
         $user = $this->em->getRepository('AppBundle:User')->findOneBy(['googleId' => $googleId]);

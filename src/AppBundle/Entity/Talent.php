@@ -90,7 +90,7 @@ class Talent
      *
      * @return Person
      */
-    public function getPerson(): Person
+    public function getPerson()
     {
         return $this->person;
     }

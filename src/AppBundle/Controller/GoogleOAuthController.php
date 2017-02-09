@@ -20,15 +20,13 @@ class GoogleOAuthController extends Controller
      * @Route("/login", name="login")
      * @Method("GET")
      *
-     * @param Request $request
-     *
      * @return Response
      */
-    public function loginAction(Request $request): Response
+    public function loginAction(): Response
     {
-        $googleService = $this->container->get('app.service.google');
+        $googleService = $this->get('app.service.google');
         $client = $googleService->auth($googleService::USER);
-        $client->setHostedDomain($this->container->getParameter('google_apps_domain'));
+        $client->setHostedDomain($this->getParameter('google_apps_domain'));
 
         return $this->redirect($client->createAuthUrl());
     }

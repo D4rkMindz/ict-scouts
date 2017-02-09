@@ -2,8 +2,6 @@
 
 namespace AppBundle\Service;
 
-use AppBundle\Entity\User;
-use Doctrine\ORM\EntityManager;
 use Google_Client;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpKernel\Kernel;
@@ -33,11 +31,6 @@ class GoogleService
     ];
 
     /**
-     * @var EntityManager
-     */
-    private $em;
-
-    /**
      * @var Google_Client
      */
     private $client;
@@ -50,10 +43,9 @@ class GoogleService
     /**
      * GoogleService constructor.
      *
-     * @param Kernel        $kernel
-     * @param EntityManager $entityManager
+     * @param Kernel $kernel
      */
-    public function __construct(Kernel $kernel, EntityManager $entityManager)
+    public function __construct(Kernel $kernel)
     {
         if (!getenv('GOOGLE_APPLICATION_CREDENTIALS')) {
             putenv(
@@ -65,7 +57,6 @@ class GoogleService
 
         $this->parameters = $kernel->getContainer()->getParameterBag();
         $this->adminMail = $this->parameters->get('google_apps_admin');
-        $this->em = $entityManager;
         $this->client = new Google_Client();
     }
 

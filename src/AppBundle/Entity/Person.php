@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @TODO: Make this extendable.
  *
+ * @ORM\Table(name="person")
  * @ORM\Entity
  */
 class Person
