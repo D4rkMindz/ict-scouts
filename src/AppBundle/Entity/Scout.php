@@ -3,28 +3,32 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @TODO: extend from person.
+ *
  * Scout.
  *
  * @ORM\Table(name="scout")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ScoutRepository")
+ * @ORM\Entity
  */
 class Scout
 {
     /**
-     * @var Person
+     * @var int
      *
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Person", inversedBy="scouts", cascade={"all"})
-     * @ORM\JoinColumn(name="person_id", unique=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $person;
+    private $id;
 
     /**
      * @var User
+     *
+     * @TODO: Maybe extend from this? Or create a Trait?
      *
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\User", inversedBy="scout", cascade={"all"})
      * @ORM\JoinColumn(name="app_user_id")
@@ -37,7 +41,7 @@ class Scout
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Module", inversedBy="scouts", cascade={"all"})
      * @ORM\JoinTable(
      *     name="scout_has_module", joinColumns={
-     *          @ORM\JoinColumn(name="scout_id", referencedColumnName="person_id")
+     *          @ORM\JoinColumn(name="scout_id", referencedColumnName="id")
      *     },
      *     inverseJoinColumns={
      *          @ORM\JoinColumn(name="module_id", referencedColumnName="id")
@@ -46,20 +50,23 @@ class Scout
      */
     private $modules;
 
-    public function __construct(Person $person, User $user)
+    /**
+     * Scout constructor.
+     *
+     * @param User   $user
+     */
+    public function __construct(User $user)
     {
-        $this->person = $person;
+        $this->modules = new ArrayCollection();
         $this->user = $user;
     }
 
     /**
-     * Get personId.
-     *
-     * @return Person
+     * @return int
      */
-    public function getPerson()
+    public function getId(): ?int
     {
-        return $this->person;
+        return $this->id;
     }
 
     /**
@@ -67,36 +74,34 @@ class Scout
      *
      * @return User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
     /**
-     * @return array|ArrayCollection
+     * @return Collection
      */
-    public function getModules()
+    public function getModules(): Collection
     {
         return $this->modules;
     }
 
     /**
-     * @param array|ArrayCollection $modules
+     * @param Module $module
      */
-    public function setModules(array $modules)
+    public function addModule(Module $module): void
     {
-        $this->modules = $modules;
+        if (!$this->modules->contains($module)) {
+            $this->modules->add($module);
+        }
     }
 
     /**
      * @param Module $module
-     *
-     * @return $this
      */
-    public function addModule(Module $module)
+    public function removeModule(Module $module): void
     {
-        $this->modules[] = $module;
-
-        return $this;
+        $this->modules->removeElement($module);
     }
 }

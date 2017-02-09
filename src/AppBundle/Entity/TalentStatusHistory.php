@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * TalentStatusHistory.
  *
  * @ORM\Table(name="talent_status_history")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\TalentStatusHistoryRepository")
+ * @ORM\Entity
  */
 class TalentStatusHistory
 {
@@ -25,7 +25,7 @@ class TalentStatusHistory
      * @var Talent
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Talent", inversedBy="talentStatusHistories", cascade={"all"})
-     * @ORM\JoinColumn(name="talent_id", nullable=true, referencedColumnName="person_id")
+     * @ORM\JoinColumn(name="talent_id", nullable=true, referencedColumnName="id")
      */
     private $talent;
 
@@ -51,7 +51,7 @@ class TalentStatusHistory
      * @param TalentStatus $status
      * @param \DateTime    $date   (optional)
      */
-    public function __construct(Talent $talent, TalentStatus $status, $date = null)
+    public function __construct(Talent $talent, TalentStatus $status, \DateTime $date = null)
     {
         $this->talent = $talent;
         $this->status = $status;
@@ -63,7 +63,7 @@ class TalentStatusHistory
      *
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -71,9 +71,9 @@ class TalentStatusHistory
     /**
      * Get talent.
      *
-     * @return string
+     * @return Talent
      */
-    public function getTalent()
+    public function getTalent(): Talent
     {
         return $this->talent;
     }
@@ -81,9 +81,9 @@ class TalentStatusHistory
     /**
      * Get status.
      *
-     * @return string
+     * @return TalentStatus
      */
-    public function getStatus()
+    public function getStatus(): TalentStatus
     {
         return $this->status;
     }
@@ -93,7 +93,7 @@ class TalentStatusHistory
      *
      * @return \DateTime
      */
-    public function getChangeDate()
+    public function getChangeDate(): \DateTime
     {
         return $this->changeDate;
     }

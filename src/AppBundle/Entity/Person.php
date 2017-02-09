@@ -7,8 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Person.
  *
- * @ORM\Table(name="person")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PersonRepository")
+ * @TODO: Make this extendable.
+ *
+ * @ORM\Entity
  */
 class Person
 {
@@ -24,43 +25,37 @@ class Person
     /**
      * @var string
      *
-     * @ORM\Column(name="family_name", type="string", length=100)
+     * @ORM\Column(name="family_name", type="string")
      */
     private $familyName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="given_name", type="string", length=100)
+     * @ORM\Column(name="given_name", type="string")
      */
     private $givenName;
 
     /**
+     * @TODO: Change this to address entity.
+     *
      * @var string
      *
-     * @ORM\Column(name="address", type="string", length=100, nullable=true)
+     * @ORM\Column(name="address", type="string", nullable=true)
      */
     private $address;
 
     /**
-     * @var Zip
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Zip", inversedBy="persons", cascade={"all"})
-     * @ORM\JoinColumn(name="zip_id", nullable=true)
-     */
-    private $zip;
-
-    /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=45, nullable=true)
+     * @ORM\Column(name="phone", type="string", nullable=true)
      */
     private $phone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="mail", type="string", length=255, nullable=true)
+     * @ORM\Column(name="mail", type="string", nullable=true)
      */
     private $mail;
 
@@ -72,27 +67,39 @@ class Person
     private $birthDate;
 
     /**
+     * Person constructor.
+     *
+     * @param string         $familyName
+     * @param string         $givenName
+     * @param string         $address
+     * @param string|null    $phone
+     * @param string|null    $mail
+     * @param \DateTime|null $birthDate
+     */
+    public function __construct(
+        string $familyName,
+        string $givenName,
+        string $address,
+        string $phone = null,
+        string $mail = null,
+        \DateTime $birthDate = null
+    ) {
+        $this->familyName = $familyName;
+        $this->givenName = $givenName;
+        $this->address = $address;
+        $this->phone = $phone;
+        $this->mail = $mail;
+        $this->birthDate = $birthDate;
+    }
+
+    /**
      * Get id.
      *
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * Set familyName.
-     *
-     * @param string $familyName
-     *
-     * @return Person
-     */
-    public function setFamilyName($familyName)
-    {
-        $this->familyName = $familyName;
-
-        return $this;
     }
 
     /**
@@ -100,23 +107,17 @@ class Person
      *
      * @return string
      */
-    public function getFamilyName()
+    public function getFamilyName(): string
     {
         return $this->familyName;
     }
 
     /**
-     * Set givenName.
-     *
-     * @param string $givenName
-     *
-     * @return Person
+     * @param string $familyName
      */
-    public function setGivenName($givenName)
+    public function setFamilyName(string $familyName): void
     {
-        $this->givenName = $givenName;
-
-        return $this;
+        $this->familyName = $familyName;
     }
 
     /**
@@ -124,23 +125,17 @@ class Person
      *
      * @return string
      */
-    public function getGivenName()
+    public function getGivenName(): string
     {
         return $this->givenName;
     }
 
     /**
-     * Set address.
-     *
-     * @param string $address
-     *
-     * @return Person
+     * @param string $givenName
      */
-    public function setAddress($address)
+    public function setGivenName(string $givenName): void
     {
-        $this->address = $address;
-
-        return $this;
+        $this->givenName = $givenName;
     }
 
     /**
@@ -148,33 +143,9 @@ class Person
      *
      * @return string
      */
-    public function getAddress()
+    public function getAddress(): string
     {
         return $this->address;
-    }
-
-    /**
-     * Set zip.
-     *
-     * @param Zip $zip
-     *
-     * @return Person
-     */
-    public function setZip($zip)
-    {
-        $this->zip = $zip;
-
-        return $this;
-    }
-
-    /**
-     * Get zip.
-     *
-     * @return Zip
-     */
-    public function getZip()
-    {
-        return $this->zip;
     }
 
     /**
@@ -184,7 +155,7 @@ class Person
      *
      * @return Person
      */
-    public function setPhone($phone)
+    public function setPhone(string $phone)
     {
         $this->phone = $phone;
 
@@ -196,7 +167,7 @@ class Person
      *
      * @return string
      */
-    public function getPhone()
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
@@ -208,7 +179,7 @@ class Person
      *
      * @return Person
      */
-    public function setMail($mail)
+    public function setMail(string $mail)
     {
         $this->mail = $mail;
 
@@ -220,7 +191,7 @@ class Person
      *
      * @return string
      */
-    public function getMail()
+    public function getMail(): ?string
     {
         return $this->mail;
     }
@@ -232,7 +203,7 @@ class Person
      *
      * @return Person
      */
-    public function setBirthDate($birthDate)
+    public function setBirthDate(\DateTime $birthDate)
     {
         $this->birthDate = $birthDate;
 
@@ -244,7 +215,7 @@ class Person
      *
      * @return \DateTime
      */
-    public function getBirthDate()
+    public function getBirthDate(): ?\DateTime
     {
         return $this->birthDate;
     }
@@ -260,7 +231,6 @@ class Person
                 $this->familyName,
                 $this->givenName,
                 $this->address,
-                $this->zip,
                 $this->phone,
                 $this->mail,
                 $this->birthDate,
@@ -275,6 +245,8 @@ class Person
      */
     public function unserialize($serialized)
     {
-        list($this->id, $this->familyName, $this->givenName, $this->address, $this->zip, $this->phone, $this->mail, $this->birthDate) = unserialize($serialized);
+        list($this->id, $this->familyName, $this->givenName, $this->address, $this->phone, $this->mail, $this->birthDate) = unserialize(
+            $serialized
+        );
     }
 }

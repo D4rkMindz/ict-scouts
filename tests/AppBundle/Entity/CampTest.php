@@ -2,8 +2,11 @@
 
 namespace Tests\AppBundle\Entity;
 
+use AppBundle\Entity\Address;
 use AppBundle\Entity\Camp;
+use AppBundle\Entity\Province;
 use AppBundle\Entity\Zip;
+use Symfony\Component\Process\ProcessUtils;
 use Tests\AppBundle\KernelTest;
 
 /**
@@ -18,34 +21,23 @@ class CampTest extends KernelTest
     {
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $zip = new Zip('0101', 'TestCity');
-        $zip2 = new Zip('0102', 'TestCity');
+        $province = new Province('Baselland', 'BL');
+        $address = new Address($province, 'Liestal', 'Hauptstrasse', '11');
 
-        $em->persist($zip);
-        $em->persist($zip2);
+        $em->persist($province);
+        $em->persist($address);
         $em->flush();
 
-        $camp = new Camp('Great Camp', 'Camp Street 1', $zip);
-        $camp->setAddress2('Building 3');
+        $camp = new Camp('Great Camp', $address);
 
         $this->assertNull($camp->getId());
         $this->assertEquals('Great Camp', $camp->getName());
-        $this->assertEquals('Camp Street 1', $camp->getAddress());
-        $this->assertEquals('Building 3', $camp->getAddress2());
-        $this->assertEquals($zip, $camp->getZip());
+        $this->assertEquals($address, $camp->getAddress());
 
         $em->persist($camp);
         $em->flush();
 
         $this->assertNotNull($camp->getId());
-
-        $camp->setName('Greatest Camp');
-        $camp->setAddress('Camp Street 5');
-        $camp->setZip($zip2);
-
-        $this->assertEquals('Greatest Camp', $camp->getName());
-        $this->assertEquals('Camp Street 5', $camp->getAddress());
-        $this->assertEquals($zip2, $camp->getZip());
     }
 
     /**
@@ -55,25 +47,26 @@ class CampTest extends KernelTest
     {
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $zip = new Zip('0101', 'TestCity');
-        $zip2 = new Zip('0102', 'TestCity');
+        $province = new Province('Baselland', 'BL');
+        $address = new Address($province, 'Liestal', 'Hauptstrasse', '11');
 
-        $em->persist($zip);
-        $em->persist($zip2);
+        $em->persist($province);
+        $em->persist($address);
         $em->flush();
 
-        $camp = new Camp('Great Camp', 'Camp Street 1', $zip);
-        $camp->setAddress2('Building 3');
+        $province1 = new Province('', '');
+        $address1 = new Address($province1, '', '', '');
+
+        $camp = new Camp('Great Camp', $address);
         $serialized = $camp->serialize();
 
         $this->assertTrue(is_string($serialized));
 
-        $camp1 = new Camp('Greatest Camp', 'Camp Street 5', $zip2);
+        $camp1 = new Camp('', $address1);
         $camp1->unserialize($serialized);
 
         $this->assertNull($camp1->getId());
         $this->assertEquals('Great Camp', $camp1->getName());
-        $this->assertEquals('Camp Street 1', $camp1->getAddress());
-        $this->assertEquals($zip, $camp1->getZip());
+        $this->assertEquals($address, $camp1->getAddress());
     }
 }

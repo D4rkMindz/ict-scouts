@@ -2,25 +2,28 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @TODO: Extends Person.
+ *
  * Talent.
  *
  * @ORM\Table(name="talent")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\TalentRepository")
+ * @ORM\Entity
  */
 class Talent
 {
     /**
-     * @var Person
+     * @var int
      *
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Person", inversedBy="talents", cascade={"all"})
-     * @ORM\JoinColumn(name="person_id", unique=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $person;
+    private $id;
 
     /**
      * @var School
@@ -39,17 +42,47 @@ class Talent
     private $user;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Module", inversedBy="talents", cascade={"all"})
+     * @ORM\JoinTable(
+     *     name="talent_has_module", joinColumns={
+     *          @ORM\JoinColumn(name="talent_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *          @ORM\JoinColumn(name="module_id", referencedColumnName="id")
+     *     }
+     * )
+     */
+    private $modules;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="veggie", type="boolean", nullable=true)
      */
     private $veggie;
 
-    public function __construct(Person $person, User $user)
+    /**
+     * Talent constructor.
+     *
+     * @param Person $person
+     * @param User   $user
+     * @param bool   $veggie
+     */
+    public function __construct(Person $person, User $user, Bool $veggie = false)
     {
         $this->person = $person;
         $this->user = $user;
+        $this->veggie = $veggie;
+    }
 
+    /**
+     * @return int
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     /**
@@ -57,7 +90,7 @@ class Talent
      *
      * @return Person
      */
-    public function getPerson()
+    public function getPerson(): Person
     {
         return $this->person;
     }
@@ -65,15 +98,11 @@ class Talent
     /**
      * Set school.
      *
-     * @param string $school
-     *
-     * @return Talent
+     * @param School $school
      */
-    public function setSchool($school)
+    public function setSchool(School $school): void
     {
         $this->school = $school;
-
-        return $this;
     }
 
     /**
@@ -81,7 +110,7 @@ class Talent
      *
      * @return School
      */
-    public function getSchool()
+    public function getSchool(): ?School
     {
         return $this->school;
     }
@@ -91,31 +120,53 @@ class Talent
      *
      * @return User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getModules(): Collection
+    {
+        return $this->modules;
+    }
+
+    /**
+     * @param Module $module
+     */
+    public function addModules(Module $module): void
+    {
+        if (!$this->modules->contains($module)) {
+            $this->modules->add($module);
+        }
+    }
+
+    /**
+     * @param Module $module
+     */
+    public function removeModule(Module $module): void
+    {
+        $this->modules->removeElement($module);
     }
 
     /**
      * Set veggie.
      *
      * @param bool $veggie
-     *
-     * @return Talent
      */
-    public function setVeggie($veggie)
+    public function setVeggie(bool $veggie): void
     {
         $this->veggie = $veggie;
-
-        return $this;
     }
 
     /**
-     * Get veggie.
+     * Is veggie.
      *
      * @return bool
      */
-    public function getVeggie()
+    public function isVeggie(): bool
     {
         return $this->veggie;
     }

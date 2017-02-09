@@ -2,8 +2,9 @@
 
 namespace Tests\AppBundle\Entity;
 
+use AppBundle\Entity\Address;
+use AppBundle\Entity\Province;
 use AppBundle\Entity\Workshop;
-use AppBundle\Entity\Zip;
 use Tests\AppBundle\KernelTest;
 
 /**
@@ -18,34 +19,25 @@ class WorkshopTest extends KernelTest
     {
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $zip = new Zip('0101', 'TestCity');
-        $zip2 = new Zip('0102', 'TestCity');
-
-        $em->persist($zip);
-        $em->persist($zip2);
+        $province = new Province('Baselland', 'BL');
+        $address = new Address($province, 'Liestal', 'Hauptstrasse', '11');
+        $em->persist($province);
+        $em->persist($address);
         $em->flush();
 
-        $workshop = new Workshop('Great Workshop', 'Workshop Street 1', $zip);
-        $workshop->setAddress2('Building 3');
+        $workshop = new Workshop('Great Workshop', $address);
 
         $this->assertNull($workshop->getId());
         $this->assertEquals('Great Workshop', $workshop->getName());
-        $this->assertEquals('Workshop Street 1', $workshop->getAddress());
-        $this->assertEquals('Building 3', $workshop->getAddress2());
-        $this->assertEquals($zip, $workshop->getZip());
+        $this->assertEquals($address, $workshop->getAddress());
 
         $em->persist($workshop);
         $em->flush();
 
         $this->assertNotNull($workshop->getId());
 
-        $workshop->setName('Greatest Workshop');
-        $workshop->setAddress('Workshop Street 5');
-        $workshop->setZip($zip2);
-
-        $this->assertEquals('Greatest Workshop', $workshop->getName());
-        $this->assertEquals('Workshop Street 5', $workshop->getAddress());
-        $this->assertEquals($zip2, $workshop->getZip());
+        $this->assertEquals('Great Workshop', $workshop->getName());
+        $this->assertEquals($address, $workshop->getAddress());
     }
 
     /**
@@ -55,25 +47,22 @@ class WorkshopTest extends KernelTest
     {
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $zip = new Zip('0101', 'TestCity');
-        $zip2 = new Zip('0102', 'TestCity');
-
-        $em->persist($zip);
-        $em->persist($zip2);
+        $province = new Province('Baselland', 'BL');
+        $address = new Address($province, 'Liestal', 'Hauptstrasse', '11');
+        $em->persist($province);
+        $em->persist($address);
         $em->flush();
 
-        $workshop = new Workshop('Great Workshop', 'Workshop Street 1', $zip);
-        $workshop->setAddress2('Building 3');
+        $workshop = new Workshop('Great Workshop', $address);
         $serialized = $workshop->serialize();
 
         $this->assertTrue(is_string($serialized));
 
-        $workshop1 = new Workshop('Greatest Workshop', 'Workshop Street 5', $zip2);
+        $workshop1 = new Workshop('Greatest Workshop', $address);
         $workshop1->unserialize($serialized);
 
         $this->assertNull($workshop1->getId());
         $this->assertEquals('Great Workshop', $workshop1->getName());
-        $this->assertEquals('Workshop Street 1', $workshop1->getAddress());
-        $this->assertEquals($zip, $workshop1->getZip());
+        $this->assertEquals($address, $workshop1->getAddress());
     }
 }

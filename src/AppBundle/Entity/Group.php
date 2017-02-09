@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 
@@ -15,35 +16,41 @@ use Symfony\Component\Security\Core\Role\RoleInterface;
 class Group implements RoleInterface, \Serializable
 {
     /**
+     * @var int
+     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @var int
      */
     protected $id;
 
     /**
-     * @ORM\Column(name="name", type="string", length=50)
-     *
      * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=50)
      */
     protected $name;
 
     /**
-     * @ORM\Column(name="role", type="string", length=50, unique=true)
-     *
      * @var string
+     *
+     * @ORM\Column(name="role", type="string", length=50, unique=true)
      */
     protected $role;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="groups", cascade={"all"})
-     *
      * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="groups", cascade={"all"})
      */
     protected $users;
 
+    /**
+     * Group constructor.
+     *
+     * @param string $name
+     * @param string $role
+     */
     public function __construct(string $name, string $role)
     {
         $this->name = $name;
@@ -54,7 +61,7 @@ class Group implements RoleInterface, \Serializable
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -76,41 +83,35 @@ class Group implements RoleInterface, \Serializable
     }
 
     /**
-     * @return array|ArrayCollection
+     * @return Collection
      */
-    public function getUsers()
+    public function getUsers(): Collection
     {
         return $this->users;
     }
 
     /**
-     * @param array|ArrayCollection $users
-     *
-     * @return $this
+     * @param User $user
      */
-    public function setUsers(array $users)
+    public function addUser(User $user): void
     {
-        $this->users = $users;
-
-        return $this;
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+        }
     }
 
     /**
      * @param User $user
-     *
-     * @return $this
      */
-    public function addUser(User $user)
+    public function removeUser(User $user): void
     {
-        $this->users[] = $user;
-
-        return $this;
+        $this->users->removeElement($user);
     }
 
     /**
      * @see \Serializable::serialize()
      */
-    public function serialize()
+    public function serialize(): string
     {
         return serialize(
             [
@@ -127,7 +128,7 @@ class Group implements RoleInterface, \Serializable
      *
      * @param string $serialized
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
         list($this->id, $this->name, $this->role, $this->users) = unserialize($serialized);
     }

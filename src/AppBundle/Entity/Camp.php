@@ -5,10 +5,10 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Camp.
+ * Camp that the talents visit with their scouts.
  *
  * @ORM\Table(name="camp")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CampRepository")
+ * @ORM\Entity
  */
 class Camp
 {
@@ -24,37 +24,30 @@ class Camp
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=100)
+     * @ORM\Column(name="name", type="string")
      */
     private $name;
 
     /**
-     * @var string
+     * @var Address
      *
-     * @ORM\Column(name="address", type="string", length=100)
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Address")
+     * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
      */
     private $address;
 
     /**
-     * @var string
+     * Camp constructor.
      *
-     * @ORM\Column(name="address2", type="string", length=100, nullable=true)
-     */
-    private $address2;
-
-    /**
-     * @var Zip
+     * @param string  $name
+     * @param Address $address
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Zip", inversedBy="camps", cascade={"all"})
-     * @ORM\JoinColumn(name="zip_id", nullable=true)
+     * @internal param Zip $zip
      */
-    private $zip;
-
-    public function __construct($name, $address, Zip $zip)
+    public function __construct(string $name, Address $address)
     {
         $this->name = $name;
         $this->address = $address;
-        $this->zip = $zip;
     }
 
     /**
@@ -62,23 +55,9 @@ class Camp
      *
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * Set name.
-     *
-     * @param string $name
-     *
-     * @return Camp
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     /**
@@ -86,95 +65,37 @@ class Camp
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * Set address.
-     *
-     * @param string $address
-     *
-     * @return Camp
+     * @return Address
      */
-    public function setAddress($address)
-    {
-        $this->address = $address;
-
-        return $this;
-    }
-
-    /**
-     * Get address.
-     *
-     * @return string
-     */
-    public function getAddress()
+    public function getAddress(): Address
     {
         return $this->address;
     }
 
     /**
-     * Set address2.
-     *
-     * @param string $address2
-     *
-     * @return Camp
+     * @param Address $address
      */
-    public function setAddress2($address2)
+    public function setAddress(Address $address): void
     {
-        $this->address2 = $address2;
-
-        return $this;
-    }
-
-    /**
-     * Get address2.
-     *
-     * @return string
-     */
-    public function getAddress2()
-    {
-        return $this->address2;
-    }
-
-    /**
-     * Set zip.
-     *
-     * @param Zip $zip
-     *
-     * @return Camp
-     */
-    public function setZip(Zip $zip)
-    {
-        $this->zip = $zip;
-
-        return $this;
-    }
-
-    /**
-     * Get zip.
-     *
-     * @return Zip
-     */
-    public function getZip()
-    {
-        return $this->zip;
+        $this->address = $address;
     }
 
     /**
      * @see \Serializable::serialize()
      */
-    public function serialize()
+    public function serialize(): string
     {
         return serialize(
             [
                 $this->id,
                 $this->name,
                 $this->address,
-                $this->address2,
-                $this->zip,
             ]
         );
     }
@@ -184,8 +105,8 @@ class Camp
      *
      * @param string $serialized
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
-        list($this->id, $this->name, $this->address, $this->address2, $this->zip) = unserialize($serialized);
+        list($this->id, $this->name, $this->address) = unserialize($serialized);
     }
 }

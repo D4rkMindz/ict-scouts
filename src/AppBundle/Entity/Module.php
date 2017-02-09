@@ -3,13 +3,14 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Module.
+ * Module. Topic that the talents learn about.
  *
  * @ORM\Table(name="module")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ModuleRepository")
+ * @ORM\Entity
  */
 class Module
 {
@@ -25,7 +26,7 @@ class Module
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=45, unique=true)
+     * @ORM\Column(name="name", type="string", unique=true)
      */
     private $name;
 
@@ -36,9 +37,23 @@ class Module
      */
     private $scouts;
 
-    public function __construct($name)
+    /**
+     * @var Talent
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Talent", mappedBy="modules", cascade={"all"})
+     */
+    private $talents;
+
+    /**
+     * Module constructor.
+     *
+     * @param string $name
+     */
+    public function __construct(string $name)
     {
-        $this->name = $name;
+        $this->name  = $name;
+        $this->scouts = new ArrayCollection();
+        $this->talents = new ArrayCollection();
     }
 
     /**
@@ -46,7 +61,7 @@ class Module
      *
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -56,47 +71,67 @@ class Module
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @return array|ArrayCollection
+     * @return Collection
      */
-    public function getScouts()
+    public function getScouts(): Collection
     {
         return $this->scouts;
     }
 
     /**
-     * @param array|ArrayCollection $scouts
-     *
-     * @return $this
+     * @param Scout $scout
      */
-    public function setScouts(array $scouts)
+    public function addScout(Scout $scout): void
     {
-        $this->scouts = $scouts;
-
-        return $this;
+        if (!$this->scouts->contains($scout)) {
+            $this->scouts->add($scout);
+        }
     }
 
     /**
      * @param Scout $scout
-     *
-     * @return $this
      */
-    public function addScout(Scout $scout)
+    public function removeScout(Scout $scout): void
     {
-        $this->scouts[] = $scout;
+        $this->scouts->removeElement($scout);
+    }
 
-        return $this;
+    /**
+     * @return Talent
+     */
+    public function getTalents(): Talent
+    {
+        return $this->talents;
+    }
+
+    /**
+     * @param Talent $talent
+     */
+    public function addTalent(Talent $talent): void
+    {
+        if (!$this->talents->contains($talent)) {
+            $this->talents->add($talent);
+        }
+    }
+
+    /**
+     * @param Talent $talent
+     */
+    public function removeTalent(Talent $talent): void
+    {
+        $this->talents->removeElement($talent);
     }
 
     /**
      * @see \Serializable::serialize()
      */
-    public function serialize()
+    public function serialize(): string
     {
         return serialize(
             [
@@ -111,7 +146,7 @@ class Module
      *
      * @param string $serialized
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
         list($this->id, $this->name) = unserialize($serialized);
     }

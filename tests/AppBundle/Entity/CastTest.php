@@ -15,20 +15,17 @@ class CastTest extends KernelTest
      */
     public function testGetterAndSetter()
     {
-        $cast = new Cast('https://www.google.com');
+        $cast = new Cast('https://hangouts.google.com');
 
         $this->assertNull($cast->getId());
-        $this->assertEquals('https://www.google.com', $cast->getUrl());
+        $this->assertEquals('https://hangouts.google.com', $cast->getUrl());
 
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $em->persist($cast);
         $em->flush();
 
-        $cast->setUrl('https://hangouts.google.com');
-
         $this->assertNotNull($cast->getId());
-        $this->assertEquals('https://hangouts.google.com', $cast->getUrl());
     }
 
     /**

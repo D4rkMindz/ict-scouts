@@ -2,12 +2,13 @@
 
 namespace Tests\AppBundle\Entity;
 
+use AppBundle\Entity\Address;
 use AppBundle\Entity\Camp;
 use AppBundle\Entity\Cast;
 use AppBundle\Entity\Module;
 use AppBundle\Entity\ModulePart;
+use AppBundle\Entity\Province;
 use AppBundle\Entity\Workshop;
-use AppBundle\Entity\Zip;
 use Tests\AppBundle\KernelTest;
 
 /**
@@ -22,15 +23,16 @@ class ModulePartTest extends KernelTest
     {
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $zip = new Zip('0101', 'TestCity');
-        $em->persist($zip);
-        $em->flush();
-
+        $province = new Province('Baselland', 'BL');
+        $address = new Address($province, 'Pratteln', 'Hauptstrasse', '11');
+        $address1 = new Address($province, 'Pratteln', 'Hauptstrasse', '11');
         $module = new Module('Module 1');
-        $workshop = new Workshop('Great Workshop', 'Workshop Street 1', $zip);
-        $camp = new Camp('Great Camp', 'Camp Street 1', $zip);
+        $workshop = new Workshop('Great Workshop', $address1);
+        $camp = new Camp('Great Camp', $address);
         $cast = new Cast('https://www.google.com');
 
+        $em->persist($address);
+        $em->persist($address1);
         $em->persist($workshop);
         $em->persist($camp);
         $em->persist($cast);

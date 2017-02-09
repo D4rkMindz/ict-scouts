@@ -5,10 +5,10 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Cast.
+ * Google Hangout link, used for potentially teaching remotely.
  *
  * @ORM\Table(name="cast")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CastRepository")
+ * @ORM\Entity
  */
 class Cast
 {
@@ -24,11 +24,16 @@ class Cast
     /**
      * @var string
      *
-     * @ORM\Column(name="url", type="string", length=255)
+     * @ORM\Column(name="url", type="string")
      */
     private $url;
 
-    public function __construct($url)
+    /**
+     * Cast constructor.
+     *
+     * @param string $url
+     */
+    public function __construct(string $url)
     {
         $this->url = $url;
     }
@@ -38,23 +43,9 @@ class Cast
      *
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * Set url.
-     *
-     * @param string $url
-     *
-     * @return Cast
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-
-        return $this;
     }
 
     /**
@@ -62,7 +53,7 @@ class Cast
      *
      * @return string
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->url;
     }
@@ -70,7 +61,7 @@ class Cast
     /**
      * @see \Serializable::serialize()
      */
-    public function serialize()
+    public function serialize(): string
     {
         return serialize(
             [
@@ -85,7 +76,7 @@ class Cast
      *
      * @param string $serialized
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
         list($this->id, $this->url) = unserialize($serialized);
     }

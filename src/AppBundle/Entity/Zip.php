@@ -5,10 +5,11 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @TODO: Include this into Address entity.
  * Zip.
  *
  * @ORM\Table(name="zip")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ZipRepository")
+ * @ORM\Entity
  */
 class Zip
 {
@@ -24,17 +25,23 @@ class Zip
     /**
      * @var string
      *
-     * @ORM\Column(name="zip", type="string", length=10)
+     * @ORM\Column(name="zip", type="string")
      */
     private $zip;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="city", type="string", length=100)
+     * @ORM\Column(name="city", type="string")
      */
     private $city;
 
+    /**
+     * Zip constructor.
+     *
+     * @param string $zip
+     * @param string $city
+     */
     public function __construct(string $zip, string $city)
     {
         $this->zip = $zip;
@@ -46,7 +53,7 @@ class Zip
      *
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -56,7 +63,7 @@ class Zip
      *
      * @return string
      */
-    public function getZip()
+    public function getZip(): string
     {
         return $this->zip;
     }
@@ -66,7 +73,7 @@ class Zip
      *
      * @return string
      */
-    public function getCity()
+    public function getCity(): string
     {
         return $this->city;
     }

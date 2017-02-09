@@ -16,15 +16,10 @@ class UserTest extends KernelTest
         $group = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_ADMIN']);
         $group1 = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_SCOUT']);
 
-        $authorizationChecker = $this->getContainer()->get('security.authorization_checker');
-
-        $user = new User();
-        $user->setGoogleId(123456789);
-        $user->setEmail('john.doe@example.com');
-        $user->setAccessToken('abc123cba');
+        $user = new User('123456789', 'john.doe@example.com');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
         $user->setAccessTokenExpireDate($tokenExpireDate);
-        $user->setGroups([$group]);
+        $user->addGroup($group);
         $user->addGroup($group1);
 
         $this->assertNull($user->getId());
@@ -49,9 +44,7 @@ class UserTest extends KernelTest
 
     public function testSerialization()
     {
-        $user = new User();
-        $user->setGoogleId(123456789);
-        $user->setEmail('john.doe@example.com');
+        $user = new User('12356789', 'john.doe@example.com');
         $user->setAccessToken('abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
         $user->setAccessTokenExpireDate($tokenExpireDate);
@@ -60,7 +53,7 @@ class UserTest extends KernelTest
 
         $this->assertTrue(is_string($serialized));
 
-        $newUser = new User();
+        $newUser = new User('', '');
         $newUser->unserialize($serialized);
 
         $this->assertTrue($newUser instanceof User);

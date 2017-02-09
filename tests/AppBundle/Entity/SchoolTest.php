@@ -2,9 +2,9 @@
 
 namespace Tests\AppBundle\Entity;
 
-use AppBundle\Entity\Person;
+use AppBundle\Entity\Address;
+use AppBundle\Entity\Province;
 use AppBundle\Entity\School;
-use AppBundle\Entity\Zip;
 use Tests\AppBundle\KernelTest;
 
 /**
@@ -19,22 +19,19 @@ class SchoolTest extends KernelTest
     {
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $zip = new Zip('0101', 'TestCity');
-        $em->persist($zip);
-        $em->flush();
+        $province = new Province('Baselland', 'BL');
+        $address = new Address($province, 'Pratteln', 'Hauptstrasse', '11');
 
-        $school = new School();
+        $school = new School('Global School');
         $school->setName('Global School');
-        $school->setAddress('Test Street 101');
-        $school->setAddress2('Main Building');
-        $school->setZip($zip);
+        $school->setAddress($address);
 
         $this->assertNull($school->getId());
         $this->assertEquals('Global School', $school->getName());
-        $this->assertEquals('Test Street 101', $school->getAddress());
-        $this->assertEquals('Main Building', $school->getAddress2());
-        $this->assertEquals($zip->getZip(), $school->getZip()->getZip());
+        $this->assertEquals($address, $school->getAddress());
 
+        $em->persist($province);
+        $em->persist($address);
         $em->persist($school);
         $em->flush();
 
@@ -46,24 +43,21 @@ class SchoolTest extends KernelTest
      */
     public function testSerialization()
     {
-        $zip = new Zip('0101', 'TestCity');
+        $province = new Province('Baselland', 'BL');
+        $address = new Address($province, 'Pratteln', 'Hauptstrasse', '11');
 
-        $school = new School();
-        $school->setName('Global School');
-        $school->setAddress('Test Street 101');
-        $school->setAddress2('Main Building');
-        $school->setZip($zip);
+        $school = new School('Global School');
+        $school->setAddress($address);
 
         $serialized = $school->serialize();
 
         $this->assertTrue(is_string($serialized));
 
-        $newSchool = new School();
+        $newSchool = new School('');
         $newSchool->unserialize($serialized);
 
         $this->assertTrue($newSchool instanceof School);
         $this->assertEquals(null, $newSchool->getId());
         $this->assertEquals('Global School', $newSchool->getName());
-        $this->assertEquals($zip->getZip(), $school->getZip()->getZip());
     }
 }

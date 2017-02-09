@@ -16,11 +16,9 @@ class GroupTest extends KernelTest
      */
     public function testGetterAndSetter()
     {
-        $user = new User();
-        $user->setEmail('test@test.com')->setGoogleId(123);
+        $user = new User('123', 'test@test.com', '');
         $group = new Group('test', 'ROLE_TEST');
 
-        $group->setUsers([]);
         $group->addUser($user);
 
         $this->assertNull($group->getId());
@@ -36,6 +34,9 @@ class GroupTest extends KernelTest
 
         $this->assertEquals(1, count($group->getUsers()));
         $this->assertNotNull($group->getId());
+
+        $group->removeUser($user);
+        $this->assertEquals(0, count($group->getUsers()));
     }
 
     /**

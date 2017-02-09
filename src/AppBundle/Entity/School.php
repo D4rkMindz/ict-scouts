@@ -5,10 +5,11 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * School.
+ * Schools that the scouts visit to gather more talents.
+ * @TODO: Maybe get dataset from examina.
  *
  * @ORM\Table(name="school")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\SchoolRepository")
+ * @ORM\Entity
  */
 class School
 {
@@ -24,54 +25,36 @@ class School
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=100)
+     * @ORM\Column(name="name", type="string")
      */
     private $name;
 
     /**
-     * @var string
+     * @var Address
      *
-     * @ORM\Column(name="address", type="string", length=100, nullable=true)
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Address")
+     * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
      */
     private $address;
 
     /**
-     * @var string
+     * School constructor.
      *
-     * @ORM\Column(name="address2", type="string", length=100, nullable=true)
+     * @param string $name
      */
-    private $address2;
-
-    /**
-     * @var Zip
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Zip", inversedBy="schools", cascade={"all"})
-     * @ORM\JoinColumn(name="zip_id", nullable=true)
-     */
-    private $zip;
+    public function __construct(string $name)
+    {
+        $this->name = $name;
+    }
 
     /**
      * Get id.
      *
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * Set name.
-     *
-     * @param string $name
-     *
-     * @return School
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     /**
@@ -79,81 +62,33 @@ class School
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * Set address.
-     *
-     * @param string $address
-     *
-     * @return School
+     * @param string $name
      */
-    public function setAddress($address)
+    public function setName(string $name): void
     {
-        $this->address = $address;
-
-        return $this;
+        $this->name = $name;
     }
 
     /**
-     * Get address.
-     *
-     * @return string
+     * @return Address
      */
-    public function getAddress()
+    public function getAddress(): Address
     {
         return $this->address;
     }
 
     /**
-     * Set address2.
-     *
-     * @param string $address2
-     *
-     * @return School
+     * @param Address $address
      */
-    public function setAddress2($address2)
+    public function setAddress(Address $address): void
     {
-        $this->address2 = $address2;
-
-        return $this;
-    }
-
-    /**
-     * Get address2.
-     *
-     * @return string
-     */
-    public function getAddress2()
-    {
-        return $this->address2;
-    }
-
-    /**
-     * Set zip.
-     *
-     * @param Zip $zip
-     *
-     * @return School
-     */
-    public function setZip($zip)
-    {
-        $this->zip = $zip;
-
-        return $this;
-    }
-
-    /**
-     * Get zip.
-     *
-     * @return Zip
-     */
-    public function getZip()
-    {
-        return $this->zip;
+        $this->address = $address;
     }
 
     /**
@@ -166,8 +101,6 @@ class School
                 $this->id,
                 $this->name,
                 $this->address,
-                $this->address2,
-                $this->zip,
             ]
         );
     }
@@ -179,6 +112,6 @@ class School
      */
     public function unserialize($serialized)
     {
-        list($this->id, $this->name, $this->address, $this->address2, $this->zip) = unserialize($serialized);
+        list($this->id, $this->name, $this->address) = unserialize($serialized);
     }
 }

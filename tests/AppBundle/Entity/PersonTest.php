@@ -8,6 +8,8 @@ use Tests\AppBundle\KernelTest;
 
 /**
  * Class PersonTest.
+ *
+ * @TODO: Rewrite test after rewriting Person-Entity.
  */
 class PersonTest extends KernelTest
 {
@@ -18,15 +20,9 @@ class PersonTest extends KernelTest
     {
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $zip = new Zip('0101', 'TestCity');
-        $em->persist($zip);
-        $em->flush();
-
-        $person = new Person();
+        $person = new Person('', '', 'Test Street 101');
         $person->setGivenName('John');
         $person->setFamilyName('Doe');
-        $person->setAddress('Test Street 101');
-        $person->setZip($zip);
         $person->setPhone('+41 79 123 45 67');
         $person->setMail('john.doe@example.com');
         $birthDate = new \DateTime();
@@ -36,7 +32,6 @@ class PersonTest extends KernelTest
         $this->assertEquals('John', $person->getGivenName());
         $this->assertEquals('Doe', $person->getFamilyName());
         $this->assertEquals('Test Street 101', $person->getAddress());
-        $this->assertEquals($zip->getZip(), $person->getZip()->getZip());
         $this->assertEquals('+41 79 123 45 67', $person->getPhone());
         $this->assertEquals('john.doe@example.com', $person->getMail());
         $this->assertEquals($birthDate, $person->getBirthDate());
@@ -52,13 +47,9 @@ class PersonTest extends KernelTest
      */
     public function testSerialization()
     {
-        $zip = new Zip('0101', 'TestCity');
-
-        $person = new Person();
+        $person = new Person('', '', '');
         $person->setGivenName('John');
         $person->setFamilyName('Doe');
-        $person->setAddress('Test Street 101');
-        $person->setZip($zip);
         $person->setPhone('+41 79 123 45 67');
         $person->setMail('john.doe@example.com');
         $birthDate = new \DateTime();
@@ -68,12 +59,11 @@ class PersonTest extends KernelTest
 
         $this->assertTrue(is_string($serialized));
 
-        $newPerson = new Person();
+        $newPerson = new Person('', '', '');
         $newPerson->unserialize($serialized);
 
         $this->assertTrue($newPerson instanceof Person);
         $this->assertEquals(null, $newPerson->getId());
         $this->assertEquals('Doe', $newPerson->getFamilyName());
-        $this->assertEquals($zip->getZip(), $newPerson->getZip()->getZip());
     }
 }

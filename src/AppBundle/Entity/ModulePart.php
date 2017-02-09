@@ -5,10 +5,10 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ModulePart.
+ * ModulePart. @TODO: PReimers, please explain this further.
  *
  * @ORM\Table(name="module_part")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ModulePartRepository")
+ * @ORM\Entity
  */
 class ModulePart
 {
@@ -24,7 +24,7 @@ class ModulePart
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=45)
+     * @ORM\Column(name="name", type="string")
      */
     private $name;
 
@@ -60,7 +60,13 @@ class ModulePart
      */
     private $cast;
 
-    public function __construct($name, Module $module)
+    /**
+     * ModulePart constructor.
+     *
+     * @param string $name
+     * @param Module $module
+     */
+    public function __construct(string $name, Module $module)
     {
         $this->name = $name;
         $this->module = $module;
@@ -71,7 +77,7 @@ class ModulePart
      *
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -81,9 +87,17 @@ class ModulePart
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 
     /**
@@ -91,7 +105,7 @@ class ModulePart
      *
      * @return Module
      */
-    public function getModule()
+    public function getModule(): Module
     {
         return $this->module;
     }
@@ -100,14 +114,10 @@ class ModulePart
      * Set workshop.
      *
      * @param string $workshop
-     *
-     * @return ModulePart
      */
-    public function setWorkshop($workshop)
+    public function setWorkshop($workshop): void
     {
         $this->workshop = $workshop;
-
-        return $this;
     }
 
     /**
@@ -115,7 +125,7 @@ class ModulePart
      *
      * @return Workshop
      */
-    public function getWorkshop()
+    public function getWorkshop(): ?Workshop
     {
         return $this->workshop;
     }
@@ -124,14 +134,10 @@ class ModulePart
      * Set camp.
      *
      * @param string $camp
-     *
-     * @return ModulePart
      */
-    public function setCamp($camp)
+    public function setCamp($camp): void
     {
         $this->camp = $camp;
-
-        return $this;
     }
 
     /**
@@ -139,7 +145,7 @@ class ModulePart
      *
      * @return Camp
      */
-    public function getCamp()
+    public function getCamp(): ?Camp
     {
         return $this->camp;
     }
@@ -148,14 +154,10 @@ class ModulePart
      * Set cast.
      *
      * @param string $cast
-     *
-     * @return ModulePart
      */
-    public function setCast($cast)
+    public function setCast($cast): void
     {
         $this->cast = $cast;
-
-        return $this;
     }
 
     /**
@@ -163,7 +165,7 @@ class ModulePart
      *
      * @return Cast
      */
-    public function getCast()
+    public function getCast(): ?Cast
     {
         return $this->cast;
     }

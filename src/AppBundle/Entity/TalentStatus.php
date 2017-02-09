@@ -5,16 +5,19 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @TODO: Maybe we want to add this to the talent entity.
+ * @TODO: Create fixtures.
+ *
  * TalentStatus.
  *
  * @ORM\Table(name="talent_status")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\TalentStatusRepository")
+ * @ORM\Entity
  */
 class TalentStatus
 {
-    const ACTIVE = 1;
-    const INACTIVE = 2;
-    const FORMER = 3;
+    public const ACTIVE = 1;
+    public const INACTIVE = 2;
+    public const FORMER = 3;
 
     /**
      * @var int
@@ -32,7 +35,12 @@ class TalentStatus
      */
     private $name;
 
-    public function __construct($name)
+    /**
+     * TalentStatus constructor.
+     *
+     * @param string $name
+     */
+    public function __construct(string $name)
     {
         $this->name = $name;
     }
@@ -42,7 +50,7 @@ class TalentStatus
      *
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -52,7 +60,7 @@ class TalentStatus
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
