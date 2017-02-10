@@ -80,7 +80,7 @@ class Person
     public function __construct(
         string $familyName,
         string $givenName,
-        string $address,
+        string $address = null,
         string $phone = null,
         string $mail = null,
         \DateTime $birthDate = null

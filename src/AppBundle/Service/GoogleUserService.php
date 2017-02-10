@@ -89,9 +89,7 @@ class GoogleUserService
             $dbUser = $this->em->getRepository('AppBundle:User')->findOneBy(['googleId' => $user->getId()]);
 
             if (!$dbUser) {
-                $dbUser = new User();
-                $dbUser->setGoogleId($user->getId());
-                $dbUser->setEmail($user->getPrimaryEmail());
+                $dbUser = new User($user->getId(), $user->getPrimaryEmail());
                 $this->em->persist($dbUser);
                 $this->em->flush();
             }
@@ -177,9 +175,7 @@ class GoogleUserService
         $name = $googleUser->getName();
 
         /** @var Person $person */
-        $person = new Person();
-        $person->setFamilyName($name->getFamilyName());
-        $person->setGivenName($name->getGivenName());
+        $person = new Person($name->getFamilyName(), $name->getGivenName());
         $person->setMail($googleUser->getPrimaryEmail());
 
         $this->em->persist($person);

@@ -16,7 +16,7 @@ class UserTest extends KernelTest
         $group = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_ADMIN']);
         $group1 = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_SCOUT']);
 
-        $user = new User('123456789', 'john.doe@example.com');
+        $user = new User('123456789', 'john.doe@example.com', 'abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
         $user->setAccessTokenExpireDate($tokenExpireDate);
         $user->addGroup($group);
@@ -44,7 +44,7 @@ class UserTest extends KernelTest
 
     public function testSerialization()
     {
-        $user = new User('12356789', 'john.doe@example.com');
+        $user = new User('123456789', 'john.doe@example.com');
         $user->setAccessToken('abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
         $user->setAccessTokenExpireDate($tokenExpireDate);

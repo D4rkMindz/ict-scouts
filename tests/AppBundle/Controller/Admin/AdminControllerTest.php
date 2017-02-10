@@ -46,12 +46,9 @@ class AdminControllerTest extends KernelTest
         $session = $this->getContainer()->get('session');
 
         /** @var User $user */
-        $user = new User();
-        $user->setAccessToken('abc123cba');
+        $user = new User('123456789', 'john.doe@'.$this->getContainer()->getParameter('google_apps_domain'), 'abc123cba');
         $user->setAccessTokenExpireDate((new \DateTime())->add(new \DateInterval('PT3595S')));
-        $user->setGoogleId(123456789);
-        $user->setEmail('john.doe@'.$this->getContainer()->getParameter('google_apps_domain'));
-        $user->setGroups([$group]);
+        $user->addGroup($group);
 
         $em->persist($user);
         $em->flush();

@@ -46,9 +46,7 @@ class GoogleUserServiceTest extends KernelTest
         /** @var GoogleUserService $googleUserService */
         $googleUserService = $client->getContainer()->get('app.service.google.user');
 
-        $user = new User();
-        $user->setGoogleId(1234567890);
-        $user->setEmail('jane.doe@example.com');
+        $user = new User('123456789', 'jane.doe@example.com');
         $em->persist($user);
         $em->flush();
 
@@ -78,9 +76,7 @@ class GoogleUserServiceTest extends KernelTest
         /** @var GoogleUserService $googleUserService */
         $googleUserService = $client->getContainer()->get('app.service.google.user');
 
-        $user = new User();
-        $user->setGoogleId(111222333444);
-        $user->setEmail('john.doe@example.com');
+        $user = new User('111222333444', 'john.doe@example.com');
         $em->persist($user);
         $em->flush();
 
