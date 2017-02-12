@@ -9,6 +9,8 @@ use Tests\AppBundle\KernelTest;
 
 /**
  * Class WorkshopTest.
+ *
+ * @covers \AppBundle\Entity\Workshop
  */
 class WorkshopTest extends KernelTest
 {

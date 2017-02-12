@@ -23,7 +23,7 @@ class GoogleAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        if (!$token = $request->getSession()->get('access_token')) {
+        if (!$request->getSession() || ($request->getSession() && !$token = $request->getSession()->get('access_token'))) {
             return;
         }
 

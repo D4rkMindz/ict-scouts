@@ -4,7 +4,14 @@ namespace Tests\AppBundle\Controller;
 
 use Tests\AppBundle\KernelTest;
 
-class DefaultControllerTest extends KernelTest
+/**
+ * Class DefaultControllerTest.
+ *
+ * @package Tests\AppBundle\Controller
+ *
+ * @covers \AppBundle\Controller\AppController
+ */
+class AppControllerTest extends KernelTest
 {
     public function testIndex()
     {

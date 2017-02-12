@@ -11,6 +11,8 @@ use Tests\AppBundle\KernelTest;
 
 /**
  * Class CampTest.
+ *
+ * @covers \AppBundle\Entity\Camp
  */
 class CampTest extends KernelTest
 {
@@ -23,6 +25,7 @@ class CampTest extends KernelTest
 
         $province = new Province('Baselland', 'BL');
         $address = new Address($province, 'Liestal', 'Hauptstrasse', '11');
+        $address2 = new Address($province, 'Liestal', 'Hauptstrasse', '12');
 
         $em->persist($province);
         $em->persist($address);
@@ -37,6 +40,9 @@ class CampTest extends KernelTest
         $em->persist($camp);
         $em->flush();
 
+        $camp->setAddress($address2);
+
+        $this->assertEquals($address2, $camp->getAddress());
         $this->assertNotNull($camp->getId());
     }
 

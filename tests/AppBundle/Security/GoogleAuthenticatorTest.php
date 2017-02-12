@@ -10,6 +10,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Tests\AppBundle\KernelTest;
 
+/**
+ * Class GoogleAuthenticatorTest.
+ *
+ * @package Tests\AppBundle\Security
+ *
+ * @covers \AppBundle\Security\GoogleAuthenticator
+ */
 class GoogleAuthenticatorTest extends KernelTest
 {
     /** @var Client */
@@ -24,6 +31,13 @@ class GoogleAuthenticatorTest extends KernelTest
         $this->client = static::createClient();
 
         $this->authenticator = new GoogleAuthenticator();
+    }
+
+    public function testFailingLogin()
+    {
+        $request = new Request();
+
+        $this->assertNull($this->authenticator->getCredentials($request));
     }
 
     public function testOnAuthenticationFailure()
@@ -59,12 +73,9 @@ class GoogleAuthenticatorTest extends KernelTest
         $session = $this->getContainer()->get('session');
 
         /** @var User $user */
-        $user = new User();
-        $user->setAccessToken('abc123cba');
+        $user = new User(123456789, 'john.doe@'.$this->getContainer()->getParameter('google_apps_domain'), 'abc123cba');
         $user->setAccessTokenExpireDate((new \DateTime())->add(new \DateInterval('PT3595S')));
-        $user->setGoogleId(123456789);
-        $user->setEmail('john.doe@'.$this->getContainer()->getParameter('google_apps_domain'));
-        $user->setGroups([$group]);
+        $user->addGroup($group);
 
         $em->persist($user);
         $em->flush();

@@ -8,6 +8,8 @@ use Tests\AppBundle\KernelTest;
 
 /**
  * Class GroupTest.
+ *
+ * @covers \AppBundle\Entity\Group
  */
 class GroupTest extends KernelTest
 {

@@ -74,6 +74,10 @@ class GoogleUserService
      * Get all users from provided domain.
      *
      * @param $domain
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     * @throws \Exception
      */
     public function getAllUsers($domain)
     {
@@ -82,6 +86,7 @@ class GoogleUserService
 
         $service = new \Google_Service_Directory($this->googleService->getClient());
 
+        /** @var \Google_Service_Directory_Users $users */
         $users = $service->users->listUsers(['domain' => $domain])->getUsers();
 
         /** @var \Google_Service_Directory_User $user */
@@ -103,6 +108,9 @@ class GoogleUserService
      *
      * @param User                           $user
      * @param \Google_Service_Directory_User $googleUser
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
     private function updateUser(User $user, \Google_Service_Directory_User $googleUser)
     {
@@ -112,7 +120,7 @@ class GoogleUserService
             $scout = $user->getScout();
 
             if (!$scout) {
-                $scout = new Scout($this->createPerson($googleUser), $user);
+                $scout = new Scout($user);
 
                 $this->em->persist($scout);
                 $this->em->flush();
@@ -143,17 +151,19 @@ class GoogleUserService
      *
      * @param User   $user
      * @param string $ou
+     *
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
-    public function updateUserGroups(User &$user, $ou)
+    public function updateUserGroups(User $user, $ou)
     {
         $group = null;
         $userGroups = (!$user->getGroups() ? 'foo' : $user->getGroups());
 
-        if ('/Support' == $ou && !$userGroups->contains($this->adminGroup)) {
+        if ('/Support' === $ou && !$userGroups->contains($this->adminGroup)) {
             $group = $this->adminGroup;
-        } elseif ('/Scouts' == $ou && !$userGroups->contains($this->scoutGroup)) {
+        } elseif ('/Scouts' === $ou && !$userGroups->contains($this->scoutGroup)) {
             $group = $this->scoutGroup;
-        } elseif ('/ict-campus/ICT Talents' == $ou && !$userGroups->contains($this->talentGroup)) {
+        } elseif ('/ict-campus/ICT Talents' === $ou && !$userGroups->contains($this->talentGroup)) {
             $group = $this->talentGroup;
         }
 
@@ -169,6 +179,9 @@ class GoogleUserService
      * @param \Google_Service_Directory_User $googleUser
      *
      * @return Person
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
     private function createPerson(\Google_Service_Directory_User $googleUser)
     {
@@ -191,6 +204,9 @@ class GoogleUserService
      * @param array $accessToken =null
      *
      * @return bool
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
     public function updateUserAccessToken($googleId, array $accessToken = null): bool
     {
@@ -203,10 +219,10 @@ class GoogleUserService
                 $user->setAccessTokenExpireDate(
                     (new \DateTime())->add(new \DateInterval('PT'.($accessToken['expires_in'] - 5).'S'))
                 );
-            }
 
-            $this->em->persist($user);
-            $this->em->flush();
+                $this->em->persist($user);
+                $this->em->flush();
+            }
 
             return true;
         } else {

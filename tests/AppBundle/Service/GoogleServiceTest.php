@@ -5,6 +5,13 @@ namespace Tests\AppBundle\Service;
 use AppBundle\Service\GoogleService;
 use Tests\AppBundle\KernelTest;
 
+/**
+ * Class GoogleServiceTest.
+ *
+ * @package Tests\AppBundle\Service
+ *
+ * @covers \AppBundle\Service\GoogleService
+ */
 class GoogleServiceTest extends KernelTest
 {
     public function testGetUserScopes()
@@ -102,5 +109,12 @@ class GoogleServiceTest extends KernelTest
         $googleService->auth($googleService::USER);
 
         $this->assertEquals($client->getContainer()->getParameter('google_client_id'), $googleService->getClient()->getClientId());
+    }
+
+    public function testGetAdminUser()
+    {
+        $googleService = $this->getContainer()->get('app.service.google');
+
+        $this->assertEquals($this->getContainer()->getParameter('google_apps_admin'), $googleService->getAdminUser());
     }
 }

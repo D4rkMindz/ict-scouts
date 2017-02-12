@@ -10,6 +10,8 @@ use Tests\AppBundle\KernelTest;
 
 /**
  * Class ScoutTest.
+ *
+ * @covers \AppBundle\Entity\Scout
  */
 class ScoutTest extends KernelTest
 {
@@ -47,5 +49,12 @@ class ScoutTest extends KernelTest
 
         $this->assertEquals($user->getEmail(), $scout->getUser()->getEmail());
         $this->assertCount(2, $scout->getModules());
+
+        $em->persist($scout);
+        $em->flush();
+
+        $scout->removeModule($module2);
+
+        $this->assertCount(1, $scout->getModules());
     }
 }

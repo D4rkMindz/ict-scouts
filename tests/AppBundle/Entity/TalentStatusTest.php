@@ -7,6 +7,8 @@ use Tests\AppBundle\KernelTest;
 
 /**
  * Class TalentStatusTest.
+ *
+ * @covers \AppBundle\Entity\TalentStatus
  */
 class TalentStatusTest extends KernelTest
 {

@@ -7,6 +7,8 @@ use Tests\AppBundle\KernelTest;
 
 /**
  * Class ZipTest.
+ *
+ * @covers \AppBundle\Entity\Zip
  */
 class ZipTest extends KernelTest
 {

@@ -2,12 +2,20 @@
 
 namespace Tests\AppBundle\Controller\Admin;
 
+use AppBundle\AppBundle;
 use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Tests\AppBundle\KernelTest;
 
+/**
+ * Class AdminControllerTest.
+ *
+ * @package Tests\AppBundle\Controller\Admin
+ *
+ * @covers \AppBundle\Controller\Admin\AdminController
+ */
 class AdminControllerTest extends KernelTest
 {
     /** @var Client */

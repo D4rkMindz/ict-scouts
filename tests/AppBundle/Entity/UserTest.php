@@ -3,10 +3,13 @@
 namespace Tests\AppBundle\Entity;
 
 use AppBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Tests\AppBundle\KernelTest;
 
 /**
  * Class UserTest.
+ *
+ * @covers \AppBundle\Entity\User
  */
 class UserTest extends KernelTest
 {
@@ -27,14 +30,14 @@ class UserTest extends KernelTest
         $this->assertEquals('john.doe@example.com', $user->getEmail());
         $this->assertEquals('abc123cba', $user->getAccessToken());
         $this->assertEquals($tokenExpireDate, $user->getAccessTokenExpireDate());
-        $this->assertTrue(is_array($user->getGroups()));
-        $this->assertEquals(count($user->getGroups()), 2);
+        $this->assertInstanceOf(ArrayCollection::class, $user->getGroups());
+        $this->assertCount(2, $user->getGroups());
 
         $em->persist($user);
         $em->flush();
 
         $this->assertTrue(is_array($user->getRoles()));
-        $this->assertEquals(count($user->getRoles()), 2);
+        $this->assertCount(2, $user->getRoles());
         $this->assertEquals(1, $user->getId());
         $this->assertEquals(null, $user->getPassword());
         $this->assertEquals(null, $user->getSalt());
@@ -56,7 +59,7 @@ class UserTest extends KernelTest
         $newUser = new User('', '');
         $newUser->unserialize($serialized);
 
-        $this->assertTrue($newUser instanceof User);
+        $this->assertInstanceOf(User::class, $newUser);
         $this->assertEquals(null, $newUser->getId());
         $this->assertEquals(123456789, $newUser->getGoogleId());
     }

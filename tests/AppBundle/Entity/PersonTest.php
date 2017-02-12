@@ -9,6 +9,8 @@ use Tests\AppBundle\KernelTest;
 /**
  * Class PersonTest.
  *
+ * @covers \AppBundle\Entity\Person
+ *
  * @TODO: Rewrite test after rewriting Person-Entity.
  */
 class PersonTest extends KernelTest

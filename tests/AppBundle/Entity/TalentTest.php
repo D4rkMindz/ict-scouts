@@ -11,6 +11,8 @@ use Tests\AppBundle\KernelTest;
 
 /**
  * Class TalentTest.
+ *
+ * @covers \AppBundle\Entity\Talent
  */
 class TalentTest extends KernelTest
 {

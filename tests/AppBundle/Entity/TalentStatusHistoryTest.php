@@ -12,6 +12,8 @@ use Tests\AppBundle\KernelTest;
 
 /**
  * Class TalentStatusHistoryTest.
+ *
+ * @covers \AppBundle\Entity\TalentStatusHistory
  */
 class TalentStatusHistoryTest extends KernelTest
 {

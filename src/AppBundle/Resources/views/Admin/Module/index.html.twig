@@ -1,0 +1,37 @@
+{% extends '@App/base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row valign-wrapper">
+            <div class="col s6">
+                <h2>Module</h2>
+            </div>
+            <div class="col s6 valign right-align">
+                <a href="{{ path('admin.module.create') }}" class="btn waves-effect waves-light">Hinzufügen</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <table class="responsive-table bordered highlight">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Aktion</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for module in modules %}
+                        <tr>
+                            <td><a href="{{ path('admin.module.show', {id: module.id}) }}">{{ module.name }}</a></td>
+                            <td>
+                                <a href="{{ path('admin.module.show', {id: module.id}) }}"><i class="material-icons">visibility</i></a>
+                                <a href="{{ path('admin.module.edit', {id: module.id}) }}"><i class="material-icons">mode_edit</i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

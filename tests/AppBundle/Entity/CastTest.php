@@ -7,6 +7,8 @@ use Tests\AppBundle\KernelTest;
 
 /**
  * Class CastTest.
+ *
+ * @covers \AppBundle\Entity\Cast
  */
 class CastTest extends KernelTest
 {

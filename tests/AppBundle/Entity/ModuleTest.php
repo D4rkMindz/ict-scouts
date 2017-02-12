@@ -10,6 +10,8 @@ use Tests\AppBundle\KernelTest;
 
 /**
  * Class ModuleTest.
+ *
+ * @covers \AppBundle\Entity\Module
  */
 class ModuleTest extends KernelTest
 {
@@ -53,6 +55,11 @@ class ModuleTest extends KernelTest
         $em->persist($module);
         $em->flush();
 
+        $module->setName('Module 1.1');
+        $module->removeScout($scout2);
+
+        $this->assertEquals('Module 1.1', $module->getName());
+        $this->assertCount(1, $module->getScouts());
         $this->assertNotNull($module->getId());
     }
 
@@ -71,5 +78,15 @@ class ModuleTest extends KernelTest
 
         $this->assertNull($module1->getId());
         $this->assertEquals('Module 2', $module1->getName());
+    }
+
+    /**
+     * Test construct from Array.
+     */
+    public function testFromArray()
+    {
+        $module = Module::fromArray(['name' => 'Module 3']);
+
+        $this->assertEquals('Module 3', $module->getName());
     }
 }

@@ -7,6 +7,13 @@ use AppBundle\Service\GoogleUserService;
 use Doctrine\ORM\EntityManager;
 use Tests\AppBundle\KernelTest;
 
+/**
+ * Class GoogleUserServiceTest.
+ *
+ * @package Tests\AppBundle\Service
+ *
+ * @covers \AppBundle\Service\GoogleUserService
+ */
 class GoogleUserServiceTest extends KernelTest
 {
     public function testGetGoogleService()
@@ -51,22 +58,21 @@ class GoogleUserServiceTest extends KernelTest
         $em->flush();
 
         $this->assertFalse($googleUserService->updateUserAccessToken('9876543210'));
-
         $this->assertNull($user->getAccessToken());
-        $this->assertTrue($googleUserService->updateUserAccessToken('1234567890'));
+        $this->assertTrue($googleUserService->updateUserAccessToken('123456789'));
 
-        $user = $em->getRepository('AppBundle:User')->findOneBy(['googleId' => '1234567890']);
+        $user = $em->getRepository('AppBundle:User')->findOneBy(['googleId' => '123456789']);
         $this->assertNull($user->getAccessToken());
 
-        $user = $em->getRepository('AppBundle:User')->findOneBy(['googleId' => '1234567890']);
+        $user = $em->getRepository('AppBundle:User')->findOneBy(['googleId' => '123456789']);
         $this->assertNull($user->getAccessToken());
-        $this->assertTrue($googleUserService->updateUserAccessToken('1234567890', ['access_token' => 'abc123cba', 'expires_in' => 3600]));
+        $this->assertTrue($googleUserService->updateUserAccessToken('123456789', ['access_token' => 'abc123cba', 'expires_in' => 3600]));
 
-        $user = $em->getRepository('AppBundle:User')->findOneBy(['googleId' => '1234567890']);
+        $user = $em->getRepository('AppBundle:User')->findOneBy(['googleId' => '123456789']);
         $this->assertNull($user->getAccessToken());
     }
 
-    public function testupdateUserGroups()
+    public function testUpdateUserGroups()
     {
         $client = static::createClient();
 

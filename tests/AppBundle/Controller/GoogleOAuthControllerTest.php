@@ -5,6 +5,13 @@ namespace Tests\AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Tests\AppBundle\KernelTest;
 
+/**
+ * Class GoogleOAuthControllerTest.
+ *
+ * @package Tests\AppBundle\Controller
+ *
+ * @covers \AppBundle\Controller\GoogleOAuthController
+ */
 class GoogleOAuthControllerTest extends KernelTest
 {
     /** @var Client */

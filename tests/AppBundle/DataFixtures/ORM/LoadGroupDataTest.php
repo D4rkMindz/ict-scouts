@@ -6,6 +6,8 @@ use Tests\AppBundle\KernelTest;
 
 /**
  * Class LoadGroupDataTest.
+ *
+ * @covers \AppBundle\DataFixtures\ORM\LoadGroupData
  */
 class LoadGroupDataTest extends KernelTest
 {

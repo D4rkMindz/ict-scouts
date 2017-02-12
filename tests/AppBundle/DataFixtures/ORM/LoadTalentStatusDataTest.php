@@ -7,6 +7,8 @@ use Tests\AppBundle\KernelTest;
 
 /**
  * Class LoadTalentStatusDataTest.
+ *
+ * @covers \AppBundle\DataFixtures\ORM\LoadTalentStatusData
  */
 class LoadTalentStatusDataTest extends KernelTest
 {

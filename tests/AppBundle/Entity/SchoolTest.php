@@ -8,7 +8,9 @@ use AppBundle\Entity\School;
 use Tests\AppBundle\KernelTest;
 
 /**
- * Class PersonTest.
+ * Class SchoolTest.
+ *
+ * @covers \AppBundle\Entity\School
  */
 class SchoolTest extends KernelTest
 {

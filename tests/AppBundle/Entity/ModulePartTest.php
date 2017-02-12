@@ -13,6 +13,8 @@ use Tests\AppBundle\KernelTest;
 
 /**
  * Class ModulePartTest.
+ *
+ * @covers \AppBundle\Entity\ModulePart
  */
 class ModulePartTest extends KernelTest
 {
@@ -53,6 +55,9 @@ class ModulePartTest extends KernelTest
         $em->persist($modulePart);
         $em->flush();
 
+        $modulePart->setName('Module 1 - Part 1.1');
+
+        $this->assertEquals('Module 1 - Part 1.1', $modulePart->getName());
         $this->assertNotNull($modulePart->getId());
     }
 }
