@@ -5,8 +5,6 @@ namespace Tests\AppBundle\Entity;
 use AppBundle\Entity\Address;
 use AppBundle\Entity\Camp;
 use AppBundle\Entity\Province;
-use AppBundle\Entity\Zip;
-use Symfony\Component\Process\ProcessUtils;
 use Tests\AppBundle\KernelTest;
 
 /**

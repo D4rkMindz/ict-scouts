@@ -10,7 +10,6 @@ use Tests\AppBundle\KernelTest;
 /**
  * Class GoogleUserServiceTest.
  *
- * @package Tests\AppBundle\Service
  *
  * @covers \AppBundle\Service\GoogleUserService
  */
@@ -87,10 +86,10 @@ class GoogleUserServiceTest extends KernelTest
         $em->flush();
 
         $googleUserService->updateUserGroups($user, '/ict-campus/ICT Talents');
-        $this->assertCount(1,$user->getGroups());
+        $this->assertCount(1, $user->getGroups());
         $googleUserService->updateUserGroups($user, '/Scouts');
-        $this->assertCount(2,$user->getGroups());
+        $this->assertCount(2, $user->getGroups());
         $googleUserService->updateUserGroups($user, '/Support');
-        $this->assertCount(3,$user->getGroups());
+        $this->assertCount(3, $user->getGroups());
     }
 }

@@ -7,7 +7,6 @@ use Tests\AppBundle\KernelTest;
 /**
  * Class DefaultControllerTest.
  *
- * @package Tests\AppBundle\Controller
  *
  * @covers \AppBundle\Controller\AppController
  */

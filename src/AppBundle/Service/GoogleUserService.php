@@ -9,8 +9,6 @@ use AppBundle\Entity\Talent;
 use AppBundle\Entity\TalentStatus;
 use AppBundle\Entity\TalentStatusHistory;
 use AppBundle\Entity\User;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Kernel;
 
@@ -178,10 +176,10 @@ class GoogleUserService
      *
      * @param \Google_Service_Directory_User $googleUser
      *
-     * @return Person
-     *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     *
+     * @return Person
      */
     private function createPerson(\Google_Service_Directory_User $googleUser)
     {
@@ -203,10 +201,10 @@ class GoogleUserService
      * @param int   $googleId
      * @param array $accessToken =null
      *
-     * @return bool
-     *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     *
+     * @return bool
      */
     public function updateUserAccessToken($googleId, array $accessToken = null): bool
     {

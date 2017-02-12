@@ -53,7 +53,7 @@ class Scout
     /**
      * Scout constructor.
      *
-     * @param User   $user
+     * @param User $user
      */
     public function __construct(User $user)
     {
