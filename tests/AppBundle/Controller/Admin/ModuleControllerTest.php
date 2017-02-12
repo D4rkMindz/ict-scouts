@@ -12,7 +12,6 @@ use Tests\AppBundle\KernelTest;
 /**
  * Class ModuleControllerTest.
  *
- * @package Tests\AppBundle\Controller\Admin
  *
  * @covers \AppBundle\Controller\Admin\ModuleController
  */

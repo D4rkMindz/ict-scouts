@@ -3,7 +3,6 @@
 namespace Tests\AppBundle\Entity;
 
 use AppBundle\Entity\Person;
-use AppBundle\Entity\Zip;
 use Tests\AppBundle\KernelTest;
 
 /**

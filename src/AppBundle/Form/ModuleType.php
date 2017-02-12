@@ -14,21 +14,20 @@ class ModuleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', null,[
+            ->add('name', null, [
                 'label'     => 'Name',
                 'required'  => true,
-            ])
-        ;
+            ]);
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Module'
-        ));
+        $resolver->setDefaults([
+            'data_class' => 'AppBundle\Entity\Module',
+        ]);
     }
 
     /**
@@ -38,6 +37,4 @@ class ModuleType extends AbstractType
     {
         return 'appbundle_module';
     }
-
-
 }

@@ -8,7 +8,6 @@ use Tests\AppBundle\KernelTest;
 /**
  * Class GoogleOAuthControllerTest.
  *
- * @package Tests\AppBundle\Controller
  *
  * @covers \AppBundle\Controller\GoogleOAuthController
  */

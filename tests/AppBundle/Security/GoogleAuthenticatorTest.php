@@ -13,7 +13,6 @@ use Tests\AppBundle\KernelTest;
 /**
  * Class GoogleAuthenticatorTest.
  *
- * @package Tests\AppBundle\Security
  *
  * @covers \AppBundle\Security\GoogleAuthenticator
  */

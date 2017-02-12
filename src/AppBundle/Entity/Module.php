@@ -51,7 +51,7 @@ class Module
      */
     public function __construct(string $name)
     {
-        $this->name  = $name;
+        $this->name = $name;
         $this->scouts = new ArrayCollection();
         $this->talents = new ArrayCollection();
     }

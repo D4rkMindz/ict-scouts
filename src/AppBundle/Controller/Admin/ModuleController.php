@@ -8,7 +8,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,9 +24,9 @@ class ModuleController extends Controller
      * @Route("/", name="admin.module.index")
      * @Method("GET")
      *
-     * @return Response
-     *
      * @throws \LogicException
+     *
+     * @return Response
      */
     public function indexAction(): Response
     {
@@ -47,15 +46,15 @@ class ModuleController extends Controller
      *
      * @param int $id
      *
-     * @return Response|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     *
      * @throws \LogicException
+     *
+     * @return Response|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function showAction($id)
     {
         $module = $this->getDoctrine()->getManager()->getRepository('AppBundle:Module')->find($id);
 
-        if (! $module) {
+        if (!$module) {
             return $this->createNotFoundException(sprintf('Module with ID: %s not found', $id));
         }
 
@@ -73,12 +72,13 @@ class ModuleController extends Controller
      *
      * @param Request $request
      *
-     * @return Response
      * @throws \InvalidArgumentException
      * @throws \LogicException
      * @throws \Symfony\Component\Form\Exception\UnexpectedTypeException
      * @throws \Symfony\Component\Form\Exception\LogicException
      * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
+     *
+     * @return Response
      */
     public function createAction(Request $request)
     {
@@ -114,14 +114,15 @@ class ModuleController extends Controller
      * @Method({"GET", "POST"})
      *
      * @param Request $request
-     * @param int $id
+     * @param int     $id
      *
-     * @return Response|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \InvalidArgumentException
      * @throws \LogicException
      * @throws \Symfony\Component\Form\Exception\UnexpectedTypeException
      * @throws \Symfony\Component\Form\Exception\LogicException
      * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
+     *
+     * @return Response|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function editAction(Request $request, $id)
     {
