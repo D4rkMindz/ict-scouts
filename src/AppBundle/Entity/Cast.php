@@ -59,6 +59,14 @@ class Cast
     }
 
     /**
+     * @param string $url
+     */
+    public function setUrl(string $url): void
+    {
+        $this->url = $url;
+    }
+
+    /**
      * @see \Serializable::serialize()
      */
     public function serialize(): string

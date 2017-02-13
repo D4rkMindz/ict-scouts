@@ -79,14 +79,4 @@ class ModuleTest extends KernelTest
         $this->assertNull($module1->getId());
         $this->assertEquals('Module 2', $module1->getName());
     }
-
-    /**
-     * Test construct from Array.
-     */
-    public function testFromArray()
-    {
-        $module = Module::fromArray(['name' => 'Module 3']);
-
-        $this->assertEquals('Module 3', $module->getName());
-    }
 }

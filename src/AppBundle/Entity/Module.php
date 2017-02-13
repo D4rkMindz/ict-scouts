@@ -77,14 +77,10 @@ class Module
      * Set name.
      *
      * @param string $name
-     *
-     * @return Module
      */
-    public function setName(string $name): Module
+    public function setName(string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
     /**
@@ -220,17 +216,5 @@ class Module
     public function unserialize(string $serialized): void
     {
         list($this->id, $this->name) = unserialize($serialized);
-    }
-
-    /**
-     * Create Object from Array.
-     *
-     * @param array $array
-     *
-     * @return Module
-     */
-    public static function fromArray(array $array): Module
-    {
-        return new self($array['name']);
     }
 }
