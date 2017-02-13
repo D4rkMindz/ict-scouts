@@ -57,10 +57,10 @@ class Address
     /**
      * Address constructor.
      *
-     * @param Province $province
-     * @param Zip $zip
-     * @param string $street
-     * @param string $streetNumber
+     * @param Province    $province
+     * @param Zip         $zip
+     * @param string      $street
+     * @param string      $streetNumber
      * @param string|null $addressExtra
      */
     public function __construct(

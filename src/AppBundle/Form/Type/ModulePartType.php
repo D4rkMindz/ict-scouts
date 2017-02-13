@@ -2,10 +2,10 @@
 
 namespace AppBundle\Form\Type;
 
+use AppBundle\Entity\ModulePart;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use AppBundle\Entity\ModulePart;
 
 class ModulePartType extends AbstractType
 {
@@ -20,14 +20,15 @@ class ModulePartType extends AbstractType
                 'required'  => true,
             ])
             ->add('module', null, [
-                'label'     => 'Modul',
-                'required'  => true,
+                'label'       => 'Modul',
+                'required'    => true,
                 'choice_label'=>'name'
             ]);
     }
 
     /**
      * {@inheritdoc}
+     *
      * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
      */
     public function configureOptions(OptionsResolver $resolver)

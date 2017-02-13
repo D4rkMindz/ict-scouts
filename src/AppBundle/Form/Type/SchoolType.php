@@ -40,6 +40,4 @@ class SchoolType extends AbstractType
     {
         return 'appbundle_school';
     }
-
-
 }
