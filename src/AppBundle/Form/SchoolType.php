@@ -5,9 +5,9 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use AppBundle\Entity\Module;
+use AppBundle\Entity\School;
 
-class ModuleType extends AbstractType
+class SchoolType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -29,7 +29,7 @@ class ModuleType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Module::class,
+            'data_class' => School::class
         ]);
     }
 
@@ -38,6 +38,8 @@ class ModuleType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_module';
+        return 'appbundle_school';
     }
+
+
 }

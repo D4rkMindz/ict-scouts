@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Entity\Module;
-use AppBundle\Form\ModuleType;
+use AppBundle\Entity\School;
+use AppBundle\Form\SchoolType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -12,16 +12,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class ModuleController.
+ * Class SchoolController.
  *
- * @Route("/admin/module")
+ * @Route("/admin/school")
  *
  * @Security("has_role('ROLE_ADMIN')")
  */
-class ModuleController extends Controller
+class SchoolController extends Controller
 {
     /**
-     * @Route("/", name="admin.module.index")
+     * @Route("/", name="admin.school.index")
      * @Method("GET")
      *
      * @throws \LogicException
@@ -30,18 +30,18 @@ class ModuleController extends Controller
      */
     public function indexAction(): Response
     {
-        $modules = $this->getDoctrine()->getManager()->getRepository('AppBundle:Module')->findAll();
+        $schools = $this->getDoctrine()->getManager()->getRepository('AppBundle:School')->findAll();
 
         return $this->render(
-            '@App/Admin/Module/index.html.twig',
+            '@App/Admin/School/index.html.twig',
             [
-                'modules' => $modules,
+                'schools' => $schools,
             ]
         );
     }
 
     /**
-     * @Route("/show/{id}", name="admin.module.show")
+     * @Route("/show/{id}", name="admin.school.show")
      * @Method("GET")
      *
      * @param int $id
@@ -52,22 +52,22 @@ class ModuleController extends Controller
      */
     public function showAction($id)
     {
-        $module = $this->getDoctrine()->getManager()->getRepository('AppBundle:Module')->find($id);
+        $school = $this->getDoctrine()->getManager()->getRepository('AppBundle:School')->find($id);
 
-        if (!$module) {
-            return $this->createNotFoundException(sprintf('Module with ID: %s not found', $id));
+        if (!$school) {
+            return $this->createNotFoundException(sprintf('School with ID: %s not found', $id));
         }
 
         return $this->render(
-            '@App/Admin/Module/show.html.twig',
+            '@App/Admin/School/show.html.twig',
             [
-                'module' => $module,
+                'school' => $school,
             ]
         );
     }
 
     /**
-     * @Route("/create", name="admin.module.create")
+     * @Route("/create", name="admin.school.create")
      * @Method({"GET", "POST"})
      *
      * @param Request $request
@@ -82,27 +82,27 @@ class ModuleController extends Controller
      */
     public function createAction(Request $request)
     {
-        $module = new Module('');
+        $school = new School('');
 
         $form = $this
-            ->createForm(ModuleType::class, $module, []);
+            ->createForm(SchoolType::class, $school, []);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $module = $form->getData();
+            $school = $form->getData();
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($module);
+            $em->persist($school);
             $em->flush();
 
-            return $this->redirectToRoute('admin.module.show', [
-                'id' => $module->getId(),
+            return $this->redirectToRoute('admin.school.show', [
+                'id' => $school->getId(),
             ]);
         }
 
         return $this->render(
-            '@App/Admin/Module/form.html.twig',
+            '@App/Admin/School/form.html.twig',
             [
                 'form' => $form->createView(),
             ]
@@ -110,7 +110,7 @@ class ModuleController extends Controller
     }
 
     /**
-     * @Route("/edit/{id}", name="admin.module.edit")
+     * @Route("/edit/{id}", name="admin.school.edit")
      * @Method({"GET", "POST"})
      *
      * @param Request $request
@@ -128,30 +128,30 @@ class ModuleController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $module = $em->getRepository('AppBundle:Module')->find($id);
+        $school = $em->getRepository('AppBundle:School')->find($id);
 
-        if (!$module) {
-            return $this->createNotFoundException(sprintf('Module with ID: %s not found', $id));
+        if (!$school) {
+            return $this->createNotFoundException(sprintf('School with ID: %s not found', $id));
         }
 
         $form = $this
-            ->createForm(ModuleType::class, $module, []);
+            ->createForm(SchoolType::class, $school, []);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $module = $form->getData();
+            $school = $form->getData();
 
-            $em->persist($module);
+            $em->persist($school);
             $em->flush();
 
-            return $this->redirectToRoute('admin.module.show', [
-                'id' => $module->getId(),
+            return $this->redirectToRoute('admin.school.show', [
+                'id' => $school->getId(),
             ]);
         }
 
         return $this->render(
-            '@App/Admin/Module/form.html.twig',
+            '@App/Admin/School/form.html.twig',
             [
                 'form' => $form->createView(),
             ]
