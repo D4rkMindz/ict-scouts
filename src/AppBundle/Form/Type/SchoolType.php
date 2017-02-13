@@ -1,11 +1,11 @@
 <?php
 
-namespace AppBundle\Form;
+namespace AppBundle\Form\Type;
 
+use AppBundle\Entity\School;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use AppBundle\Entity\School;
 
 class SchoolType extends AbstractType
 {
@@ -29,7 +29,7 @@ class SchoolType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => School::class
+            'data_class' => School::class,
         ]);
     }
 

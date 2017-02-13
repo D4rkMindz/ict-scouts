@@ -1,15 +1,15 @@
 <?php
 
-namespace Tests\AppBundle\Form;
+namespace Tests\AppBundle\Form\Type;
 
 use AppBundle\Entity\Module;
-use AppBundle\Form\ModuleType;
+use AppBundle\Form\Type\ModuleType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
  * Class ModuleTypeTest.
  *
- * @covers \AppBundle\Form\ModuleType
+ * @covers \AppBundle\Form\Type\ModuleType
  */
 class ModuleTypeTest extends TypeTestCase
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace AppBundle\Form;
+namespace AppBundle\Form\Type;
 
+use AppBundle\Entity\Module;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use AppBundle\Entity\Module;
 
 class ModuleType extends AbstractType
 {
