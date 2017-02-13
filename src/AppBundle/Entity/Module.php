@@ -38,13 +38,6 @@ class Module
     private $scouts;
 
     /**
-     * @var Talent
-     *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Talent", mappedBy="modules", cascade={"all"})
-     */
-    private $talents;
-
-    /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\ModulePart", mappedBy="module", cascade={"all"})
@@ -123,40 +116,6 @@ class Module
     public function removeScout(Scout $scout): Module
     {
         $this->scouts->removeElement($scout);
-
-        return $this;
-    }
-
-    /**
-     * @return Talent
-     */
-    public function getTalents(): Talent
-    {
-        return $this->talents;
-    }
-
-    /**
-     * @param Talent $talent
-     *
-     * @return Module
-     */
-    public function addTalent(Talent $talent): Module
-    {
-        if (!$this->talents->contains($talent)) {
-            $this->talents->add($talent);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Talent $talent
-     *
-     * @return Module
-     */
-    public function removeTalent(Talent $talent): Module
-    {
-        $this->talents->removeElement($talent);
 
         return $this;
     }

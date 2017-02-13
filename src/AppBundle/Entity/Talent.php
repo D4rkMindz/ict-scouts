@@ -17,13 +17,14 @@ use Doctrine\ORM\Mapping as ORM;
 class Talent
 {
     /**
-     * @var int
+     * @var Person
      *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Id()
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Person", inversedBy="talents", cascade={"all"})
+     * @ORM\JoinColumn(name="person_id", unique=true)
      */
-    private $id;
+    private $person;
 
     /**
      * @var School
@@ -40,21 +41,6 @@ class Talent
      * @ORM\JoinColumn(name="app_user_id", nullable=false)
      */
     private $user;
-
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Module", inversedBy="talents", cascade={"all"})
-     * @ORM\JoinTable(
-     *     name="talent_has_module", joinColumns={
-     *          @ORM\JoinColumn(name="talent_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *          @ORM\JoinColumn(name="module_id", referencedColumnName="id")
-     *     }
-     * )
-     */
-    private $modules;
 
     /**
      * @var bool
@@ -75,14 +61,6 @@ class Talent
         $this->person = $person;
         $this->user = $user;
         $this->veggie = $veggie;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     /**
@@ -123,32 +101,6 @@ class Talent
     public function getUser(): User
     {
         return $this->user;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getModules(): Collection
-    {
-        return $this->modules;
-    }
-
-    /**
-     * @param Module $module
-     */
-    public function addModules(Module $module): void
-    {
-        if (!$this->modules->contains($module)) {
-            $this->modules->add($module);
-        }
-    }
-
-    /**
-     * @param Module $module
-     */
-    public function removeModule(Module $module): void
-    {
-        $this->modules->removeElement($module);
     }
 
     /**

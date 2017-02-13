@@ -5,6 +5,7 @@ namespace Tests\AppBundle\Entity;
 use AppBundle\Entity\Address;
 use AppBundle\Entity\Province;
 use AppBundle\Entity\School;
+use AppBundle\Entity\Zip;
 use Tests\AppBundle\KernelTest;
 
 /**
@@ -22,7 +23,8 @@ class SchoolTest extends KernelTest
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $province = new Province('Baselland', 'BL');
-        $address = new Address($province, 'Pratteln', 'Hauptstrasse', '11');
+        $zip = new Zip('4133', 'Pratteln');
+        $address = new Address($province, $zip, 'Hauptstrasse', '11');
 
         $school = new School('Global School');
         $school->setName('Global School');
@@ -46,7 +48,8 @@ class SchoolTest extends KernelTest
     public function testSerialization()
     {
         $province = new Province('Baselland', 'BL');
-        $address = new Address($province, 'Pratteln', 'Hauptstrasse', '11');
+        $zip = new Zip('4133', 'Pratteln');
+        $address = new Address($province, $zip, 'Hauptstrasse', '11');
 
         $school = new School('Global School');
         $school->setAddress($address);

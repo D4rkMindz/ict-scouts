@@ -5,6 +5,7 @@ namespace Tests\AppBundle\Entity;
 use AppBundle\Entity\Address;
 use AppBundle\Entity\Camp;
 use AppBundle\Entity\Province;
+use AppBundle\Entity\Zip;
 use Tests\AppBundle\KernelTest;
 
 /**
@@ -22,8 +23,9 @@ class CampTest extends KernelTest
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $province = new Province('Baselland', 'BL');
-        $address = new Address($province, 'Liestal', 'Hauptstrasse', '11');
-        $address2 = new Address($province, 'Liestal', 'Hauptstrasse', '12');
+        $zip = new Zip('4410', 'Liestal');
+        $address = new Address($province, $zip, 'Hauptstrasse', '11');
+        $address2 = new Address($province, $zip, 'Hauptstrasse', '12');
 
         $em->persist($province);
         $em->persist($address);
@@ -52,14 +54,16 @@ class CampTest extends KernelTest
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $province = new Province('Baselland', 'BL');
-        $address = new Address($province, 'Liestal', 'Hauptstrasse', '11');
+        $zip = new Zip('4410', 'Liestal');
+        $address = new Address($province, $zip, 'Hauptstrasse', '11');
 
         $em->persist($province);
         $em->persist($address);
         $em->flush();
 
         $province1 = new Province('', '');
-        $address1 = new Address($province1, '', '', '');
+        $zip1 = new Zip('', '');
+        $address1 = new Address($province1, $zip1, '', '');
 
         $camp = new Camp('Great Camp', $address);
         $serialized = $camp->serialize();

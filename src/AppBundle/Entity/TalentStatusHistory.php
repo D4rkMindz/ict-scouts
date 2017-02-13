@@ -25,7 +25,7 @@ class TalentStatusHistory
      * @var Talent
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Talent", inversedBy="talentStatusHistories", cascade={"all"})
-     * @ORM\JoinColumn(name="talent_id", nullable=true, referencedColumnName="id")
+     * @ORM\JoinColumn(name="talent_id", nullable=true, referencedColumnName="person_id")
      */
     private $talent;
 

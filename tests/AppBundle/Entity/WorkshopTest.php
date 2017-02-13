@@ -22,7 +22,8 @@ class WorkshopTest extends KernelTest
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $province = new Province('Baselland', 'BL');
-        $address = new Address($province, 'Liestal', 'Hauptstrasse', '11');
+        $zip = new Zip('4410', 'Liestal');
+        $address = new Address($province, $zip, 'Hauptstrasse', '11');
         $em->persist($province);
         $em->persist($address);
         $em->flush();
@@ -50,7 +51,8 @@ class WorkshopTest extends KernelTest
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $province = new Province('Baselland', 'BL');
-        $address = new Address($province, 'Liestal', 'Hauptstrasse', '11');
+        $zip = new Zip('4410', 'Liestal');
+        $address = new Address($province, $zip, 'Hauptstrasse', '11');
         $em->persist($province);
         $em->persist($address);
         $em->flush();

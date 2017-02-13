@@ -23,9 +23,10 @@ class Address
     /**
      * @var string
      *
-     * @ORM\Column(type="string")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Zip", cascade={"persist"})
+     * @ORM\JoinColumn(name="zip_id")
      */
-    private $state;
+    private $zip;
 
     /**
      * @var Province
@@ -56,16 +57,21 @@ class Address
     /**
      * Address constructor.
      *
-     * @param Province    $province
-     * @param string      $state
-     * @param string      $street
-     * @param string      $streetNumber
+     * @param Province $province
+     * @param Zip $zip
+     * @param string $street
+     * @param string $streetNumber
      * @param string|null $addressExtra
      */
-    public function __construct(Province $province, string $state, string $street, string $streetNumber, string $addressExtra = null)
-    {
+    public function __construct(
+        Province $province,
+        Zip $zip,
+        string $street,
+        string $streetNumber,
+        string $addressExtra = null
+    ) {
         $this->province = $province;
-        $this->state = $state;
+        $this->zip = $zip;
         $this->street = $street;
         $this->streetNumber = $streetNumber;
         $this->addressExtra = $addressExtra;
@@ -82,17 +88,17 @@ class Address
     /**
      * @return string
      */
-    public function getState(): string
+    public function getZip(): string
     {
-        return $this->state;
+        return $this->zip;
     }
 
     /**
-     * @param string $state
+     * @param string $zip
      */
-    public function setState(string $state): void
+    public function setZip(string $zip): void
     {
-        $this->state = $state;
+        $this->zip = $zip;
     }
 
     /**
@@ -146,7 +152,7 @@ class Address
     /**
      * @return string
      */
-    public function getAddressExtra(): string
+    public function getAddressExtra(): ?string
     {
         return $this->addressExtra;
     }

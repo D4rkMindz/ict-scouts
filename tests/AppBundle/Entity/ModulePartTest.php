@@ -9,6 +9,7 @@ use AppBundle\Entity\Module;
 use AppBundle\Entity\ModulePart;
 use AppBundle\Entity\Province;
 use AppBundle\Entity\Workshop;
+use AppBundle\Entity\Zip;
 use Tests\AppBundle\KernelTest;
 
 /**
@@ -26,8 +27,9 @@ class ModulePartTest extends KernelTest
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $province = new Province('Baselland', 'BL');
-        $address = new Address($province, 'Pratteln', 'Hauptstrasse', '11');
-        $address1 = new Address($province, 'Pratteln', 'Hauptstrasse', '11');
+        $zip = new Zip('4133', 'Pratteln');
+        $address = new Address($province, $zip, 'Hauptstrasse', '11');
+        $address1 = new Address($province, $zip, 'Hauptstrasse', '11');
         $module = new Module('Module 1');
         $workshop = new Workshop('Great Workshop', $address1);
         $camp = new Camp('Great Camp', $address);
