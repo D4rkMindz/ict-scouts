@@ -45,6 +45,13 @@ class Module
     private $talents;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ModulePart", mappedBy="module", cascade={"all"})
+     */
+    private $moduleParts;
+
+    /**
      * Module constructor.
      *
      * @param string $name
@@ -100,20 +107,28 @@ class Module
 
     /**
      * @param Scout $scout
+     *
+     * @return Module
      */
-    public function addScout(Scout $scout): void
+    public function addScout(Scout $scout): Module
     {
         if (!$this->scouts->contains($scout)) {
             $this->scouts->add($scout);
         }
+
+        return $this;
     }
 
     /**
      * @param Scout $scout
+     *
+     * @return Module
      */
-    public function removeScout(Scout $scout): void
+    public function removeScout(Scout $scout): Module
     {
         $this->scouts->removeElement($scout);
+
+        return $this;
     }
 
     /**
@@ -126,20 +141,62 @@ class Module
 
     /**
      * @param Talent $talent
+     *
+     * @return Module
      */
-    public function addTalent(Talent $talent): void
+    public function addTalent(Talent $talent): Module
     {
         if (!$this->talents->contains($talent)) {
             $this->talents->add($talent);
         }
+
+        return $this;
     }
 
     /**
      * @param Talent $talent
+     *
+     * @return Module
      */
-    public function removeTalent(Talent $talent): void
+    public function removeTalent(Talent $talent): Module
     {
         $this->talents->removeElement($talent);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getModuleParts(): Collection
+    {
+        return $this->moduleParts;
+    }
+
+    /**
+     * @param ModulePart $modulePart
+     *
+     * @return Module
+     */
+    public function addModulePart(ModulePart $modulePart): Module
+    {
+        if (!$this->talents->contains($modulePart)) {
+            $this->talents->add($modulePart);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ModulePart $modulePart
+     *
+     * @return Module
+     */
+    public function removeModulePart(ModulePart $modulePart): Module
+    {
+        $this->talents->removeElement($modulePart);
+
+        return $this;
     }
 
     /**

@@ -28,6 +28,17 @@
                                 <a href="{{ path('admin.module.edit', {id: module.id}) }}"><i class="material-icons">mode_edit</i></a>
                             </td>
                         </tr>
+                        {% if module.moduleParts is not empty %}
+                            {% for part in module.moduleParts %}
+                                <tr>
+                                    <td><a href="{{ path('admin.module.part.show', {id: part.id}) }}"><i class="material-icons">label</i>&nbsp;{{ part.name }}</a></td>
+                                    <td>
+                                        <a href="{{ path('admin.module.part.show', {id: part.id}) }}"><i class="material-icons">visibility</i></a>
+                                        <a href="{{ path('admin.module.part.edit', {id: part.id}) }}"><i class="material-icons">mode_edit</i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
                     {% endfor %}
                     </tbody>
                 </table>

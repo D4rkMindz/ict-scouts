@@ -3,6 +3,8 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Module;
+use AppBundle\Entity\ModulePart;
+use AppBundle\Form\Type\ModulePartType;
 use AppBundle\Form\Type\ModuleType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -152,6 +154,131 @@ class ModuleController extends Controller
 
         return $this->render(
             '@App/Admin/Module/form.html.twig',
+            [
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/part/show/{id}", name="admin.module.part.show")
+     * @Method("GET")
+     *
+     * @param int $id
+     *
+     * @throws \LogicException
+     *
+     * @return Response|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function showPartAction($id)
+    {
+        $modulePart = $this->getDoctrine()->getManager()->getRepository('AppBundle:ModulePart')->find($id);
+
+        if (!$modulePart) {
+            return $this->createNotFoundException(sprintf('ModulePart with ID: %s not found', $id));
+        }
+
+        return $this->render(
+            '@App/Admin/Module/Part/show.html.twig',
+            [
+                'modulePart' => $modulePart,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/part/create/{moduleId}", name="admin.module.part.create")
+     * @Method({"GET", "POST"})
+     *
+     * @param Request $request
+     *
+     * @throws \InvalidArgumentException
+     * @throws \LogicException
+     * @throws \Symfony\Component\Form\Exception\UnexpectedTypeException
+     * @throws \Symfony\Component\Form\Exception\LogicException
+     * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
+     *
+     * @return Response|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function createPartAction(Request $request, $moduleId)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $module = $em->getRepository('AppBundle:Module')->find($moduleId);
+
+        if (! $module) {
+            return $this->createNotFoundException(sprintf('Module with ID: %s not found', $moduleId));
+        }
+
+        $modulePart = new ModulePart('', $module);
+
+        $form = $this
+            ->createForm(ModulePartType::class, $modulePart, []);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $modulePart = $form->getData();
+
+            $em->persist($modulePart);
+            $em->flush();
+
+            return $this->redirectToRoute('admin.module.show', [
+                'id' => $modulePart->getId(),
+            ]);
+        }
+
+        return $this->render(
+            '@App/Admin/Module/Part/form.html.twig',
+            [
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/part/edit/{id}", name="admin.module.part.edit")
+     * @Method({"GET", "POST"})
+     *
+     * @param Request $request
+     * @param int     $id
+     *
+     * @throws \InvalidArgumentException
+     * @throws \LogicException
+     * @throws \Symfony\Component\Form\Exception\UnexpectedTypeException
+     * @throws \Symfony\Component\Form\Exception\LogicException
+     * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
+     *
+     * @return Response|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function editPartAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $modulePart = $em->getRepository('AppBundle:ModulePart')->find($id);
+
+        if (!$modulePart) {
+            return $this->createNotFoundException(sprintf('ModulePart with ID: %s not found', $id));
+        }
+
+        $form = $this
+            ->createForm(ModulePartType::class, $modulePart, []);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $modulePart = $form->getData();
+
+            $em->persist($modulePart);
+            $em->flush();
+
+            return $this->redirectToRoute('admin.module.part.show', [
+                'id' => $modulePart->getId(),
+            ]);
+        }
+
+        return $this->render(
+            '@App/Admin/Module/Part/form.html.twig',
             [
                 'form' => $form->createView(),
             ]
