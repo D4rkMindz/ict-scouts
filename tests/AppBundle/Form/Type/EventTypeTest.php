@@ -21,9 +21,9 @@ class EventTypeTest extends TypeTestCase
         $endDate = (new \DateTime())->add(new \DateInterval('P1D'));
 
         $formData = [
-            'name' => 'test-event',
+            'name'      => 'test-event',
             'startDate' => $startDate,
-            'endDate' => $endDate,
+            'endDate'   => $endDate,
         ];
 
         $this->assertNull($event->getName());

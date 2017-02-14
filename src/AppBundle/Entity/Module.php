@@ -46,7 +46,6 @@ class Module
 
     /**
      * Module constructor.
-     *
      */
     public function __construct()
     {

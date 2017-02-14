@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Event
+ * Event.
  *
  * @ORM\Table(name="event")
  * @ORM\Entity
@@ -49,7 +49,7 @@ class Event
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -59,7 +59,7 @@ class Event
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -73,7 +73,7 @@ class Event
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -83,7 +83,7 @@ class Event
     }
 
     /**
-     * Set startDate
+     * Set startDate.
      *
      * @param \DateTime $startDate
      *
@@ -97,7 +97,7 @@ class Event
     }
 
     /**
-     * Get startDate
+     * Get startDate.
      *
      * @return \DateTime
      */
@@ -107,7 +107,7 @@ class Event
     }
 
     /**
-     * Set endDate
+     * Set endDate.
      *
      * @param \DateTime $endDate
      *
@@ -121,7 +121,7 @@ class Event
     }
 
     /**
-     * Get endDate
+     * Get endDate.
      *
      * @return \DateTime
      */
@@ -130,4 +130,3 @@ class Event
         return $this->endDate;
     }
 }
-

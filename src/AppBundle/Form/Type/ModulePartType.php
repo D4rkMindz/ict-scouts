@@ -23,7 +23,7 @@ class ModulePartType extends AbstractType
             ->add('module', null, [
                 'label'        => 'Modul',
                 'required'     => true,
-                'choice_label' => 'name'
+                'choice_label' => 'name',
             ]);
     }
 
@@ -46,6 +46,4 @@ class ModulePartType extends AbstractType
     {
         return 'appbundle_modulepart';
     }
-
-
 }
