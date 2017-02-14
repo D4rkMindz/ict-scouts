@@ -27,6 +27,9 @@ class CastTest extends KernelTest
         $em->persist($cast);
         $em->flush();
 
+        $cast->setUrl('https://example.com');
+
+        $this->assertEquals('https://example.com', $cast->getUrl());
         $this->assertNotNull($cast->getId());
     }
 
@@ -35,7 +38,7 @@ class CastTest extends KernelTest
      */
     public function testSerialization()
     {
-        $cast = new Cast('https://www.google.com');
+        $cast = new Cast('https://example.com');
         $serialized = $cast->serialize();
 
         $this->assertTrue(is_string($serialized));
@@ -44,6 +47,6 @@ class CastTest extends KernelTest
         $cast1->unserialize($serialized);
 
         $this->assertNull($cast1->getId());
-        $this->assertEquals('https://www.google.com', $cast1->getUrl());
+        $this->assertEquals('https://example.com', $cast1->getUrl());
     }
 }

@@ -13,7 +13,7 @@ use Tests\AppBundle\KernelTest;
  * Class SchoolControllerTest.
  *
  *
- * @covers \AppBundle\Controller\Admin\ModuleController
+ * @covers \AppBundle\Controller\Admin\SchoolController
  */
 class SchoolControllerTest extends KernelTest
 {

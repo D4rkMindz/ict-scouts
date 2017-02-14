@@ -84,10 +84,8 @@ class ModuleController extends Controller
      */
     public function createAction(Request $request)
     {
-        $module = new Module('');
-
         $form = $this
-            ->createForm(ModuleType::class, $module, []);
+            ->createForm(ModuleType::class, new Module(), []);
 
         $form->handleRequest($request);
 
@@ -210,7 +208,8 @@ class ModuleController extends Controller
             return $this->createNotFoundException(sprintf('Module with ID: %s not found', $moduleId));
         }
 
-        $modulePart = new ModulePart('', $module);
+        $modulePart = new ModulePart();
+        $modulePart->setModule($module);
 
         $form = $this
             ->createForm(ModulePartType::class, $modulePart, []);

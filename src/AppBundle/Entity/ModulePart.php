@@ -60,16 +60,9 @@ class ModulePart
      */
     private $cast;
 
-    /**
-     * ModulePart constructor.
-     *
-     * @param string $name
-     * @param Module $module
-     */
-    public function __construct(string $name, Module $module)
+    public function __construct()
     {
-        $this->name = $name;
-        $this->module = $module;
+        $this->name = '';
     }
 
     /**
@@ -105,9 +98,19 @@ class ModulePart
      *
      * @return Module
      */
-    public function getModule(): Module
+    public function getModule(): ?Module
     {
         return $this->module;
+    }
+
+    /**
+     * Set module.
+     *
+     * @param Module $module
+     */
+    public function setModule(Module $module): void
+    {
+        $this->module = $module;
     }
 
     /**

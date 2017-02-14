@@ -9,29 +9,29 @@ use Symfony\Component\Form\Test\TypeTestCase;
 /**
  * Class SchoolTypeTest.
  *
- * @covers \AppBundle\Form\Type\ModuleType
+ * @covers \AppBundle\Form\Type\SchoolType
  */
 class SchoolTypeTest extends TypeTestCase
 {
     public function testSubmitValidData()
     {
-        $module = new School('');
+        $school = new School('');
 
         $formData = [
             'name' => 'test-school',
         ];
 
-        $this->assertEquals('', $module->getName());
+        $this->assertEquals('', $school->getName());
 
-        $form = $this->factory->create(SchoolType::class, $module);
+        $form = $this->factory->create(SchoolType::class, $school);
 
         // submit the data to the form directly
         $form->submit($formData);
 
-        $this->assertEquals('test-school', $module->getName());
+        $this->assertEquals('test-school', $school->getName());
 
         $this->assertTrue($form->isSynchronized());
-        $this->assertEquals($module, $form->getData());
+        $this->assertEquals($school, $form->getData());
 
         $view = $form->createView();
         $children = $view->children;

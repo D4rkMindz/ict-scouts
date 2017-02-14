@@ -2,13 +2,12 @@
 
 namespace AppBundle\Form\Type;
 
-use AppBundle\Entity\Module;
-use AppBundle\Entity\ModulePart;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use AppBundle\Entity\Event;
 
-class ModulePartType extends AbstractType
+class EventType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -17,25 +16,27 @@ class ModulePartType extends AbstractType
     {
         $builder
             ->add('name', null, [
-                'label'     => 'Name',
-                'required'  => true,
+                'label' => 'Name',
+                'required' => true,
             ])
-            ->add('module', null, [
-                'label'        => 'Modul',
-                'required'     => true,
-                'choice_label' => 'name'
+            ->add('startDate', null, [
+                'label' => 'Start',
+                'required' => true,
+            ])
+            ->add('endDate', null, [
+                'label' => 'Ende',
+                'required' => true,
             ]);
     }
 
     /**
      * {@inheritdoc}
-     *
      * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => ModulePart::class,
+            'data_class' => Event::class
         ]);
     }
 
@@ -44,7 +45,7 @@ class ModulePartType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_modulepart';
+        return 'appbundle_event';
     }
 
 

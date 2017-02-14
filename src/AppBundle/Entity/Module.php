@@ -47,13 +47,13 @@ class Module
     /**
      * Module constructor.
      *
-     * @param string $name
      */
-    public function __construct(string $name)
+    public function __construct()
     {
-        $this->name = $name;
+        $this->name = '';
         $this->scouts = new ArrayCollection();
         $this->talents = new ArrayCollection();
+        $this->moduleParts = new ArrayCollection();
     }
 
     /**
@@ -96,32 +96,24 @@ class Module
 
     /**
      * @param Scout $scout
-     *
-     * @return Module
      */
-    public function addScout(Scout $scout): Module
+    public function addScout(Scout $scout): void
     {
         if (!$this->scouts->contains($scout)) {
             $this->scouts->add($scout);
         }
-
-        return $this;
     }
 
     /**
      * @param Scout $scout
-     *
-     * @return Module
      */
-    public function removeScout(Scout $scout): Module
+    public function removeScout(Scout $scout): void
     {
         $this->scouts->removeElement($scout);
-
-        return $this;
     }
 
     /**
-     * @return Collection
+     * @return Collection|null
      */
     public function getModuleParts(): Collection
     {
@@ -129,29 +121,21 @@ class Module
     }
 
     /**
-     * @param ModulePart $modulePart
-     *
-     * @return Module
+     * @param modulePart $modulePart
      */
-    public function addModulePart(ModulePart $modulePart): Module
+    public function addModulePart(ModulePart $modulePart): void
     {
-        if (!$this->talents->contains($modulePart)) {
-            $this->talents->add($modulePart);
+        if (!$this->moduleParts->contains($modulePart)) {
+            $this->moduleParts->add($modulePart);
         }
-
-        return $this;
     }
 
     /**
      * @param ModulePart $modulePart
-     *
-     * @return Module
      */
-    public function removeModulePart(ModulePart $modulePart): Module
+    public function removeModulePart(ModulePart $modulePart): void
     {
-        $this->talents->removeElement($modulePart);
-
-        return $this;
+        $this->moduleParts->removeElement($modulePart);
     }
 
     /**

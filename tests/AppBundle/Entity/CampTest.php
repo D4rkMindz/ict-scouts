@@ -40,8 +40,10 @@ class CampTest extends KernelTest
         $em->persist($camp);
         $em->flush();
 
+        $camp->setName('Greatest Camp');
         $camp->setAddress($address2);
 
+        $this->assertEquals('Greatest Camp', $camp->getName());
         $this->assertEquals($address2, $camp->getAddress());
         $this->assertNotNull($camp->getId());
     }

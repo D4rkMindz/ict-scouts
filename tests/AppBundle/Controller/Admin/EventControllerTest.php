@@ -2,7 +2,7 @@
 
 namespace Tests\AppBundle\Controller\Admin;
 
-use AppBundle\Entity\Module;
+use AppBundle\Entity\Event;
 use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\BrowserKit\Cookie;
@@ -10,12 +10,12 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Tests\AppBundle\KernelTest;
 
 /**
- * Class ModuleControllerTest.
+ * Class EventControllerTest.
  *
  *
- * @covers \AppBundle\Controller\Admin\ModuleController
+ * @covers \AppBundle\Controller\Admin\EventController
  */
-class ModuleControllerTest extends KernelTest
+class EventControllerTest extends KernelTest
 {
     /** @var Client */
     private $client = null;
@@ -30,20 +30,30 @@ class ModuleControllerTest extends KernelTest
     {
         $this->logIn();
 
-        $crawler = $this->client->request('GET', '/admin/module/');
+        $crawler = $this->client->request('GET', '/admin/event/');
 
         $this->assertTrue($this->client->getResponse()->isSuccessful());
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Module")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Events")')->count());
     }
 
     public function testCreate()
     {
         $this->logIn();
 
-        $crawler = $this->client->request('GET', '/admin/module/create');
+        $crawler = $this->client->request('GET', '/admin/event/create');
 
         $form = $crawler->selectButton('submit')->form();
-        $form['appbundle_module[name]'] = 'Test Module';
+        $form['appbundle_event[name]'] = 'Test Event';
+        $form['appbundle_event[startDate][date][month]'] = 2;
+        $form['appbundle_event[startDate][date][day]'] = 28;
+        $form['appbundle_event[startDate][date][year]'] = 2017;
+        $form['appbundle_event[startDate][time][hour]'] = 12;
+        $form['appbundle_event[startDate][time][minute]'] = 0;
+        $form['appbundle_event[endDate][date][month]'] = 2;
+        $form['appbundle_event[endDate][date][day]'] = 28;
+        $form['appbundle_event[endDate][date][year]'] = 2017;
+        $form['appbundle_event[endDate][time][hour]'] = 13;
+        $form['appbundle_event[endDate][time][minute]'] = 0;
         $crawler = $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirection());
@@ -56,13 +66,15 @@ class ModuleControllerTest extends KernelTest
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         // Create Module
-        $module = new Module();
-        $module->setName('Automated-Test-Module');
-        $em->persist($module);
+        $event = new Event();
+        $event->setName('Automated-Test-Event');
+        $event->setStartDate(new \DateTime());
+        $event->setEndDate((new \DateTime())->add(new \DateInterval('P1D')));
+        $em->persist($event);
         $em->flush();
 
         // Get Module
-        $crawler = $this->client->request('GET', '/admin/module/show/'.$module->getId());
+        $crawler = $this->client->request('GET', '/admin/event/show/'.$event->getId());
 
         $this->assertTrue($this->client->getResponse()->isSuccessful());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Name:")')->count());
@@ -79,21 +91,33 @@ class ModuleControllerTest extends KernelTest
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         // Create Module
-        $module = new Module();
-        $module->setName('Automated-Test-Module');
-        $em->persist($module);
+        $event = new Event();
+        $event->setName('Automated-Test-Event');
+        $event->setStartDate(new \DateTime());
+        $event->setEndDate((new \DateTime())->add(new \DateInterval('P1D')));
+        $em->persist($event);
         $em->flush();
 
         // Get Module
-        $crawler = $this->client->request('GET', '/admin/module/edit/'.$module->getId());
+        $crawler = $this->client->request('GET', '/admin/event/edit/'.$event->getId());
 
         $this->assertTrue($this->client->getResponse()->isSuccessful());
 
         $form = $crawler->selectButton('submit')->form();
-        $form['appbundle_module[name]'] = 'My Test Module';
+        $form['appbundle_event[name]'] = 'Test Event';
+        $form['appbundle_event[startDate][date][month]'] = 2;
+        $form['appbundle_event[startDate][date][day]'] = 28;
+        $form['appbundle_event[startDate][date][year]'] = 2017;
+        $form['appbundle_event[startDate][time][hour]'] = 12;
+        $form['appbundle_event[startDate][time][minute]'] = 0;
+        $form['appbundle_event[endDate][date][month]'] = 2;
+        $form['appbundle_event[endDate][date][day]'] = 28;
+        $form['appbundle_event[endDate][date][year]'] = 2017;
+        $form['appbundle_event[endDate][time][hour]'] = 13;
+        $form['appbundle_event[endDate][time][minute]'] = 0;
         $crawler = $this->client->submit($form);
 
-        $this->assertTrue($this->client->getResponse()->isRedirect('/admin/module/show/'.$module->getId()));
+        $this->assertTrue($this->client->getResponse()->isRedirect('/admin/event/show/'.$event->getId()));
     }
 
     private function logIn()

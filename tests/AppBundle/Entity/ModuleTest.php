@@ -3,6 +3,7 @@
 namespace Tests\AppBundle\Entity;
 
 use AppBundle\Entity\Module;
+use AppBundle\Entity\ModulePart;
 use AppBundle\Entity\Scout;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Zip;
@@ -44,7 +45,8 @@ class ModuleTest extends KernelTest
         $scout = new Scout($user);
         $scout2 = new Scout($user2);
 
-        $module = new Module('Module 1');
+        $module = new Module();
+        $module->setName('Module 1');
         $module->addScout($scout);
         $module->addScout($scout2);
 
@@ -55,12 +57,25 @@ class ModuleTest extends KernelTest
         $em->persist($module);
         $em->flush();
 
+        $modulePart = new ModulePart();
+        $modulePart->setName('Test-Module-Part-1');
+        $modulePart->setModule($module);
+
+        $em->persist($modulePart);
+        $em->flush();
+
+        $module->addModulePart($modulePart);
+
+        $this->assertCount(1, $module->getModuleParts());
+
         $module->setName('Module 1.1');
         $module->removeScout($scout2);
+        $module->removeModulePart($modulePart);
 
+        $this->assertNotNull($module->getId());
         $this->assertEquals('Module 1.1', $module->getName());
         $this->assertCount(1, $module->getScouts());
-        $this->assertNotNull($module->getId());
+        $this->assertEmpty($module->getModuleParts());
     }
 
     /**
@@ -68,12 +83,14 @@ class ModuleTest extends KernelTest
      */
     public function testSerialization()
     {
-        $module = new Module('Module 2');
+        $module = new Module();
+        $module->setName('Module 2');
         $serialized = $module->serialize();
 
         $this->assertTrue(is_string($serialized));
 
-        $module1 = new Module('Module 1');
+        $module1 = new Module();
+        $module1->setName('Module 1');
         $module1->unserialize($serialized);
 
         $this->assertNull($module1->getId());

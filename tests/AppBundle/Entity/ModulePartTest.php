@@ -30,7 +30,8 @@ class ModulePartTest extends KernelTest
         $zip = new Zip('4133', 'Pratteln');
         $address = new Address($province, $zip, 'Hauptstrasse', '11');
         $address1 = new Address($province, $zip, 'Hauptstrasse', '11');
-        $module = new Module('Module 1');
+        $module = new Module();
+        $module->setName('Module 1');
         $workshop = new Workshop('Great Workshop', $address1);
         $camp = new Camp('Great Camp', $address);
         $cast = new Cast('https://www.google.com');
@@ -42,7 +43,9 @@ class ModulePartTest extends KernelTest
         $em->persist($cast);
         $em->flush();
 
-        $modulePart = new ModulePart('Module 1 - Part 1', $module);
+        $modulePart = new ModulePart();
+        $modulePart->setName('Module 1 - Part 1');
+        $modulePart->setModule($module);
         $modulePart->setWorkshop($workshop);
         $modulePart->setCamp($camp);
         $modulePart->setCast($cast);

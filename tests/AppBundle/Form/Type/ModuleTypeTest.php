@@ -15,13 +15,13 @@ class ModuleTypeTest extends TypeTestCase
 {
     public function testSubmitValidData()
     {
-        $module = new Module('');
+        $module = new Module();
 
         $formData = [
             'name' => 'test',
         ];
 
-        $this->assertEquals('', $module->getName());
+        $this->assertEmpty($module->getName());
 
         $form = $this->factory->create(ModuleType::class, $module);
 

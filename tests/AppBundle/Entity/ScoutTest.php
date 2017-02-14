@@ -23,8 +23,10 @@ class ScoutTest extends KernelTest
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $group = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_SCOUT']);
 
-        $module = new Module('Module 1');
-        $module2 = new Module('Module 2');
+        $module = new Module();
+        $module->setName('Module 1');
+        $module2 = new Module();
+        $module2->setName('Module 2');
 
         $person = new Person('Doe', 'John', 'Address');
         $person->setPhone('+41 79 123 45 67');
