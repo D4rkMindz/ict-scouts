@@ -204,7 +204,7 @@ class ModuleController extends Controller
 
         $module = $em->getRepository('AppBundle:Module')->find($moduleId);
 
-        if (! $module) {
+        if (!$module) {
             return $this->createNotFoundException(sprintf('Module with ID: %s not found', $moduleId));
         }
 

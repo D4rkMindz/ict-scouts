@@ -2,10 +2,10 @@
 
 namespace AppBundle\Form\Type;
 
+use AppBundle\Entity\Event;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use AppBundle\Entity\Event;
 
 class EventType extends AbstractType
 {
@@ -16,27 +16,28 @@ class EventType extends AbstractType
     {
         $builder
             ->add('name', null, [
-                'label' => 'Name',
+                'label'    => 'Name',
                 'required' => true,
             ])
             ->add('startDate', null, [
-                'label' => 'Start',
+                'label'    => 'Start',
                 'required' => true,
             ])
             ->add('endDate', null, [
-                'label' => 'Ende',
+                'label'    => 'Ende',
                 'required' => true,
             ]);
     }
 
     /**
      * {@inheritdoc}
+     *
      * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Event::class
+            'data_class' => Event::class,
         ]);
     }
 
@@ -47,6 +48,4 @@ class EventType extends AbstractType
     {
         return 'appbundle_event';
     }
-
-
 }
