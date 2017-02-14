@@ -37,7 +37,7 @@
         </div>
         <div class="footer-copyright">
             <div class="container">
-                © 2016 Copyright Förderverein ICT Scouts / Campus
+                © 2016{{ ("now"|date('Y')>2016 ? ' - ' ~ "now"|date('Y') : '') }} Copyright Förderverein ICT Scouts / Campus
             </div>
         </div>
         {% block modals %}
