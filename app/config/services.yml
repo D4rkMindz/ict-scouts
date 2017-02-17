@@ -8,5 +8,7 @@ services:
         class: AppBundle\Security\GoogleAuthenticator
     app.service.google:
         class: AppBundle\Service\GoogleService
+        arguments: ['@kernel']
+    app.service.google.user:
+        class: AppBundle\Service\GoogleUserService
         arguments: ['@kernel', '@doctrine.orm.entity_manager']
-

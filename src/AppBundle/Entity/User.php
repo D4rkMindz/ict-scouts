@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -10,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Class User.
  *
  * @ORM\Table(name="app_user")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ * @ORM\Entity
  */
 class User implements UserInterface, \Serializable
 {
@@ -24,34 +25,22 @@ class User implements UserInterface, \Serializable
     private $id;
 
     /**
-     * @ORM\Column(name="google_id", type="string", length=255, unique=true)
-     *
      * @var string
+     *
+     * @ORM\Column(name="google_id", type="string", unique=true)
      */
     private $googleId;
 
     /**
-     * @ORM\Column(name="given_name", type="string", length=100)
-     *
      * @var string
-     */
-    private $givenName;
-
-    /**
-     * @ORM\Column(name="family_name", type="string", length=100)
      *
-     * @var string
-     */
-    private $familyName;
-
-    /**
-     * @ORM\Column(name="email", type="string", length=255)
-     *
-     * @var string
+     * @ORM\Column(name="email", type="string")
      */
     private $email;
 
     /**
+     * @var ArrayCollection
+     *
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Group", inversedBy="users", cascade={"all"})
      * @ORM\JoinTable(
      *     name="app_user_has_app_group", joinColumns={
@@ -61,15 +50,13 @@ class User implements UserInterface, \Serializable
      *          @ORM\JoinColumn(name="group_id", referencedColumnName="id")
      *     }
      * )
-     *
-     * @var ArrayCollection
      */
     private $groups;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="access_token", type="string", length=255, nullable=true)
+     * @ORM\Column(name="access_token", type="string", nullable=true)
      */
     private $accessToken;
 
@@ -81,48 +68,42 @@ class User implements UserInterface, \Serializable
     private $accessTokenExpireDate;
 
     /**
-     * @var \DateTime
+     * @var Scout
      *
-     * @ORM\Column(name="created_at", type="datetime", nullable=true)
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Scout", mappedBy="user", cascade={"all"})
      */
-    private $createdAt;
+    private $scout;
 
     /**
-     * @var \DateTime
+     * @var Talent
      *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Talent", mappedBy="user", cascade={"all"})
      */
-    private $updatedAt;
+    private $talent;
 
     /**
-     * @var \DateTime
+     * User constructor.
      *
-     * @ORM\Column(name="deleted_at", type="datetime", nullable=true, options={"default":null})
+     * @param string $googleId
+     * @param string $email
+     * @param string $accessToken
      */
-    private $deletedAt = null;
+    public function __construct(string $googleId, string $email, string $accessToken = null)
+    {
+        $this->groups = new ArrayCollection();
+        $this->googleId = $googleId;
+        $this->email = $email;
+        $this->accessToken = $accessToken;
+    }
 
     /**
      * Get id.
      *
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * Set googleId.
-     *
-     * @param string $googleId
-     *
-     * @return User
-     */
-    public function setGoogleId($googleId)
-    {
-        $this->googleId = $googleId;
-
-        return $this;
     }
 
     /**
@@ -130,71 +111,9 @@ class User implements UserInterface, \Serializable
      *
      * @return string
      */
-    public function getGoogleId()
+    public function getGoogleId(): string
     {
         return $this->googleId;
-    }
-
-    /**
-     * Set givenName.
-     *
-     * @param string $givenName
-     *
-     * @return User
-     */
-    public function setGivenName($givenName)
-    {
-        $this->givenName = $givenName;
-
-        return $this;
-    }
-
-    /**
-     * Get givenName.
-     *
-     * @return string
-     */
-    public function getGivenName()
-    {
-        return $this->givenName;
-    }
-
-    /**
-     * Set familyName.
-     *
-     * @param string $familyName
-     *
-     * @return User
-     */
-    public function setFamilyName($familyName)
-    {
-        $this->familyName = $familyName;
-
-        return $this;
-    }
-
-    /**
-     * Get familyName.
-     *
-     * @return string
-     */
-    public function getFamilyName()
-    {
-        return $this->familyName;
-    }
-
-    /**
-     * Set email.
-     *
-     * @param string $email
-     *
-     * @return User
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
     }
 
     /**
@@ -202,51 +121,43 @@ class User implements UserInterface, \Serializable
      *
      * @return string
      */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
 
     /**
-     * @return array|ArrayCollection
+     * @return Collection
      */
-    public function getGroups()
+    public function getGroups(): Collection
     {
         return $this->groups;
     }
 
     /**
-     * @param array|ArrayCollection $groups
+     * @param Group $group
      */
-    public function setGroups(array $groups)
+    public function addGroup(Group $group): void
     {
-        $this->groups = $groups;
+        if (!$this->groups->contains($group)) {
+            $this->groups->add($group);
+        }
     }
 
     /**
      * @param Group $group
-     *
-     * @return $this
      */
-    public function addGroup(Group $group)
+    public function removeGroup(Group $group): void
     {
-        $this->groups[] = $group;
-
-        return $this;
+        $this->groups->removeElement($group);
     }
 
     /**
-     * Set accessToken.
-     *
      * @param string $accessToken
-     *
-     * @return User
      */
-    public function setAccessToken($accessToken)
+    public function setAccessToken(string $accessToken): void
     {
         $this->accessToken = $accessToken;
-
-        return $this;
     }
 
     /**
@@ -254,7 +165,7 @@ class User implements UserInterface, \Serializable
      *
      * @return string
      */
-    public function getAccessToken()
+    public function getAccessToken(): ?string
     {
         return $this->accessToken;
     }
@@ -263,14 +174,10 @@ class User implements UserInterface, \Serializable
      * Set accessTokenExpireDate.
      *
      * @param \DateTime $accessTokenExpireDate
-     *
-     * @return User
      */
-    public function setAccessTokenExpireDate($accessTokenExpireDate)
+    public function setAccessTokenExpireDate(\DateTime $accessTokenExpireDate): void
     {
         $this->accessTokenExpireDate = $accessTokenExpireDate;
-
-        return $this;
     }
 
     /**
@@ -278,81 +185,49 @@ class User implements UserInterface, \Serializable
      *
      * @return \DateTime
      */
-    public function getAccessTokenExpireDate()
+    public function getAccessTokenExpireDate(): ?\DateTime
     {
         return $this->accessTokenExpireDate;
     }
 
     /**
-     * Set createdAt.
+     * Set scout.
      *
-     * @param \DateTime $createdAt
-     *
-     * @return User
+     * @param Scout $scout
      */
-    public function setCreatedAt($createdAt)
+    public function setScout(Scout $scout): void
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        $this->scout = $scout;
     }
 
     /**
-     * Get createdAt.
+     * Get scout.
      *
-     * @return \DateTime
+     * @return Scout
      */
-    public function getCreatedAt()
+    public function getScout(): ?Scout
     {
-        return $this->createdAt;
+        return $this->scout;
     }
 
     /**
-     * Set updatedAt.
+     * Set talent.
      *
-     * @param \DateTime $updatedAt
-     *
-     * @return User
+     * @param Talent $talent
      */
-    public function setUpdatedAt($updatedAt)
+    public function setTalent(Talent $talent): void
     {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
+        $this->talent = $talent;
     }
 
     /**
-     * Get updatedAt.
+     * Get talent.
      *
-     * @return \DateTime
+     * @return Talent
      */
-    public function getUpdatedAt()
+    public function getTalent(): ?Talent
     {
-        return $this->updatedAt;
-    }
-
-    /**
-     * Set deletedAt.
-     *
-     * @param \DateTime $deletedAt
-     *
-     * @return User
-     */
-    public function setDeletedAt($deletedAt)
-    {
-        $this->deletedAt = $deletedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get deletedAt.
-     *
-     * @return \DateTime
-     */
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
+        return $this->talent;
     }
 
     /**
@@ -361,7 +236,7 @@ class User implements UserInterface, \Serializable
      * This should be the encoded password. On authentication, a plain-text
      * password will be salted, encoded, and then compared to this value.
      */
-    public function getPassword()
+    public function getPassword(): void
     {
     }
 
@@ -370,7 +245,7 @@ class User implements UserInterface, \Serializable
      *
      * This can return null if the password was not encoded using a salt.
      */
-    public function getSalt()
+    public function getSalt(): void
     {
     }
 
@@ -379,9 +254,9 @@ class User implements UserInterface, \Serializable
      *
      * @return string The username
      */
-    public function getUsername()
+    public function getUsername(): string
     {
-        return $this->getGivenName().' '.$this->getFamilyName();
+        return $this->getEmail();
     }
 
     /**
@@ -390,7 +265,7 @@ class User implements UserInterface, \Serializable
      * This is important if, at any given point, sensitive information like
      * the plain-text password is stored on this object.
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
     }
 
@@ -399,14 +274,12 @@ class User implements UserInterface, \Serializable
      *
      * @see \Serializable::serialize()
      */
-    public function serialize()
+    public function serialize(): string
     {
         return serialize(
             [
                 'id'         => $this->id,
                 'googleId'   => $this->googleId,
-                'givenName'  => $this->givenName,
-                'familyName' => $this->familyName,
                 'email'      => $this->email,
             ]
         );
@@ -416,23 +289,23 @@ class User implements UserInterface, \Serializable
      * Constructs the object.
      *
      * @see \Serializable::unserialize()
+     *
+     * @param string $serialized
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
         $userArray = unserialize($serialized);
         $this->id = $userArray['id'];
         $this->googleId = $userArray['googleId'];
-        $this->givenName = $userArray['givenName'];
-        $this->familyName = $userArray['familyName'];
         $this->email = $userArray['email'];
     }
 
     /**
-     * Get asigned Roles.
+     * Get assigned Roles.
      *
      * @return array
      */
-    public function getRoles()
+    public function getRoles(): array
     {
         $roles = [];
         /** @var Group $group */

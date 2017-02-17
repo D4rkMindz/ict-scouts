@@ -1,0 +1,37 @@
+{% extends '@App/base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row valign-wrapper">
+            <div class="col s6">
+                <h2>Schulen</h2>
+            </div>
+            <div class="col s6 valign right-align">
+                <a href="{{ path('admin.school.create') }}" class="btn waves-effect waves-light">Hinzufügen</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <table class="responsive-table bordered highlight">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Aktion</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for school in schools %}
+                        <tr>
+                            <td><a href="{{ path('admin.school.show', {id: school.id}) }}">{{ school.name }}</a></td>
+                            <td>
+                                <a href="{{ path('admin.school.show', {id: school.id}) }}"><i class="material-icons">visibility</i></a>
+                                <a href="{{ path('admin.school.edit', {id: school.id}) }}"><i class="material-icons">mode_edit</i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

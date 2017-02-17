@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Service\GoogleService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,15 +20,13 @@ class GoogleOAuthController extends Controller
      * @Route("/login", name="login")
      * @Method("GET")
      *
-     * @param Request $request
-     *
      * @return Response
      */
-    public function loginAction(Request $request): Response
+    public function loginAction(): Response
     {
-        $googleService = $this->container->get('app.service.google');
+        $googleService = $this->get('app.service.google');
         $client = $googleService->auth($googleService::USER);
-        $client->setHostedDomain($this->container->getParameter('google_apps_domain'));
+        $client->setHostedDomain($this->getParameter('google_apps_domain'));
 
         return $this->redirect($client->createAuthUrl());
     }
@@ -46,14 +45,14 @@ class GoogleOAuthController extends Controller
     {
         if ($request->query->get('code')) {
             $code = $request->query->get('code');
-            $googleService = $this->get('app.service.google');
-            $client = $googleService->auth($googleService::USER);
+            $googleUserService = $this->get('app.service.google.user');
+            $client = $googleUserService->getGoogleService()->auth(GoogleService::USER);
             $client->authenticate($code);
             $userData = (new \Google_Service_Oauth2($client))->userinfo_v2_me->get();
-            if ($userData->getHd() != $this->container->getParameter('google_apps_domain')) {
+            if ($userData->getHd() != $this->getParameter('google_apps_domain')) {
                 return new Response('<h2>Error</h2><hr />Wrong Google Account<hr />');
             }
-            if (!$googleService->updateUserAccessToken($userData->getId(), $client->getAccessToken())) {
+            if (!$googleUserService->updateUserAccessToken($userData->getId(), $client->getAccessToken())) {
                 return new Response('<h2>Error</h2><hr />Account not Found - If you think this is an error please contact an Administrator<hr />');
             }
             $request->getSession()->set('access_token', $client->getAccessToken()['access_token']);

@@ -31,8 +31,8 @@ class GoogleUserSyncCommand extends ContainerAwareCommand
         $io = new SymfonyStyle($input, $output);
         $io->title('Google Usersync');
 
-        $googleService = $this->getContainer()->get('app.service.google');
-        $googleService->getAllUsers($this->getContainer()->getParameter('google_apps_domain'));
+        $googleUserService = $this->getContainer()->get('app.service.google.user');
+        $googleUserService->getAllUsers($this->getContainer()->getParameter('google_apps_domain'));
 
         $io->writeln('Done');
     }

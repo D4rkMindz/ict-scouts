@@ -2,8 +2,6 @@
 
 namespace AppBundle\Service;
 
-use AppBundle\Entity\User;
-use Doctrine\ORM\EntityManager;
 use Google_Client;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpKernel\Kernel;
@@ -33,11 +31,6 @@ class GoogleService
     ];
 
     /**
-     * @var EntityManager
-     */
-    private $em;
-
-    /**
      * @var Google_Client
      */
     private $client;
@@ -50,10 +43,9 @@ class GoogleService
     /**
      * GoogleService constructor.
      *
-     * @param Kernel        $kernel
-     * @param EntityManager $entityManager
+     * @param Kernel $kernel
      */
-    public function __construct(Kernel $kernel, EntityManager $entityManager)
+    public function __construct(Kernel $kernel)
     {
         if (!getenv('GOOGLE_APPLICATION_CREDENTIALS')) {
             putenv(
@@ -65,7 +57,6 @@ class GoogleService
 
         $this->parameters = $kernel->getContainer()->getParameterBag();
         $this->adminMail = $this->parameters->get('google_apps_admin');
-        $this->em = $entityManager;
         $this->client = new Google_Client();
     }
 
@@ -159,132 +150,5 @@ class GoogleService
     public function getAdminUser(): string
     {
         return $this->adminMail;
-    }
-
-    /**
-     * Get all users from provided domain.
-     *
-     * @param $domain
-     */
-    public function getAllUsers($domain)
-    {
-        $this->auth(self::SERVICE);
-        $this->client->setSubject($this->getAdminUser());
-
-        $service = new \Google_Service_Directory($this->client);
-
-        $users = $service->users->listUsers(['domain' => $domain])->getUsers();
-
-        $googleUsers = [];
-        /** @var \Google_Service_Directory_User $user */
-        foreach ($users as $user) {
-            $name = $user->getName();
-
-            $myUser = new \Google_Service_Oauth2_Userinfoplus();
-            $myUser->setEmail($user->getPrimaryEmail());
-            $myUser->setFamilyName($name->getFamilyName());
-            $myUser->setGivenName($name->getGivenName());
-            $myUser->setId($user->getId());
-
-            $dbUser = $this->createUser($myUser);
-
-            $this->updateUserGroups($dbUser, $user->getOrgUnitPath());
-
-            $googleUsers[] = $dbUser;
-        }
-
-        $users = $this->em->getRepository('AppBundle:User')->findAll();
-        /** @var User $user */
-        foreach ($users as $user) {
-            if (!in_array($user, $googleUsers)) {
-                $this->em->remove($user);
-            }
-        }
-        $this->em->flush();
-    }
-
-    /**
-     * Create user based on users in GSuite.
-     *
-     * @param \Google_Service_Oauth2_Userinfoplus $userData
-     *
-     * @return User
-     */
-    public function createUser(\Google_Service_Oauth2_Userinfoplus $userData): User
-    {
-        /** @var User $user */
-        $user = $this->em->getRepository('AppBundle:User')->findOneBy(['googleId' => $userData->getId()]);
-
-        if (!$user) {
-            $user = new User();
-            $user->setGoogleId($userData->getId());
-            $user->setGivenName($userData->getGivenName());
-            $user->setFamilyName($userData->getFamilyName());
-            $user->setEmail($userData->getEmail());
-
-            $this->em->persist($user);
-            $this->em->flush();
-        }
-
-        return $user;
-    }
-
-    /**
-     * Set group based on Google organisation unit.
-     *
-     * @param User   $user
-     * @param string $ou
-     */
-    public function updateUserGroups(User &$user, $ou)
-    {
-        $group = null;
-        $userGroups = (!$user->getGroups() ? [] : $user->getGroups());
-
-        $adminGroup = $this->em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_ADMIN']);
-        $scoutGroup = $this->em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_SCOUT']);
-        $talentGroup = $this->em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_TALENT']);
-
-        if ('/Support' == $ou && !in_array($adminGroup, $userGroups)) {
-            $group = $adminGroup;
-        } elseif ('/Scouts' == $ou && !in_array($scoutGroup, $userGroups)) {
-            $group = $scoutGroup;
-        } elseif ('/ict-campus/ICT Talents' == $ou && !in_array($talentGroup, $userGroups)) {
-            $group = $talentGroup;
-        }
-
-        if ($group) {
-            $user->addGroup($group);
-            $this->em->persist($user);
-        }
-    }
-
-    /**
-     * Update user data.
-     *
-     * @param int   $googleId
-     * @param array $accessToken =false
-     *
-     * @return bool
-     */
-    public function updateUserAccessToken($googleId, $accessToken): bool
-    {
-        /** @var User $user */
-        $user = $this->em->getRepository('AppBundle:User')->findOneBy(['googleId' => $googleId]);
-
-        if ($user) {
-            if ($accessToken) {
-                $user->setAccessToken($accessToken['access_token']);
-                $user->setAccessTokenExpireDate(
-                    (new \DateTime())->add(new \DateInterval('PT'.($accessToken['expires_in'] - 5).'S'))
-                );
-            }
-
-            $this->em->persist($user);
-            $this->em->flush();
-
-            return true;
-        } else {
-            return false;
-        }
     }
 }

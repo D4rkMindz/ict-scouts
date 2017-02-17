@@ -3,10 +3,13 @@
 namespace Tests\AppBundle\Entity;
 
 use AppBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Tests\AppBundle\KernelTest;
 
 /**
  * Class UserTest.
+ *
+ * @covers \AppBundle\Entity\User
  */
 class UserTest extends KernelTest
 {
@@ -16,75 +19,47 @@ class UserTest extends KernelTest
         $group = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_ADMIN']);
         $group1 = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_SCOUT']);
 
-        $authorizationChecker = $this->getContainer()->get('security.authorization_checker');
-
-        $user = new User();
-        $user->setGoogleId(123456789);
-        $user->setGivenName('John');
-        $user->setFamilyName('Doe');
-        $user->setEmail('john.doe@example.com');
-        $user->setAccessToken('abc123cba');
+        $user = new User('123456789', 'john.doe@example.com', 'abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
         $user->setAccessTokenExpireDate($tokenExpireDate);
-        $createdAtDate = new \DateTime();
-        $user->setCreatedAt($createdAtDate);
-        $updatedAtDate = new \DateTime();
-        $user->setUpdatedAt($updatedAtDate);
-        $deletedAtDate = new \DateTime();
-        $user->setDeletedAt(null);
-        $user->setGroups([$group]);
+        $user->addGroup($group);
         $user->addGroup($group1);
 
         $this->assertNull($user->getId());
         $this->assertEquals(123456789, $user->getGoogleId());
-        $this->assertEquals('John', $user->getGivenName());
-        $this->assertEquals('Doe', $user->getFamilyName());
         $this->assertEquals('john.doe@example.com', $user->getEmail());
         $this->assertEquals('abc123cba', $user->getAccessToken());
         $this->assertEquals($tokenExpireDate, $user->getAccessTokenExpireDate());
-        $this->assertEquals($createdAtDate, $user->getCreatedAt());
-        $this->assertEquals($updatedAtDate, $user->getUpdatedAt());
-        $this->assertNull($user->getDeletedAt());
-        $this->assertTrue(is_array($user->getGroups()));
-        $this->assertEquals(count($user->getGroups()), 2);
+        $this->assertInstanceOf(ArrayCollection::class, $user->getGroups());
+        $this->assertCount(2, $user->getGroups());
 
         $em->persist($user);
         $em->flush();
 
         $this->assertTrue(is_array($user->getRoles()));
-        $this->assertEquals(count($user->getRoles()), 2);
+        $this->assertCount(2, $user->getRoles());
         $this->assertEquals(1, $user->getId());
         $this->assertEquals(null, $user->getPassword());
         $this->assertEquals(null, $user->getSalt());
-        $this->assertEquals('John Doe', $user->getUsername());
+        $this->assertEquals('john.doe@example.com', $user->getUsername());
         $this->assertEquals(null, $user->eraseCredentials());
     }
 
     public function testSerialization()
     {
-        $user = new User();
-        $user->setGoogleId(123456789);
-        $user->setGivenName('John');
-        $user->setFamilyName('Doe');
-        $user->setEmail('john.doe@example.com');
+        $user = new User('123456789', 'john.doe@example.com');
         $user->setAccessToken('abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
         $user->setAccessTokenExpireDate($tokenExpireDate);
-        $createdAtDate = new \DateTime();
-        $user->setCreatedAt($createdAtDate);
-        $updatedAtDate = new \DateTime();
-        $user->setUpdatedAt($updatedAtDate);
-        $deletedAtDate = new \DateTime();
-        $user->setDeletedAt(null);
 
         $serialized = $user->serialize();
 
         $this->assertTrue(is_string($serialized));
 
-        $newUser = new User();
+        $newUser = new User('', '');
         $newUser->unserialize($serialized);
 
-        $this->assertTrue($newUser instanceof User);
+        $this->assertInstanceOf(User::class, $newUser);
         $this->assertEquals(null, $newUser->getId());
         $this->assertEquals(123456789, $newUser->getGoogleId());
     }

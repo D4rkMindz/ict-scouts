@@ -1,0 +1,28 @@
+{% extends '@App/base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row valign-wrapper">
+            <div class="col s6">
+                <h2>Modul</h2>
+            </div>
+            <div class="col s6 valign right-align">
+                <a href="{{ path('admin.module.part.create', {moduleId: module.id}) }}" class="btn waves-effect waves-light">Modul-Teil hinzufügen</a>
+                &nbsp;
+                <a href="{{ path('admin.module.edit', {id: module.id}) }}" class="btn waves-effect waves-light">Bearbeiten</a>
+                &nbsp;
+                <a href="{{ path('admin.module.index') }}" class="btn waves-effect waves-light blue">Übersicht</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <table>
+                    <tr>
+                        <th>Name:</th>
+                        <td>{{ module.name }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
