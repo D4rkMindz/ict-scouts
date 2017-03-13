@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -66,6 +67,13 @@ class Person
      * @ORM\Column(name="birth_date", type="date", nullable=true)
      */
     private $birthDate;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Talent", mappedBy="person")
+     */
+    private $talent;
 
     /**
      * Person constructor.
@@ -219,6 +227,14 @@ class Person
     public function getBirthDate(): ?\DateTime
     {
         return $this->birthDate;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getTalent(): Collection
+    {
+        return $this->talent;
     }
 
     /**

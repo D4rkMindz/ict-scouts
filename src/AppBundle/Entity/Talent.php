@@ -19,7 +19,7 @@ class Talent
      *
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Person", inversedBy="talents", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Person", inversedBy="talent", cascade={"all"})
      * @ORM\JoinColumn(name="person_id", unique=true)
      */
     private $person;

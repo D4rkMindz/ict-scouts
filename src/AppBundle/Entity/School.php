@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,6 +38,13 @@ class School
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
      */
     private $address;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Talent", mappedBy="school")
+     */
+    private $talents;
 
     /**
      * School constructor.
@@ -90,6 +98,14 @@ class School
     public function setAddress(Address $address): void
     {
         $this->address = $address;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getTalents(): Collection
+    {
+        return $this->talents;
     }
 
     /**
