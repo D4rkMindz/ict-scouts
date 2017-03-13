@@ -76,14 +76,14 @@ class GoogleUserServiceTest extends KernelTest
         $client = static::createClient();
 
         /** @var EntityManager $em */
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         /** @var GoogleUserService $googleUserService */
         $googleUserService = $client->getContainer()->get('app.service.google.user');
 
         $user = new User('111222333444', 'john.doe@example.com');
-        $em->persist($user);
-        $em->flush();
+        $entityManager->persist($user);
+        $entityManager->flush();
 
         $googleUserService->updateUserGroups($user, '/ict-campus/ICT Talents');
         $this->assertCount(1, $user->getGroups());

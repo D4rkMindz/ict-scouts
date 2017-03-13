@@ -44,7 +44,7 @@ class ModuleControllerTest extends KernelTest
 
         $form = $crawler->selectButton('submit')->form();
         $form['appbundle_module[name]'] = 'Test Module';
-        $crawler = $this->client->submit($form);
+        $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirection());
     }
@@ -53,13 +53,13 @@ class ModuleControllerTest extends KernelTest
     {
         $this->logIn();
 
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         // Create Module
         $module = new Module();
         $module->setName('Automated-Test-Module');
-        $em->persist($module);
-        $em->flush();
+        $entityManager->persist($module);
+        $entityManager->flush();
 
         // Get Module
         $crawler = $this->client->request('GET', '/admin/module/show/'.$module->getId());
@@ -67,6 +67,7 @@ class ModuleControllerTest extends KernelTest
         $this->assertTrue($this->client->getResponse()->isSuccessful());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Name:")')->count());
 
+        /** @ToDo: Test for not existing module */
         // Not existing Module
 //        $crawler = $this->client->request('GET', '/admin/module/show/0');
 //        $this->assertTrue($this->client->getResponse()->isNotFound());
@@ -76,13 +77,13 @@ class ModuleControllerTest extends KernelTest
     {
         $this->logIn();
 
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         // Create Module
         $module = new Module();
         $module->setName('Automated-Test-Module');
-        $em->persist($module);
-        $em->flush();
+        $entityManager->persist($module);
+        $entityManager->flush();
 
         // Get Module
         $crawler = $this->client->request('GET', '/admin/module/edit/'.$module->getId());
@@ -91,7 +92,7 @@ class ModuleControllerTest extends KernelTest
 
         $form = $crawler->selectButton('submit')->form();
         $form['appbundle_module[name]'] = 'My Test Module';
-        $crawler = $this->client->submit($form);
+        $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirect('/admin/module/show/'.$module->getId()));
     }

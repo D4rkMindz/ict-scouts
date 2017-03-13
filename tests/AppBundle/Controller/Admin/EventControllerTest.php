@@ -54,7 +54,7 @@ class EventControllerTest extends KernelTest
         $form['appbundle_event[endDate][date][year]'] = 2017;
         $form['appbundle_event[endDate][time][hour]'] = 13;
         $form['appbundle_event[endDate][time][minute]'] = 0;
-        $crawler = $this->client->submit($form);
+        $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirection());
     }
@@ -63,15 +63,15 @@ class EventControllerTest extends KernelTest
     {
         $this->logIn();
 
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         // Create Module
         $event = new Event();
         $event->setName('Automated-Test-Event');
         $event->setStartDate(new \DateTime());
         $event->setEndDate((new \DateTime())->add(new \DateInterval('P1D')));
-        $em->persist($event);
-        $em->flush();
+        $entityManager->persist($event);
+        $entityManager->flush();
 
         // Get Module
         $crawler = $this->client->request('GET', '/admin/event/show/'.$event->getId());
@@ -88,15 +88,15 @@ class EventControllerTest extends KernelTest
     {
         $this->logIn();
 
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         // Create Module
         $event = new Event();
         $event->setName('Automated-Test-Event');
         $event->setStartDate(new \DateTime());
         $event->setEndDate((new \DateTime())->add(new \DateInterval('P1D')));
-        $em->persist($event);
-        $em->flush();
+        $entityManager->persist($event);
+        $entityManager->flush();
 
         // Get Module
         $crawler = $this->client->request('GET', '/admin/event/edit/'.$event->getId());
@@ -115,7 +115,7 @@ class EventControllerTest extends KernelTest
         $form['appbundle_event[endDate][date][year]'] = 2017;
         $form['appbundle_event[endDate][time][hour]'] = 13;
         $form['appbundle_event[endDate][time][minute]'] = 0;
-        $crawler = $this->client->submit($form);
+        $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirect('/admin/event/show/'.$event->getId()));
     }

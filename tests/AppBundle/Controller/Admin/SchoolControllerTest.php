@@ -44,7 +44,7 @@ class SchoolControllerTest extends KernelTest
 
         $form = $crawler->selectButton('submit')->form();
         $form['appbundle_school[name]'] = 'Test School';
-        $crawler = $this->client->submit($form);
+        $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirection());
     }
@@ -53,12 +53,12 @@ class SchoolControllerTest extends KernelTest
     {
         $this->logIn();
 
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         // Create Module
         $module = new School('Automated-Test-School');
-        $em->persist($module);
-        $em->flush();
+        $entityManager->persist($module);
+        $entityManager->flush();
 
         // Get Module
         $crawler = $this->client->request('GET', '/admin/school/show/'.$module->getId());
@@ -75,12 +75,12 @@ class SchoolControllerTest extends KernelTest
     {
         $this->logIn();
 
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         // Create Module
         $module = new School('Automated-Test-School');
-        $em->persist($module);
-        $em->flush();
+        $entityManager->persist($module);
+        $entityManager->flush();
 
         // Get Module
         $crawler = $this->client->request('GET', '/admin/school/edit/'.$module->getId());
@@ -89,7 +89,7 @@ class SchoolControllerTest extends KernelTest
 
         $form = $crawler->selectButton('submit')->form();
         $form['appbundle_school[name]'] = 'My Test School';
-        $crawler = $this->client->submit($form);
+        $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirect('/admin/school/show/'.$module->getId()));
     }
