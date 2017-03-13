@@ -17,15 +17,15 @@ class TalentStatusTest extends KernelTest
      */
     public function testGetterAndSetter()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $talentStatus = new TalentStatus('foo');
 
         $this->assertNull($talentStatus->getId());
         $this->assertEquals('foo', $talentStatus->getName());
 
-        $em->persist($talentStatus);
-        $em->flush();
+        $entityManager->persist($talentStatus);
+        $entityManager->flush();
 
         $this->assertNotNull($talentStatus->getId());
     }

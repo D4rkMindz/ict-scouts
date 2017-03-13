@@ -14,10 +14,12 @@ class GoogleUserSyncCommand extends ContainerAwareCommand
 {
     /**
      * Configures command.
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
     protected function configure()
     {
-        $this->setName('app:google:usersync')->setDescription('Syncs users with the G Suite.');
+        $this->setName('app:google:usersync')
+             ->setDescription('Syncs users with the G Suite.');
     }
 
     /**
@@ -25,15 +27,19 @@ class GoogleUserSyncCommand extends ContainerAwareCommand
      * @param OutputInterface $output
      *
      * @return int|null|void
+     * @throws \Exception
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \LogicException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $io = new SymfonyStyle($input, $output);
-        $io->title('Google Usersync');
+        $symfonyStyle = new SymfonyStyle($input, $output);
+        $symfonyStyle->title('Google Usersync');
 
         $googleUserService = $this->getContainer()->get('app.service.google.user');
         $googleUserService->getAllUsers($this->getContainer()->getParameter('google_apps_domain'));
 
-        $io->writeln('Done');
+        $symfonyStyle->writeln('Done');
     }
 }

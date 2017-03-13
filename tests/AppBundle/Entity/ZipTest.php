@@ -23,12 +23,12 @@ class ZipTest extends KernelTest
         $this->assertEquals('0101', $zip->getZip());
         $this->assertEquals('TestCity', $zip->getCity());
 
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $em->persist($zip);
-        $em->flush();
+        $entityManager->persist($zip);
+        $entityManager->flush();
 
-        $zip = $em->getRepository('AppBundle:Zip')->findOneBy(['zip' => '0101']);
+        $zip = $entityManager->getRepository('AppBundle:Zip')->findOneBy(['zip' => '0101']);
 
         $this->assertNotNull($zip->getId());
     }

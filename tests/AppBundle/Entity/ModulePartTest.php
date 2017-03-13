@@ -24,7 +24,7 @@ class ModulePartTest extends KernelTest
      */
     public function testGetterAndSetter()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $province = new Province('Baselland', 'BL');
         $zip = new Zip('4133', 'Pratteln');
@@ -36,12 +36,12 @@ class ModulePartTest extends KernelTest
         $camp = new Camp('Great Camp', $address);
         $cast = new Cast('https://www.google.com');
 
-        $em->persist($address);
-        $em->persist($address1);
-        $em->persist($workshop);
-        $em->persist($camp);
-        $em->persist($cast);
-        $em->flush();
+        $entityManager->persist($address);
+        $entityManager->persist($address1);
+        $entityManager->persist($workshop);
+        $entityManager->persist($camp);
+        $entityManager->persist($cast);
+        $entityManager->flush();
 
         $modulePart = new ModulePart();
         $modulePart->setName('Module 1 - Part 1');
@@ -57,8 +57,8 @@ class ModulePartTest extends KernelTest
         $this->assertEquals($camp, $modulePart->getCamp());
         $this->assertEquals($cast, $modulePart->getCast());
 
-        $em->persist($modulePart);
-        $em->flush();
+        $entityManager->persist($modulePart);
+        $entityManager->flush();
 
         $modulePart->setName('Module 1 - Part 1.1');
 

@@ -46,28 +46,28 @@ class GoogleUserServiceTest extends KernelTest
     {
         $client = static::createClient();
 
-        /** @var EntityManager $em */
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        /** @var EntityManager $entityManager */
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         /** @var GoogleUserService $googleUserService */
         $googleUserService = $client->getContainer()->get('app.service.google.user');
 
         $user = new User('123456789', 'jane.doe@example.com');
-        $em->persist($user);
-        $em->flush();
+        $entityManager->persist($user);
+        $entityManager->flush();
 
         $this->assertFalse($googleUserService->updateUserAccessToken('9876543210'));
         $this->assertNull($user->getAccessToken());
         $this->assertTrue($googleUserService->updateUserAccessToken('123456789'));
 
-        $user = $em->getRepository('AppBundle:User')->findOneBy(['googleId' => '123456789']);
+        $user = $entityManager->getRepository('AppBundle:User')->findOneBy(['googleId' => '123456789']);
         $this->assertNull($user->getAccessToken());
 
-        $user = $em->getRepository('AppBundle:User')->findOneBy(['googleId' => '123456789']);
+        $user = $entityManager->getRepository('AppBundle:User')->findOneBy(['googleId' => '123456789']);
         $this->assertNull($user->getAccessToken());
         $this->assertTrue($googleUserService->updateUserAccessToken('123456789', ['access_token' => 'abc123cba', 'expires_in' => 3600]));
 
-        $user = $em->getRepository('AppBundle:User')->findOneBy(['googleId' => '123456789']);
+        $user = $entityManager->getRepository('AppBundle:User')->findOneBy(['googleId' => '123456789']);
         $this->assertNull($user->getAccessToken());
     }
 

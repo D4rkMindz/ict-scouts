@@ -21,30 +21,30 @@ class TalentTest extends KernelTest
      */
     public function testGetterAndSetter()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $group = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_TALENT']);
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $group = $entityManager->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_TALENT']);
 
         $zip = new Zip('0101', 'TestCity');
-        $em->persist($zip);
-        $em->flush();
+        $entityManager->persist($zip);
+        $entityManager->flush();
 
         $school = new School('Global School');
 
-        $em->persist($school);
+        $entityManager->persist($school);
 
         $person = new Person('Doe', 'John', 'Address');
         $person->setPhone('+41 79 123 45 67');
         $person->setMail('john.doe@example.com');
 
-        $em->persist($person);
+        $entityManager->persist($person);
 
         $user = new User('123456789', 'john.doe@example.com', 'abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
         $user->setAccessTokenExpireDate($tokenExpireDate);
         $user->addGroup($group);
 
-        $em->persist($user);
-        $em->flush();
+        $entityManager->persist($user);
+        $entityManager->flush();
 
         $talent = new Talent($person, $user);
         $talent->setSchool($school);

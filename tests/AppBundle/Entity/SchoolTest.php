@@ -20,7 +20,7 @@ class SchoolTest extends KernelTest
      */
     public function testGetterAndSetter()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $province = new Province('Baselland', 'BL');
         $zip = new Zip('4133', 'Pratteln');
@@ -34,10 +34,10 @@ class SchoolTest extends KernelTest
         $this->assertEquals('Global School', $school->getName());
         $this->assertEquals($address, $school->getAddress());
 
-        $em->persist($province);
-        $em->persist($address);
-        $em->persist($school);
-        $em->flush();
+        $entityManager->persist($province);
+        $entityManager->persist($address);
+        $entityManager->persist($school);
+        $entityManager->flush();
 
         $this->assertEquals(1, $school->getId());
     }
@@ -61,7 +61,7 @@ class SchoolTest extends KernelTest
         $newSchool = new School('');
         $newSchool->unserialize($serialized);
 
-        $this->assertTrue($newSchool instanceof School);
+        $this->assertInstanceOf(School::class, $newSchool);
         $this->assertEquals(null, $newSchool->getId());
         $this->assertEquals('Global School', $newSchool->getName());
     }

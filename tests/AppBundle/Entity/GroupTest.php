@@ -27,18 +27,18 @@ class GroupTest extends KernelTest
         $this->assertEquals('test', $group->getName());
         $this->assertEquals('ROLE_TEST', $group->getRole());
 
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $em->persist($group);
-        $em->flush();
+        $entityManager->persist($group);
+        $entityManager->flush();
 
-        $group = $em->getRepository('AppBundle:Group')->findOneBy(['name' => 'test']);
+        $group = $entityManager->getRepository('AppBundle:Group')->findOneBy(['name' => 'test']);
 
-        $this->assertEquals(1, count($group->getUsers()));
+        $this->assertCount(1, $group->getUsers());
         $this->assertNotNull($group->getId());
 
         $group->removeUser($user);
-        $this->assertEquals(0, count($group->getUsers()));
+        $this->assertCount(0, $group->getUsers());
     }
 
     /**

@@ -19,7 +19,7 @@ class PersonTest extends KernelTest
      */
     public function testGetterAndSetter()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $person = new Person('', '', 'Test Street 101');
         $person->setGivenName('John');
@@ -37,8 +37,8 @@ class PersonTest extends KernelTest
         $this->assertEquals('john.doe@example.com', $person->getMail());
         $this->assertEquals($birthDate, $person->getBirthDate());
 
-        $em->persist($person);
-        $em->flush();
+        $entityManager->persist($person);
+        $entityManager->flush();
 
         $this->assertEquals(1, $person->getId());
     }
@@ -63,7 +63,7 @@ class PersonTest extends KernelTest
         $newPerson = new Person('', '', '');
         $newPerson->unserialize($serialized);
 
-        $this->assertTrue($newPerson instanceof Person);
+        $this->assertInstanceOf(Person::class, $newPerson);
         $this->assertEquals(null, $newPerson->getId());
         $this->assertEquals('Doe', $newPerson->getFamilyName());
     }

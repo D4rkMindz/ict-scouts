@@ -20,16 +20,16 @@ class CampTest extends KernelTest
      */
     public function testGetterAndSetter()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $province = new Province('Baselland', 'BL');
         $zip = new Zip('4410', 'Liestal');
         $address = new Address($province, $zip, 'Hauptstrasse', '11');
         $address2 = new Address($province, $zip, 'Hauptstrasse', '12');
 
-        $em->persist($province);
-        $em->persist($address);
-        $em->flush();
+        $entityManager->persist($province);
+        $entityManager->persist($address);
+        $entityManager->flush();
 
         $camp = new Camp('Great Camp', $address);
 
@@ -37,8 +37,8 @@ class CampTest extends KernelTest
         $this->assertEquals('Great Camp', $camp->getName());
         $this->assertEquals($address, $camp->getAddress());
 
-        $em->persist($camp);
-        $em->flush();
+        $entityManager->persist($camp);
+        $entityManager->flush();
 
         $camp->setName('Greatest Camp');
         $camp->setAddress($address2);
@@ -53,15 +53,15 @@ class CampTest extends KernelTest
      */
     public function testSerialization()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $province = new Province('Baselland', 'BL');
         $zip = new Zip('4410', 'Liestal');
         $address = new Address($province, $zip, 'Hauptstrasse', '11');
 
-        $em->persist($province);
-        $em->persist($address);
-        $em->flush();
+        $entityManager->persist($province);
+        $entityManager->persist($address);
+        $entityManager->flush();
 
         $province1 = new Province('', '');
         $zip1 = new Zip('', '');

@@ -98,8 +98,8 @@ class ModuleControllerTest extends KernelTest
 
     private function logIn()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $group = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_ADMIN']);
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $group = $entityManager->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_ADMIN']);
         $firewall = 'main';
         $session = $this->getContainer()->get('session');
 
@@ -108,8 +108,8 @@ class ModuleControllerTest extends KernelTest
         $user->setAccessTokenExpireDate((new \DateTime())->add(new \DateInterval('PT3595S')));
         $user->addGroup($group);
 
-        $em->persist($user);
-        $em->flush();
+        $entityManager->persist($user);
+        $entityManager->flush();
 
         $token = new UsernamePasswordToken($user->getUsername(), ['accessToken' => 'abc123cba'], $firewall, ['ROLE_ADMIN']);
         $session->set('_security_'.$firewall, serialize($token));

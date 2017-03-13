@@ -15,9 +15,9 @@ class UserTest extends KernelTest
 {
     public function testGetterAndSetter()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $group = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_ADMIN']);
-        $group1 = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_SCOUT']);
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $group = $entityManager->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_ADMIN']);
+        $group1 = $entityManager->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_SCOUT']);
 
         $user = new User('123456789', 'john.doe@example.com', 'abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
@@ -33,8 +33,8 @@ class UserTest extends KernelTest
         $this->assertInstanceOf(ArrayCollection::class, $user->getGroups());
         $this->assertCount(2, $user->getGroups());
 
-        $em->persist($user);
-        $em->flush();
+        $entityManager->persist($user);
+        $entityManager->flush();
 
         $this->assertTrue(is_array($user->getRoles()));
         $this->assertCount(2, $user->getRoles());

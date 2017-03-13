@@ -21,12 +21,12 @@ class ModuleTest extends KernelTest
      */
     public function testGetterAndSetter()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $group = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_SCOUT']);
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $group = $entityManager->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_SCOUT']);
 
         $zip = new Zip('0101', 'TestCity');
-        $em->persist($zip);
-        $em->flush();
+        $entityManager->persist($zip);
+        $entityManager->flush();
 
         $user = new User('123456789', 'john.doe@example.com', 'abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
@@ -38,9 +38,9 @@ class ModuleTest extends KernelTest
         $user2->setAccessTokenExpireDate($tokenExpireDate2);
         $user2->addGroup($group);
 
-        $em->persist($user);
-        $em->persist($user2);
-        $em->flush();
+        $entityManager->persist($user);
+        $entityManager->persist($user2);
+        $entityManager->flush();
 
         $scout = new Scout($user);
         $scout2 = new Scout($user2);
@@ -54,15 +54,15 @@ class ModuleTest extends KernelTest
         $this->assertEquals('Module 1', $module->getName());
         $this->assertCount(2, $module->getScouts());
 
-        $em->persist($module);
-        $em->flush();
+        $entityManager->persist($module);
+        $entityManager->flush();
 
         $modulePart = new ModulePart();
         $modulePart->setName('Test-Module-Part-1');
         $modulePart->setModule($module);
 
-        $em->persist($modulePart);
-        $em->flush();
+        $entityManager->persist($modulePart);
+        $entityManager->flush();
 
         $module->addModulePart($modulePart);
 
