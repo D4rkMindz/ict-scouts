@@ -1,0 +1,38 @@
+version: '2'
+services:
+    nginx:
+        image: ictscouts/nginx:latest
+        ports:
+            - 8080:80
+        networks:
+            - ictscouts
+        volumes:
+            - ./:/var/www/html
+    php:
+        image: ictscouts/php:latest
+        networks:
+            - ictscouts
+        volumes:
+            - ./:/var/www/html
+        working_dir: /app
+    redis:
+        image: redis:alpine
+        networks:
+            - ictscouts
+    db:
+        image: mysql:5.7
+        environment:
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_DATABSE: ict_scouts
+            MYSQL_USER: ict_scouts
+            MYSQL_PASSWORD: secret
+        networks:
+            - ictscouts
+        volumes:
+            - data:/var/lib/mysql
+networks:
+    ictscouts:
+        driver: "bridge"
+volumes:
+    data:
+        driver: "local"
