@@ -6,11 +6,11 @@ use AppBundle\Entity\Province;
 use Tests\AppBundle\KernelTest;
 
 /**
- * Class LoadTalentStatusDataTest.
+ * Class LoadProvinceDataTest.
  *
  * @covers \AppBundle\DataFixtures\ORM\LoadProvinceData
  */
-class LoadTalentStatusDataTest extends KernelTest
+class LoadProvinceDataTest extends KernelTest
 {
     /**
      * Tests load function.
@@ -18,8 +18,11 @@ class LoadTalentStatusDataTest extends KernelTest
     public function testLoad()
     {
         $repo = $this->getContainer()->get('doctrine.orm.entity_manager')->getRepository('AppBundle:Province');
+        /** @var Province $aargau */
         $aargau = $repo->findOneBy(['nameShort' => 'AG']);
+        /** @var Province $baselLandschaft */
         $baselLandschaft = $repo->findOneBy(['nameShort' => 'BL']);
+        /** @var Province $zurich */
         $zurich = $repo->findOneBy(['nameShort' => 'ZH']);
         $all = $repo->findAll();
 
