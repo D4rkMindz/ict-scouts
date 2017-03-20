@@ -35,12 +35,12 @@ class ModuleTest extends KernelTest
 
         $user = new User($person, '123456789', 'john.doe@example.com', 'abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
-        $user->setAccessTokenExpireDate($tokenExpireDate);
+        $user->setAccessTokenExpire($tokenExpireDate);
         $user->addGroup($group);
 
         $user2 = new User($person2, '987654321', 'jane.doe@example.com', 'cba123abc');
         $tokenExpireDate2 = (new \DateTime())->add(new \DateInterval('PT3595S'));
-        $user2->setAccessTokenExpireDate($tokenExpireDate2);
+        $user2->setAccessTokenExpire($tokenExpireDate2);
         $user2->addGroup($group);
 
         $entityManager->persist($user);

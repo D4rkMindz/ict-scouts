@@ -25,7 +25,7 @@ class UserTest extends KernelTest
 
         $user = new User($person, '123456789', 'john.doe@example.com', 'abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
-        $user->setAccessTokenExpireDate($tokenExpireDate);
+        $user->setAccessTokenExpire($tokenExpireDate);
         $user->addGroup($group);
         $user->addGroup($group1);
 
@@ -33,7 +33,7 @@ class UserTest extends KernelTest
         $this->assertEquals(123456789, $user->getGoogleId());
         $this->assertEquals('john.doe@example.com', $user->getEmail());
         $this->assertEquals('abc123cba', $user->getAccessToken());
-        $this->assertEquals($tokenExpireDate, $user->getAccessTokenExpireDate());
+        $this->assertEquals($tokenExpireDate, $user->getAccessTokenExpire());
         $this->assertInstanceOf(ArrayCollection::class, $user->getGroups());
         $this->assertCount(2, $user->getGroups());
 
@@ -59,7 +59,7 @@ class UserTest extends KernelTest
         $user = new User($person, '123456789', 'john.doe@example.com');
         $user->setAccessToken('abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
-        $user->setAccessTokenExpireDate($tokenExpireDate);
+        $user->setAccessTokenExpire($tokenExpireDate);
 
         $serialized = $user->serialize();
 

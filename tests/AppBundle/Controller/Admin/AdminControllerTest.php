@@ -27,13 +27,4 @@ class AdminControllerTest extends KernelTest
         $this->assertTrue($this->client->getResponse()->isSuccessful());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Admin")')->count());
     }
-
-    public function testUserSync()
-    {
-        $this->logIn('ROLE_ADMIN');
-
-        $this->client->request('GET', '/admin/user/sync');
-
-        $this->assertTrue($this->client->getResponse()->isRedirect('/admin/'));
-    }
 }

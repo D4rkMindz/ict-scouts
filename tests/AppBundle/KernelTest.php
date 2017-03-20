@@ -94,7 +94,7 @@ class KernelTest extends WebTestCase
 
         /** @var User $user */
         $user = new User($person,'123456789', 'john.doe@'.$this->getContainer()->getParameter('google_apps_domain'), 'abc123cba');
-        $user->setAccessTokenExpireDate((new \DateTime())->add(new \DateInterval('PT3595S')));
+        $user->setAccessTokenExpire((new \DateTime())->add(new \DateInterval('PT3595S')));
         $user->addGroup($group);
 
         $entityManager->persist($user);

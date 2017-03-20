@@ -39,7 +39,7 @@ class ScoutTest extends KernelTest
 
         $user = new User($person, '123456789', 'john.doe@example.com', 'abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
-        $user->setAccessTokenExpireDate($tokenExpireDate);
+        $user->setAccessTokenExpire($tokenExpireDate);
         $user->addGroup($group);
 
         $entityManager->persist($user);

@@ -20,7 +20,7 @@ class GoogleUserService
     /**
      * @var EntityManager
      */
-    private $em;
+    private $entityManager;
 
     /**
      * @var GoogleService
@@ -50,12 +50,12 @@ class GoogleUserService
      */
     public function __construct(Kernel $kernel, EntityManager $entityManager)
     {
-        $this->em = $entityManager;
+        $this->entityManager = $entityManager;
         $this->googleService = $kernel->getContainer()->get('app.service.google');
 
-        $this->adminGroup = $this->em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_ADMIN']);
-        $this->scoutGroup = $this->em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_SCOUT']);
-        $this->talentGroup = $this->em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_TALENT']);
+        $this->adminGroup = $this->entityManager->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_ADMIN']);
+        $this->scoutGroup = $this->entityManager->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_SCOUT']);
+        $this->talentGroup = $this->entityManager->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_TALENT']);
     }
 
     /**
@@ -89,12 +89,12 @@ class GoogleUserService
 
         /** @var \Google_Service_Directory_User $user */
         foreach ($users as $user) {
-            $dbUser = $this->em->getRepository('AppBundle:User')->findOneBy(['googleId' => $user->getId()]);
+            $dbUser = $this->entityManager->getRepository('AppBundle:User')->findOneBy(['googleId' => $user->getId()]);
 
             if (!$dbUser) {
                 $dbUser = new User($this->createPerson($user), $user->getId(), $user->getPrimaryEmail());
-                $this->em->persist($dbUser);
-                $this->em->flush();
+                $this->entityManager->persist($dbUser);
+                $this->entityManager->flush();
             }
 
             $this->updateUser($dbUser, $user);
@@ -120,8 +120,8 @@ class GoogleUserService
             if (!$scout) {
                 $scout = new Scout($user->getPerson());
 
-                $this->em->persist($scout);
-                $this->em->flush();
+                $this->entityManager->persist($scout);
+                $this->entityManager->flush();
             }
         }
 
@@ -131,13 +131,13 @@ class GoogleUserService
             if (!$talent) {
                 $talent = new Talent($user->getPerson());
 
-                $this->em->persist($talent);
-                $this->em->flush();
+                $this->entityManager->persist($talent);
+                $this->entityManager->flush();
 
                 $talentStatusHistory = new TalentStatusHistory($talent, Talent::ACTIVE);
 
-                $this->em->persist($talentStatusHistory);
-                $this->em->flush();
+                $this->entityManager->persist($talentStatusHistory);
+                $this->entityManager->flush();
             }
         }
     }
@@ -146,30 +146,30 @@ class GoogleUserService
      * Set group based on Google organisation unit.
      *
      * @param User   $user
-     * @param string $ou
+     * @param string $organisationUnit
      *
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
-    public function updateUserGroups(User $user, $ou)
+    public function updateUserGroups(User $user, string $organisationUnit)
     {
         $group = null;
         $userGroups = (!$user->getGroups() ? 'foo' : $user->getGroups());
 
-        if ('/Support' === $ou && !$userGroups->contains($this->adminGroup)) {
+        if ('/Support' === $organisationUnit && !$userGroups->contains($this->adminGroup)) {
             $group = $this->adminGroup;
-        } elseif ('/Scouts' === $ou && !$userGroups->contains($this->scoutGroup)) {
+        } elseif ('/Scouts' === $organisationUnit && !$userGroups->contains($this->scoutGroup)) {
             $group = $this->scoutGroup;
-        } elseif ('/ict-campus/ICT Talents' === $ou && !$userGroups->contains($this->talentGroup)) {
+        } elseif ('/ict-campus/ICT Talents' === $organisationUnit && !$userGroups->contains($this->talentGroup)) {
             $group = $this->talentGroup;
         }
 
         if ($group) {
             $user->addGroup($group);
-            $this->em->persist($user);
+            $this->entityManager->persist($user);
         }
     }
 
-    /**
+    /**F
      * Create person object.
      *
      * @param \Google_Service_Directory_User $googleUser
@@ -187,8 +187,8 @@ class GoogleUserService
         $person = new Person($name->getFamilyName(), $name->getGivenName());
         $person->setMail($googleUser->getPrimaryEmail());
 
-        $this->em->persist($person);
-        $this->em->flush();
+        $this->entityManager->persist($person);
+        $this->entityManager->flush();
 
         return $person;
     }
@@ -203,21 +203,22 @@ class GoogleUserService
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      *
      * @return bool
+     * @throws \Exception
      */
     public function updateUserAccessToken($googleId, array $accessToken = null): bool
     {
         /** @var User $user */
-        $user = $this->em->getRepository('AppBundle:User')->findOneBy(['googleId' => $googleId]);
+        $user = $this->entityManager->getRepository('AppBundle:User')->findOneBy(['googleId' => $googleId]);
 
         if ($user) {
             if ($accessToken) {
                 $user->setAccessToken($accessToken['access_token']);
-                $user->setAccessTokenExpireDate(
+                $user->setAccessTokenExpire(
                     (new \DateTime())->add(new \DateInterval('PT'.($accessToken['expires_in'] - 5).'S'))
                 );
 
-                $this->em->persist($user);
-                $this->em->flush();
+                $this->entityManager->persist($user);
+                $this->entityManager->flush();
             }
 
             return true;

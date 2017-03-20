@@ -18,14 +18,14 @@ class LoadProvinceDataTest extends KernelTest
     public function testLoad()
     {
         $repo = $this->getContainer()->get('doctrine.orm.entity_manager')->getRepository('AppBundle:Province');
-        $ag = $repo->findOneBy(['nameShort' => 'AG']);
-        $bl = $repo->findOneBy(['nameShort' => 'BL']);
-        $zh = $repo->findOneBy(['nameShort' => 'ZH']);
+        $aargau = $repo->findOneBy(['nameShort' => 'AG']);
+        $baselLandschaft = $repo->findOneBy(['nameShort' => 'BL']);
+        $zurich = $repo->findOneBy(['nameShort' => 'ZH']);
         $all = $repo->findAll();
 
-        $this->assertEquals('Aargau', $ag->getName());
-        $this->assertEquals('Basel-Landschaft', $bl->getName());
-        $this->assertEquals('Zürich', $zh->getName());
+        $this->assertEquals('Aargau', $aargau->getName());
+        $this->assertEquals('Basel-Landschaft', $baselLandschaft->getName());
+        $this->assertEquals('Zürich', $zurich->getName());
         $this->assertCount(26, $all);
 
     }

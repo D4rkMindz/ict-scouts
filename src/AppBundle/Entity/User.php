@@ -65,7 +65,7 @@ class User implements UserInterface, \Serializable
      *
      * @ORM\Column(name="access_token_expire_date", type="datetime", nullable=true)
      */
-    private $accessTokenExpireDate;
+    private $accessTokenExpire;
 
     /**
      * @var Person
@@ -177,23 +177,23 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Set accessTokenExpireDate.
+     * Set $accessTokenExpire.
      *
-     * @param \DateTime $accessTokenExpireDate
+     * @param \DateTime $accessTokenExpire
      */
-    public function setAccessTokenExpireDate(\DateTime $accessTokenExpireDate): void
+    public function setAccessTokenExpire(\DateTime $accessTokenExpire): void
     {
-        $this->accessTokenExpireDate = $accessTokenExpireDate;
+        $this->accessTokenExpire = $accessTokenExpire;
     }
 
     /**
-     * Get accessTokenExpireDate.
+     * Get $accessTokenExpire.
      *
      * @return \DateTime
      */
-    public function getAccessTokenExpireDate(): ?\DateTime
+    public function getAccessTokenExpire(): ?\DateTime
     {
-        return $this->accessTokenExpireDate;
+        return $this->accessTokenExpire;
     }
 
     /**
