@@ -6,7 +6,6 @@ use AppBundle\Entity\Group;
 use AppBundle\Entity\Person;
 use AppBundle\Entity\Scout;
 use AppBundle\Entity\Talent;
-use AppBundle\Entity\TalentStatus;
 use AppBundle\Entity\TalentStatusHistory;
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
@@ -201,9 +200,9 @@ class GoogleUserService
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     * @throws \Exception
      *
      * @return bool
-     * @throws \Exception
      */
     public function updateUserAccessToken($googleId, array $accessToken = null): bool
     {

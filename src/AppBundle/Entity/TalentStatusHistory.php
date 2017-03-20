@@ -46,9 +46,9 @@ class TalentStatusHistory
     /**
      * TalentStatusHistory constructor.
      *
-     * @param Talent       $talent
-     * @param int          $status
-     * @param \DateTime    $date   (optional)
+     * @param Talent    $talent
+     * @param int       $status
+     * @param \DateTime $date   (optional)
      */
     public function __construct(Talent $talent, int $status, \DateTime $date = null)
     {

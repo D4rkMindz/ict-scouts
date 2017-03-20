@@ -37,10 +37,11 @@ class AdminController extends Controller
      * @Route("/user/sync", name="admin_user_sync")
      * @Method("GET")
      *
-     * @return RedirectResponse
      * @throws \Exception
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     *
+     * @return RedirectResponse
      */
     public function userSyncAction(): RedirectResponse
     {

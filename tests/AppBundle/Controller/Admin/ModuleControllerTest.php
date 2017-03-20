@@ -60,7 +60,7 @@ class ModuleControllerTest extends KernelTest
         $this->assertTrue($this->client->getResponse()->isSuccessful());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Name:")')->count());
 
-        /** @ToDo: Test for not existing module */
+        /* @ToDo: Test for not existing module */
         // Not existing Module
 //        $crawler = $this->client->request('GET', '/admin/module/show/0');
 //        $this->assertTrue($this->client->getResponse()->isNotFound());

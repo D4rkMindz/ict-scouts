@@ -10,7 +10,7 @@ use Tests\AppBundle\KernelTest;
  *
  * @covers \AppBundle\DataFixtures\ORM\LoadProvinceData
  */
-class LoadProvinceDataTest extends KernelTest
+class LoadTalentStatusDataTest extends KernelTest
 {
     /**
      * Tests load function.
@@ -27,6 +27,5 @@ class LoadProvinceDataTest extends KernelTest
         $this->assertEquals('Basel-Landschaft', $baselLandschaft->getName());
         $this->assertEquals('Zürich', $zurich->getName());
         $this->assertCount(26, $all);
-
     }
 }
