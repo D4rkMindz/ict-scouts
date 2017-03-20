@@ -23,29 +23,9 @@ class Address
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Zip", cascade={"persist"})
-     * @ORM\JoinColumn(name="zip_id")
-     */
-    private $zip;
-
-    /**
-     * @var Province
-     */
-    private $province;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(type="string")
      */
     private $street;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string")
-     */
-    private $streetNumber;
 
     /**
      * @var string
@@ -55,25 +35,38 @@ class Address
     private $addressExtra;
 
     /**
+     * @var Zip
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Zip", cascade={"persist"})
+     * @ORM\JoinColumn(name="zip_id")
+     */
+    private $zip;
+
+    /**
+     * @var Province
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Province", cascade={"persist"})
+     * @ORM\JoinColumn(name="province_id")
+     */
+    private $province;
+
+    /**
      * Address constructor.
      *
-     * @param Province    $province
-     * @param Zip         $zip
      * @param string      $street
-     * @param string      $streetNumber
-     * @param string|null $addressExtra
+     * @param Zip         $zip
+     * @param Province    $province
+     * @@param string|null $addressExtra
      */
     public function __construct(
-        Province $province,
-        Zip $zip,
         string $street,
-        string $streetNumber,
+        Zip $zip,
+        Province $province,
         string $addressExtra = null
     ) {
-        $this->province = $province;
-        $this->zip = $zip;
         $this->street = $street;
-        $this->streetNumber = $streetNumber;
+        $this->zip = $zip;
+        $this->province = $province;
         $this->addressExtra = $addressExtra;
     }
 
@@ -86,46 +79,8 @@ class Address
     }
 
     /**
-     * @return string
-     */
-    public function getZip(): string
-    {
-        return $this->zip;
-    }
-
-    /**
-     * @param string $zip
-     */
-    public function setZip(string $zip): void
-    {
-        $this->zip = $zip;
-    }
-
-    /**
-     * @return Province
-     */
-    public function getProvince(): Province
-    {
-        return $this->province;
-    }
-
-    /**
-     * @param Province $province
-     */
-    public function setProvince(Province $province): void
-    {
-        $this->province = $province;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStreet(): string
-    {
-        return $this->street;
-    }
-
-    /**
+     * Set street.
+     *
      * @param string $street
      */
     public function setStreet(string $street): void
@@ -134,22 +89,28 @@ class Address
     }
 
     /**
+     * Get street.
+     *
      * @return string
      */
-    public function getStreetNumber(): string
+    public function getStreet(): string
     {
-        return $this->streetNumber;
+        return $this->street;
     }
 
     /**
-     * @param string $streetNumber
+     * Set addressExtra.
+     *
+     * @param string $addressExtra
      */
-    public function setStreetNumber(string $streetNumber): void
+    public function setAddressExtra(string $addressExtra): void
     {
-        $this->streetNumber = $streetNumber;
+        $this->addressExtra = $addressExtra;
     }
 
     /**
+     * Get addressExtra.
+     *
      * @return string
      */
     public function getAddressExtra(): ?string
@@ -158,10 +119,42 @@ class Address
     }
 
     /**
-     * @param string $addressExtra
+     * Set zip.
+     *
+     * @param Zip $zip
      */
-    public function setAddressExtra(string $addressExtra): void
+    public function setZip(Zip $zip): void
     {
-        $this->addressExtra = $addressExtra;
+        $this->zip = $zip;
+    }
+
+    /**
+     * Get zip.
+     *
+     * @return Zip
+     */
+    public function getZip(): Zip
+    {
+        return $this->zip;
+    }
+
+    /**
+     * Set province.
+     *
+     * @param Province $province
+     */
+    public function setProvince(Province $province): void
+    {
+        $this->province = $province;
+    }
+
+    /**
+     * Get province.
+     *
+     * @return Province
+     */
+    public function getProvince(): Province
+    {
+        return $this->province;
     }
 }

@@ -8,8 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Schools that the scouts visit to gather more talents.
  *
- * @TODO: Maybe get dataset from examina.
- *
  * @ORM\Table(name="school")
  * @ORM\Entity
  */

@@ -3,6 +3,7 @@
 namespace Tests\AppBundle\Entity;
 
 use AppBundle\Entity\Group;
+use AppBundle\Entity\Person;
 use AppBundle\Entity\User;
 use Tests\AppBundle\KernelTest;
 
@@ -18,7 +19,12 @@ class GroupTest extends KernelTest
      */
     public function testGetterAndSetter()
     {
-        $user = new User('123', 'test@test.com', '');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
+
+        $person = new Person('Doe', 'John');
+        $entityManager->persist($person);
+
+        $user = new User($person, '123', 'test@test.com', '');
         $group = new Group('test', 'ROLE_TEST');
 
         $group->addUser($user);
@@ -26,8 +32,6 @@ class GroupTest extends KernelTest
         $this->assertNull($group->getId());
         $this->assertEquals('test', $group->getName());
         $this->assertEquals('ROLE_TEST', $group->getRole());
-
-        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $entityManager->persist($group);
         $entityManager->flush();

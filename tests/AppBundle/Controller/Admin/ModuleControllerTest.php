@@ -3,10 +3,6 @@
 namespace Tests\AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Module;
-use AppBundle\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Client;
-use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Tests\AppBundle\KernelTest;
 
 /**
@@ -17,9 +13,6 @@ use Tests\AppBundle\KernelTest;
  */
 class ModuleControllerTest extends KernelTest
 {
-    /** @var Client */
-    private $client = null;
-
     public function setUp()
     {
         parent::setup();
@@ -28,7 +21,7 @@ class ModuleControllerTest extends KernelTest
 
     public function testIndex()
     {
-        $this->logIn();
+        $this->logIn('ROLE_ADMIN');
 
         $crawler = $this->client->request('GET', '/admin/module/');
 
@@ -38,7 +31,7 @@ class ModuleControllerTest extends KernelTest
 
     public function testCreate()
     {
-        $this->logIn();
+        $this->logIn('ROLE_ADMIN');
 
         $crawler = $this->client->request('GET', '/admin/module/create');
 
@@ -51,7 +44,7 @@ class ModuleControllerTest extends KernelTest
 
     public function testShow()
     {
-        $this->logIn();
+        $this->logIn('ROLE_ADMIN');
 
         $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
@@ -75,7 +68,7 @@ class ModuleControllerTest extends KernelTest
 
     public function testEdit()
     {
-        $this->logIn();
+        $this->logIn('ROLE_ADMIN');
 
         $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
@@ -95,29 +88,5 @@ class ModuleControllerTest extends KernelTest
         $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirect('/admin/module/show/'.$module->getId()));
-    }
-
-    private function logIn()
-    {
-        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $group = $entityManager->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_ADMIN']);
-        $firewall = 'main';
-        $session = $this->getContainer()->get('session');
-
-        /** @var User $user */
-        $user = new User('123456789', 'john.doe@'.$this->getContainer()->getParameter('google_apps_domain'), 'abc123cba');
-        $user->setAccessTokenExpireDate((new \DateTime())->add(new \DateInterval('PT3595S')));
-        $user->addGroup($group);
-
-        $entityManager->persist($user);
-        $entityManager->flush();
-
-        $token = new UsernamePasswordToken($user->getUsername(), ['accessToken' => 'abc123cba'], $firewall, ['ROLE_ADMIN']);
-        $session->set('_security_'.$firewall, serialize($token));
-        $session->set('access_token', 'abc123cba');
-        $session->save();
-
-        $cookie = new Cookie($session->getName(), $session->getId());
-        $this->client->getCookieJar()->set($cookie);
     }
 }

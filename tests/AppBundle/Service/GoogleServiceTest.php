@@ -8,7 +8,6 @@ use Tests\AppBundle\KernelTest;
 /**
  * Class GoogleServiceTest.
  *
- *
  * @covers \AppBundle\Service\GoogleService
  */
 class GoogleServiceTest extends KernelTest

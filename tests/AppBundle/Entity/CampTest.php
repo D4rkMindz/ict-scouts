@@ -24,8 +24,8 @@ class CampTest extends KernelTest
 
         $province = new Province('Baselland', 'BL');
         $zip = new Zip('4410', 'Liestal');
-        $address = new Address($province, $zip, 'Hauptstrasse', '11');
-        $address2 = new Address($province, $zip, 'Hauptstrasse', '12');
+        $address = new Address('Hauptstrasse 11', $zip, $province);
+        $address2 = new Address('Hauptstrasse 12', $zip, $province);
 
         $entityManager->persist($province);
         $entityManager->persist($address);
@@ -57,7 +57,7 @@ class CampTest extends KernelTest
 
         $province = new Province('Baselland', 'BL');
         $zip = new Zip('4410', 'Liestal');
-        $address = new Address($province, $zip, 'Hauptstrasse', '11');
+        $address = new Address('Hauptstrasse 11', $zip, $province);
 
         $entityManager->persist($province);
         $entityManager->persist($address);
@@ -65,7 +65,7 @@ class CampTest extends KernelTest
 
         $province1 = new Province('', '');
         $zip1 = new Zip('', '');
-        $address1 = new Address($province1, $zip1, '', '');
+        $address1 = new Address('', $zip1, $province1);
 
         $camp = new Camp('Great Camp', $address);
         $serialized = $camp->serialize();

@@ -2,13 +2,10 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Person.
- *
- * @TODO: Make this extendable.
  *
  * @ORM\Table(name="person")
  * @ORM\Entity
@@ -25,6 +22,27 @@ class Person
     private $id;
 
     /**
+     * @var Scout
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Scout", mappedBy="person")
+     */
+    private $scout;
+
+    /**
+     * @var Talent
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Talent", mappedBy="person")
+     */
+    private $talent;
+
+    /**
+     * @var User
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User", mappedBy="person")
+     */
+    private $user;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="family_name", type="string")
@@ -39,11 +57,10 @@ class Person
     private $givenName;
 
     /**
-     * @TODO: Change this to address entity.
+     * @var Address
      *
-     * @var string
-     *
-     * @ORM\Column(name="address", type="string", nullable=true)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Address", inversedBy="persons")
+     * @ORM\Column(name="address_id", type="integer", nullable=true)
      */
     private $address;
 
@@ -69,18 +86,11 @@ class Person
     private $birthDate;
 
     /**
-     * @var Collection
-     *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Talent", mappedBy="person")
-     */
-    private $talent;
-
-    /**
      * Person constructor.
      *
      * @param string         $familyName
      * @param string         $givenName
-     * @param string         $address
+     * @param Address|null   $address
      * @param string|null    $phone
      * @param string|null    $mail
      * @param \DateTime|null $birthDate
@@ -88,7 +98,7 @@ class Person
     public function __construct(
         string $familyName,
         string $givenName,
-        string $address = null,
+        Address $address = null,
         string $phone = null,
         string $mail = null,
         \DateTime $birthDate = null
@@ -112,6 +122,46 @@ class Person
     }
 
     /**
+     * Get scout.
+     *
+     * @return Scout
+     */
+    public function getScout(): ?Scout
+    {
+        return $this->scout;
+    }
+
+    /**
+     * Get talent.
+     *
+     * @return Talent
+     */
+    public function getTalent(): ?Talent
+    {
+        return $this->talent;
+    }
+
+    /**
+     * Get user.
+     *
+     * @return User
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set familyName.
+     *
+     * @param string $familyName
+     */
+    public function setFamilyName(string $familyName): void
+    {
+        $this->familyName = $familyName;
+    }
+
+    /**
      * Get familyName.
      *
      * @return string
@@ -122,11 +172,13 @@ class Person
     }
 
     /**
-     * @param string $familyName
+     * Set givenName.
+     *
+     * @param string $givenName
      */
-    public function setFamilyName(string $familyName): void
+    public function setGivenName(string $givenName): void
     {
-        $this->familyName = $familyName;
+        $this->givenName = $givenName;
     }
 
     /**
@@ -140,19 +192,23 @@ class Person
     }
 
     /**
-     * @param string $givenName
+     * Set address.
+     *
+     * @param Address $address
+     *
+     * @return void
      */
-    public function setGivenName(string $givenName): void
+    public function setAddress(Address $address): void
     {
-        $this->givenName = $givenName;
+        $this->address = $address;
     }
 
     /**
      * Get address.
      *
-     * @return string
+     * @return Address
      */
-    public function getAddress(): string
+    public function getAddress(): ?Address
     {
         return $this->address;
     }
@@ -230,17 +286,9 @@ class Person
     }
 
     /**
-     * @return Collection
-     */
-    public function getTalent(): Collection
-    {
-        return $this->talent;
-    }
-
-    /**
      * @see \Serializable::serialize()
      */
-    public function serialize()
+    public function serialize(): string
     {
         return serialize(
             [
@@ -260,10 +308,16 @@ class Person
      *
      * @param string $serialized
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
-        list($this->id, $this->familyName, $this->givenName, $this->address, $this->phone, $this->mail, $this->birthDate) = unserialize(
-            $serialized
-        );
+        list(
+            $this->id,
+            $this->familyName,
+            $this->givenName,
+            $this->address,
+            $this->phone,
+            $this->mail,
+            $this->birthDate
+        ) = unserialize($serialized);
     }
 }

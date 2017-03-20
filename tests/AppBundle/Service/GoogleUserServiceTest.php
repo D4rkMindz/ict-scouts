@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle\Service;
 
+use AppBundle\Entity\Person;
 use AppBundle\Entity\User;
 use AppBundle\Service\GoogleUserService;
 use Doctrine\ORM\EntityManager;
@@ -9,7 +10,6 @@ use Tests\AppBundle\KernelTest;
 
 /**
  * Class GoogleUserServiceTest.
- *
  *
  * @covers \AppBundle\Service\GoogleUserService
  */
@@ -52,7 +52,10 @@ class GoogleUserServiceTest extends KernelTest
         /** @var GoogleUserService $googleUserService */
         $googleUserService = $client->getContainer()->get('app.service.google.user');
 
-        $user = new User('123456789', 'jane.doe@example.com');
+        $person = new Person('Doe', 'Jane');
+        $entityManager->persist($person);
+
+        $user = new User($person, '123456789', 'jane.doe@example.com');
         $entityManager->persist($user);
         $entityManager->flush();
 
@@ -81,7 +84,10 @@ class GoogleUserServiceTest extends KernelTest
         /** @var GoogleUserService $googleUserService */
         $googleUserService = $client->getContainer()->get('app.service.google.user');
 
-        $user = new User('111222333444', 'john.doe@example.com');
+        $person = new Person('Doe', 'Jane');
+        $entityManager->persist($person);
+
+        $user = new User($person, '111222333444', 'john.doe@example.com');
         $entityManager->persist($user);
         $entityManager->flush();
 

@@ -92,7 +92,7 @@ class GoogleUserService
             $dbUser = $this->em->getRepository('AppBundle:User')->findOneBy(['googleId' => $user->getId()]);
 
             if (!$dbUser) {
-                $dbUser = new User($user->getId(), $user->getPrimaryEmail());
+                $dbUser = new User($this->createPerson($user), $user->getId(), $user->getPrimaryEmail());
                 $this->em->persist($dbUser);
                 $this->em->flush();
             }
@@ -115,10 +115,10 @@ class GoogleUserService
         $this->updateUserGroups($user, $googleUser->getOrgUnitPath());
 
         if ($user->getGroups()->contains($this->scoutGroup)) {
-            $scout = $user->getScout();
+            $scout = $user->getPerson()->getScout();
 
             if (!$scout) {
-                $scout = new Scout($user);
+                $scout = new Scout($user->getPerson());
 
                 $this->em->persist($scout);
                 $this->em->flush();
@@ -126,17 +126,15 @@ class GoogleUserService
         }
 
         if ($user->getGroups()->contains($this->talentGroup)) {
-            $talent = $user->getTalent();
+            $talent = $user->getPerson()->getTalent();
 
             if (!$talent) {
-                $talentStatus = $this->em->getRepository('AppBundle:TalentStatus')->find(TalentStatus::ACTIVE);
-
-                $talent = new Talent($this->createPerson($googleUser), $user);
+                $talent = new Talent($user->getPerson());
 
                 $this->em->persist($talent);
                 $this->em->flush();
 
-                $talentStatusHistory = new TalentStatusHistory($talent, $talentStatus);
+                $talentStatusHistory = new TalentStatusHistory($talent, Talent::ACTIVE);
 
                 $this->em->persist($talentStatusHistory);
                 $this->em->flush();

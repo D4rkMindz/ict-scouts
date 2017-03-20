@@ -38,6 +38,9 @@ class AdminController extends Controller
      * @Method("GET")
      *
      * @return RedirectResponse
+     * @throws \Exception
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
     public function userSyncAction(): RedirectResponse
     {

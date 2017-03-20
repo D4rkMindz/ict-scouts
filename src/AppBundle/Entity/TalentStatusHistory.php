@@ -24,16 +24,15 @@ class TalentStatusHistory
     /**
      * @var Talent
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Talent", inversedBy="talentStatusHistories", cascade={"all"})
-     * @ORM\JoinColumn(name="talent_id", nullable=true, referencedColumnName="person_id")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Talent", inversedBy="talentStatusHistory", cascade={"all"})
+     * @ORM\JoinColumn(name="talent_id", nullable=true, referencedColumnName="id")
      */
     private $talent;
 
     /**
-     * @var TalentStatus
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TalentStatus", inversedBy="talentStatusHistories", cascade={"all"})
-     * @ORM\JoinColumn(name="talent_status_id", nullable=true)
+     * @ORM\Column(name="status", nullable=true)
      */
     private $status;
 
@@ -48,10 +47,10 @@ class TalentStatusHistory
      * TalentStatusHistory constructor.
      *
      * @param Talent       $talent
-     * @param TalentStatus $status
+     * @param int          $status
      * @param \DateTime    $date   (optional)
      */
-    public function __construct(Talent $talent, TalentStatus $status, \DateTime $date = null)
+    public function __construct(Talent $talent, int $status, \DateTime $date = null)
     {
         $this->talent = $talent;
         $this->status = $status;
@@ -81,9 +80,9 @@ class TalentStatusHistory
     /**
      * Get status.
      *
-     * @return TalentStatus
+     * @return int
      */
-    public function getStatus(): TalentStatus
+    public function getStatus(): int
     {
         return $this->status;
     }

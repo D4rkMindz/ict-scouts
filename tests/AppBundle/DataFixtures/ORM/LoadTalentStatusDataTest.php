@@ -2,28 +2,31 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
-use AppBundle\Entity\TalentStatus;
+use AppBundle\Entity\Province;
 use Tests\AppBundle\KernelTest;
 
 /**
  * Class LoadTalentStatusDataTest.
  *
- * @covers \AppBundle\DataFixtures\ORM\LoadTalentStatusData
+ * @covers \AppBundle\DataFixtures\ORM\LoadProvinceData
  */
-class LoadTalentStatusDataTest extends KernelTest
+class LoadProvinceDataTest extends KernelTest
 {
     /**
      * Tests load function.
      */
     public function testLoad()
     {
-        $repo = $this->getContainer()->get('doctrine.orm.entity_manager')->getRepository('AppBundle:TalentStatus');
-        $active = $repo->findOneBy(['name' => 'Aktiv']);
-        $inactive = $repo->findOneBy(['name' => 'Inaktiv']);
-        $former = $repo->findOneBy(['name' => 'Ehemalig']);
+        $repo = $this->getContainer()->get('doctrine.orm.entity_manager')->getRepository('AppBundle:Province');
+        $ag = $repo->findOneBy(['nameShort' => 'AG']);
+        $bl = $repo->findOneBy(['nameShort' => 'BL']);
+        $zh = $repo->findOneBy(['nameShort' => 'ZH']);
+        $all = $repo->findAll();
 
-        $this->assertEquals($active->getId(), TalentStatus::ACTIVE);
-        $this->assertEquals($inactive->getId(), TalentStatus::INACTIVE);
-        $this->assertEquals($former->getId(), TalentStatus::FORMER);
+        $this->assertEquals('Aargau', $ag->getName());
+        $this->assertEquals('Basel-Landschaft', $bl->getName());
+        $this->assertEquals('Zürich', $zh->getName());
+        $this->assertCount(26, $all);
+
     }
 }

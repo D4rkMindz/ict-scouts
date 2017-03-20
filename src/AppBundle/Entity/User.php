@@ -68,29 +68,25 @@ class User implements UserInterface, \Serializable
     private $accessTokenExpireDate;
 
     /**
-     * @var Scout
+     * @var Person
      *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Scout", mappedBy="user", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Person", inversedBy="user")
+     * @ORM\JoinColumn(name="person_id")
      */
-    private $scout;
-
-    /**
-     * @var Talent
-     *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Talent", mappedBy="user", cascade={"all"})
-     */
-    private $talent;
+    private $person;
 
     /**
      * User constructor.
      *
+     * @param Person $person
      * @param string $googleId
      * @param string $email
      * @param string $accessToken
      */
-    public function __construct(string $googleId, string $email, string $accessToken = null)
+    public function __construct(Person $person, string $googleId, string $email, string $accessToken = null)
     {
         $this->groups = new ArrayCollection();
+        $this->person = $person;
         $this->googleId = $googleId;
         $this->email = $email;
         $this->accessToken = $accessToken;
@@ -104,6 +100,16 @@ class User implements UserInterface, \Serializable
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * Get person.
+     *
+     * @return Person
+     */
+    public function getPerson(): Person
+    {
+        return $this->person;
     }
 
     /**
@@ -191,46 +197,6 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Set scout.
-     *
-     * @param Scout $scout
-     */
-    public function setScout(Scout $scout): void
-    {
-        $this->scout = $scout;
-    }
-
-    /**
-     * Get scout.
-     *
-     * @return Scout
-     */
-    public function getScout(): ?Scout
-    {
-        return $this->scout;
-    }
-
-    /**
-     * Set talent.
-     *
-     * @param Talent $talent
-     */
-    public function setTalent(Talent $talent): void
-    {
-        $this->talent = $talent;
-    }
-
-    /**
-     * Get talent.
-     *
-     * @return Talent
-     */
-    public function getTalent(): ?Talent
-    {
-        return $this->talent;
-    }
-
-    /**
      * Returns the password used to authenticate the user.
      *
      * This should be the encoded password. On authentication, a plain-text
@@ -278,9 +244,10 @@ class User implements UserInterface, \Serializable
     {
         return serialize(
             [
-                'id'         => $this->id,
-                'googleId'   => $this->googleId,
-                'email'      => $this->email,
+                'id'        => $this->id,
+                'person'    => $this->person,
+                'googleId'  => $this->googleId,
+                'email'     => $this->email,
             ]
         );
     }
@@ -296,6 +263,7 @@ class User implements UserInterface, \Serializable
     {
         $userArray = unserialize($serialized);
         $this->id = $userArray['id'];
+        $this->person = $userArray['person'];
         $this->googleId = $userArray['googleId'];
         $this->email = $userArray['email'];
     }

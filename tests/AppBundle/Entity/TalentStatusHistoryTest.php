@@ -29,33 +29,26 @@ class TalentStatusHistoryTest extends KernelTest
 
         $entityManager->persist($school);
 
-        $person = new Person('Doe', 'John', 'Address');
+        $person = new Person('Doe', 'John');
         $person->setPhone('+41 79 123 45 67');
         $person->setMail('john.doe@example.com');
-
         $entityManager->persist($person);
 
-        $user = new User('123456789', 'john.doe@example.com', 'abc123cba');
+        $user = new User($person, '123456789', 'john.doe@example.com', 'abc123cba');
         $user->addGroup($group);
 
         $entityManager->persist($user);
         $entityManager->flush();
 
-        $talent = new Talent($person, $user);
-        $talent->setSchool($school);
+        $talent = new Talent($person, $school);
         $talent->setVeggie(true);
 
-        $talentStatus = $entityManager->getRepository('AppBundle:TalentStatus')->find(TalentStatus::ACTIVE);
-
-        $entityManager->persist($talentStatus);
-        $entityManager->flush();
-
-        $talentStatusHistory = new TalentStatusHistory($talent, $talentStatus);
+        $talentStatusHistory = new TalentStatusHistory($talent, Talent::ACTIVE);
 
         $this->assertNull($talentStatusHistory->getId());
         $this->assertLessThanOrEqual((new \DateTime())->getTimestamp(), $talentStatusHistory->getChangeDate()->getTimestamp());
         $this->assertEquals($talent, $talentStatusHistory->getTalent());
-        $this->assertEquals($talentStatus, $talentStatusHistory->getStatus());
+        $this->assertEquals(Talent::ACTIVE, $talentStatusHistory->getStatus());
 
         $entityManager->persist($talentStatusHistory);
         $entityManager->flush();

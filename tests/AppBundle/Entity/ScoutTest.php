@@ -28,7 +28,7 @@ class ScoutTest extends KernelTest
         $module2 = new Module();
         $module2->setName('Module 2');
 
-        $person = new Person('Doe', 'John', 'Address');
+        $person = new Person('Doe', 'John');
         $person->setPhone('+41 79 123 45 67');
         $person->setMail('john.doe@example.com');
         $birthDate = new \DateTime();
@@ -37,7 +37,7 @@ class ScoutTest extends KernelTest
         $entityManager->persist($person);
         $entityManager->flush();
 
-        $user = new User('123456789', 'john.doe@example.com', 'abc123cba');
+        $user = new User($person, '123456789', 'john.doe@example.com', 'abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
         $user->setAccessTokenExpireDate($tokenExpireDate);
         $user->addGroup($group);
@@ -45,11 +45,12 @@ class ScoutTest extends KernelTest
         $entityManager->persist($user);
         $entityManager->flush();
 
-        $scout = new Scout($user);
+        $scout = new Scout($person);
         $scout->addModule($module);
         $scout->addModule($module2);
 
-        $this->assertEquals($user->getEmail(), $scout->getUser()->getEmail());
+        $this->assertNull($scout->getId());
+        $this->assertEquals($person, $scout->getPerson());
         $this->assertCount(2, $scout->getModules());
 
         $entityManager->persist($scout);
@@ -57,6 +58,7 @@ class ScoutTest extends KernelTest
 
         $scout->removeModule($module2);
 
+        $this->assertEquals(1, $scout->getId());
         $this->assertCount(1, $scout->getModules());
     }
 }

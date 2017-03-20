@@ -5,7 +5,6 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @TODO: Include this into Address entity.
  * Zip.
  *
  * @ORM\Table(name="zip")

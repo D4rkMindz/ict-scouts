@@ -24,7 +24,7 @@ class SchoolTest extends KernelTest
 
         $province = new Province('Baselland', 'BL');
         $zip = new Zip('4133', 'Pratteln');
-        $address = new Address($province, $zip, 'Hauptstrasse', '11');
+        $address = new Address('Hauptstrasse 11', $zip, $province);
 
         $school = new School('Global School');
         $school->setName('Global School');
@@ -49,7 +49,7 @@ class SchoolTest extends KernelTest
     {
         $province = new Province('Baselland', 'BL');
         $zip = new Zip('4133', 'Pratteln');
-        $address = new Address($province, $zip, 'Hauptstrasse', '11');
+        $address = new Address('Hauptstrasse 11', $zip, $province);
 
         $school = new School('Global School');
         $school->setAddress($address);

@@ -13,9 +13,6 @@ use Tests\AppBundle\KernelTest;
  */
 class GoogleOAuthControllerTest extends KernelTest
 {
-    /** @var Client */
-    private $client = null;
-
     public function setUp()
     {
         parent::setup();

@@ -28,8 +28,8 @@ class ModulePartTest extends KernelTest
 
         $province = new Province('Baselland', 'BL');
         $zip = new Zip('4133', 'Pratteln');
-        $address = new Address($province, $zip, 'Hauptstrasse', '11');
-        $address1 = new Address($province, $zip, 'Hauptstrasse', '11');
+        $address = new Address('Hauptstrasse 11', $zip, $province);
+        $address1 = new Address('Hauptstrasse 12', $zip, $province);
         $module = new Module();
         $module->setName('Module 1');
         $workshop = new Workshop('Great Workshop', $address1);

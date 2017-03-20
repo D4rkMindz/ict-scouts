@@ -29,7 +29,7 @@ class Workshop
     private $name;
 
     /**
-     * @var string
+     * @var Address
      *
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Address")
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id")

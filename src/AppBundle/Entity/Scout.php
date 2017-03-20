@@ -7,8 +7,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @TODO: extend from person.
- *
  * Scout.
  *
  * @ORM\Table(name="scout")
@@ -26,14 +24,12 @@ class Scout
     private $id;
 
     /**
-     * @var User
+     * @var Person
      *
-     * @TODO: Maybe extend from this? Or create a Trait?
-     *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User", inversedBy="scout", cascade={"all"})
-     * @ORM\JoinColumn(name="app_user_id")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Person", inversedBy="scout", cascade={"all"})
+     * @ORM\JoinColumn(name="person_id")
      */
-    private $user;
+    private $person;
 
     /**
      * @var ArrayCollection
@@ -53,15 +49,17 @@ class Scout
     /**
      * Scout constructor.
      *
-     * @param User $user
+     * @param Person $person
      */
-    public function __construct(User $user)
+    public function __construct(Person $person)
     {
         $this->modules = new ArrayCollection();
-        $this->user = $user;
+        $this->person = $person;
     }
 
     /**
+     * Get id.
+     *
      * @return int
      */
     public function getId(): ?int
@@ -70,13 +68,13 @@ class Scout
     }
 
     /**
-     * Get user.
+     * Get person.
      *
-     * @return User
+     * @return Person
      */
-    public function getUser(): User
+    public function getPerson(): Person
     {
-        return $this->user;
+        return $this->person;
     }
 
     /**

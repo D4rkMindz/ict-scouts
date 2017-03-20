@@ -24,7 +24,7 @@ class WorkshopTest extends KernelTest
 
         $province = new Province('Baselland', 'BL');
         $zip = new Zip('4410', 'Liestal');
-        $address = new Address($province, $zip, 'Hauptstrasse', '11');
+        $address = new Address('Hauptstrasse 11', $zip, $province);
         $entityManager->persist($province);
         $entityManager->persist($address);
         $entityManager->flush();
@@ -53,7 +53,7 @@ class WorkshopTest extends KernelTest
 
         $province = new Province('Baselland', 'BL');
         $zip = new Zip('4410', 'Liestal');
-        $address = new Address($province, $zip, 'Hauptstrasse', '11');
+        $address = new Address('Hauptstrasse 11', $zip, $province);
         $entityManager->persist($province);
         $entityManager->persist($address);
         $entityManager->flush();
