@@ -6,8 +6,6 @@ use AppBundle\Entity\Person;
 use AppBundle\Entity\School;
 use AppBundle\Entity\Talent;
 use AppBundle\Entity\TalentStatusHistory;
-use AppBundle\Entity\User;
-use AppBundle\Entity\Zip;
 use Tests\AppBundle\KernelTest;
 
 /**

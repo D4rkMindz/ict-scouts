@@ -6,16 +6,16 @@ use AppBundle\Entity\Person;
 use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * Class KernelTest.
  *
- * @coversNothing 
+ * @coversNothing
  */
 class KernelTest extends WebTestCase
 {
@@ -93,7 +93,7 @@ class KernelTest extends WebTestCase
         $entityManager->persist($person);
 
         /** @var User $user */
-        $user = new User($person,'123456789', 'john.doe@'.$this->getContainer()->getParameter('google_apps_domain'), 'abc123cba');
+        $user = new User($person, '123456789', 'john.doe@'.$this->getContainer()->getParameter('google_apps_domain'), 'abc123cba');
         $user->setAccessTokenExpire((new \DateTime())->add(new \DateInterval('PT3595S')));
         $user->addGroup($group);
 

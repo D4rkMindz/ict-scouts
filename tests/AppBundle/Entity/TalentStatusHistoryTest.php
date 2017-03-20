@@ -5,7 +5,6 @@ namespace Tests\AppBundle\Entity;
 use AppBundle\Entity\Person;
 use AppBundle\Entity\School;
 use AppBundle\Entity\Talent;
-use AppBundle\Entity\TalentStatus;
 use AppBundle\Entity\TalentStatusHistory;
 use AppBundle\Entity\User;
 use Tests\AppBundle\KernelTest;
