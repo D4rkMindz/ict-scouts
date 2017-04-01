@@ -1,0 +1,47 @@
+{% extends '@App/base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row valign-wrapper">
+            <div class="col s6">
+                <h2>Benutzer</h2>
+            </div>
+            <div class="col s6 valign right-align">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <table class="responsive-table bordered highlight">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>E-Mail</th>
+                        <th>Berechtigung</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for person in persons %}
+                        {% set personGroups = '' %}
+                        {% for group in person.user.groups %}
+                            {% set personGroups = personGroups ~ group.name ~ ', ' %}
+                        {% else %}
+                            {% set personGroups = 'Keine Gruppe' %}
+                        {% endfor %}
+                        <tr>
+                            <td><img class="circle" src="https://placehold.it/350" height="30" /></td>
+                            <td><a href="{{ path('profile_show', {person: person.id}) }}">{{ person.givenName ~ ' ' ~ person.familyName }}</a></td>
+                            <td>{% if person.mail %}<a href="mailto:{{ person.mail }}">{{ person.mail }}</a>{% endif %}</td>
+                            <td>{{ personGroups|trim(', ') }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="center-align">Keine Benutzer vorhanden.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

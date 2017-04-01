@@ -214,4 +214,28 @@ class School
     {
         list($this->id, $this->name) = unserialize($serialized);
     }
+
+    /**
+     * Add talent
+     *
+     * @param \AppBundle\Entity\Talent $talent
+     *
+     * @return School
+     */
+    public function addTalent(\AppBundle\Entity\Talent $talent)
+    {
+        $this->talents[] = $talent;
+
+        return $this;
+    }
+
+    /**
+     * Remove talent
+     *
+     * @param \AppBundle\Entity\Talent $talent
+     */
+    public function removeTalent(\AppBundle\Entity\Talent $talent)
+    {
+        $this->talents->removeElement($talent);
+    }
 }

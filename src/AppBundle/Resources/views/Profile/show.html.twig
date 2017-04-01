@@ -8,20 +8,20 @@
             </div>
             <div class="col s6 valign right-align">
                 {% if app.user.person.id == person.id or is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('profile_edit', {id: person.id}) }}" class="btn waves-effect waves-light">Bearbeiten</a>
+                    <a href="{{ path('profile_edit', {person: person.id}) }}" class="btn waves-effect waves-light">Bearbeiten</a>
                     &nbsp;
                 {% endif %}
             </div>
         </div>
         <div class="row">
             <div class="col s9">
-                <div class="card ">
+                <div class="card">
                     <div class="card-content">
                         <span class="card-title">Persondaten</span>
                         <table>
                             {% if person.addressExtra or person.street or person.zip %}
                             <tr>
-                                <th valign="top">Adresse:</th>
+                                <th>Adresse:</th>
                                 <td>{% if person.addressExtra %}{{ person.addressExtra }}<br />{% endif %}{% if person.street %}{{ person.street }}<br />{% endif %}{% if person.zip %}{{ person.zip.zip }} {{ person.zip.city }}{% endif %}</td>
                             </tr>
                             {% endif %}
@@ -48,12 +48,12 @@
                 </div>
 
                 {% if person.talent and person.talent.school %}
-                    <div class="card ">
+                    <div class="card">
                         <div class="card-content">
                             <span class="card-title">Schule</span>
                             <table>
                                 <tr>
-                                    <th valign="top">Schule:</th>
+                                    <th>Schule:</th>
                                     <td>{{ person.talent.school.name }}<br />{{ person.talent.school.street }}<br />{{ person.talent.school
                                         .zip.zip}} {{ person.talent.school
                                         .zip.city}}</td>
@@ -68,9 +68,22 @@
                 {% endif %}
             </div>
             <div class="col s3">
-                <div class="card ">
+                <div class="card">
                     <div class="card-content">
-                        <img class="circle responsive-img" src="https://placehold.it/350">
+                        <img class="circle responsive-img" src="https://placehold.it/350" />
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        {% if person.user %}
+                            {% for group in person.user.groups %}
+                                <p>{{ group.name }}</p>
+                            {% else %}
+                                <p class="center-align"><strong>Keine Berechtigungen</strong></p>
+                            {% endfor %}
+                        {% else %}
+                            <p class="center-align"><strong>Konntakt</strong></p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -78,7 +91,7 @@
         {% if person.talent %}
         <div class="row">
             <div class="col s12">
-                <div class="card ">
+                <div class="card">
                     <div class="card-content">
                         <div class="col s6 left-align">
                             <span class="card-title">Portfolio</span>

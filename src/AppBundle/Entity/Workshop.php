@@ -190,4 +190,18 @@ class Workshop
     {
         list($this->id, $this->name) = unserialize($serialized);
     }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Workshop
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
 }

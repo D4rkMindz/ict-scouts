@@ -151,4 +151,38 @@ class Talent
     {
         return $this->talentStatusHistory;
     }
+
+    /**
+     * Get veggie
+     *
+     * @return boolean
+     */
+    public function getVeggie()
+    {
+        return $this->veggie;
+    }
+
+    /**
+     * Set person
+     *
+     * @param \AppBundle\Entity\Person $person
+     *
+     * @return Talent
+     */
+    public function setPerson(\AppBundle\Entity\Person $person = null)
+    {
+        $this->person = $person;
+
+        return $this;
+    }
+
+    /**
+     * Remove talentStatusHistory
+     *
+     * @param \AppBundle\Entity\TalentStatusHistory $talentStatusHistory
+     */
+    public function removeTalentStatusHistory(\AppBundle\Entity\TalentStatusHistory $talentStatusHistory)
+    {
+        $this->talentStatusHistory->removeElement($talentStatusHistory);
+    }
 }

@@ -12,6 +12,9 @@ services:
     app.service.google.user:
         class: AppBundle\Service\GoogleUserService
         arguments: ['@kernel', '@doctrine.orm.entity_manager']
+    app.service.portfolio.pdf:
+        class: AppBundle\Service\PortfolioPdfService
+        arguments: ['@doctrine.orm.default_entity_manager', '@white_october.tcpdf']
     app.twig_extension.person:
         class: AppBundle\Twig\Extension\PersonTwigExtension
         public: false

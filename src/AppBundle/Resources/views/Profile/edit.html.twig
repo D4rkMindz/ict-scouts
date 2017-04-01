@@ -8,13 +8,17 @@
                 <h2>{{ person.givenName ~ ' ' ~ person.familyName }}</h2>
             </div>
             <div class="col s6 valign right-align">
+                {% if person.id == app.user.person.id %}
                 <a href="{{ path('profile_show') }}" class="btn waves-effect waves-light red">Abbrechen</a>&nbsp;
+                {% else %}
+                <a href="{{ path('profile_show', {person: person.id}) }}" class="btn waves-effect waves-light red">Abbrechen</a>&nbsp;
+                {% endif %}
                 <button type="submit" class="btn waves-effect waves-light">Speichern</button>
             </div>
         </div>
         <div class="row">
             <div class="col s9">
-                <div class="card ">
+                <div class="card">
                     <div class="card-content">
                         <span class="card-title">Persondaten</span>
                         {{ form(form) }}
@@ -22,9 +26,9 @@
                 </div>
             </div>
             <div class="col s3">
-                <div class="card ">
+                <div class="card">
                     <div class="card-content">
-                        <img class="circle responsive-img" src="https://placehold.it/350">
+                        <img class="circle responsive-img" src="https://placehold.it/350" />
                     </div>
                 </div>
             </div>

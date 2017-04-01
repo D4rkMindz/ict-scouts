@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Person.
  *
  * @ORM\Table(name="person")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PersonRepository")
  */
 class Person
 {
@@ -399,5 +399,47 @@ class Person
             $this->mail,
             $this->birthDate
         ) = unserialize($serialized);
+    }
+
+    /**
+     * Set scout
+     *
+     * @param \AppBundle\Entity\Scout $scout
+     *
+     * @return Person
+     */
+    public function setScout(\AppBundle\Entity\Scout $scout = null)
+    {
+        $this->scout = $scout;
+
+        return $this;
+    }
+
+    /**
+     * Set talent
+     *
+     * @param \AppBundle\Entity\Talent $talent
+     *
+     * @return Person
+     */
+    public function setTalent(\AppBundle\Entity\Talent $talent = null)
+    {
+        $this->talent = $talent;
+
+        return $this;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Person
+     */
+    public function setUser(\AppBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }

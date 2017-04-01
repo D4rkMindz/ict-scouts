@@ -96,4 +96,46 @@ class TalentStatusHistory
     {
         return $this->changeDate;
     }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     *
+     * @return TalentStatusHistory
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Set changeDate
+     *
+     * @param \DateTime $changeDate
+     *
+     * @return TalentStatusHistory
+     */
+    public function setChangeDate($changeDate)
+    {
+        $this->changeDate = $changeDate;
+
+        return $this;
+    }
+
+    /**
+     * Set talent
+     *
+     * @param \AppBundle\Entity\Talent $talent
+     *
+     * @return TalentStatusHistory
+     */
+    public function setTalent(\AppBundle\Entity\Talent $talent = null)
+    {
+        $this->talent = $talent;
+
+        return $this;
+    }
 }

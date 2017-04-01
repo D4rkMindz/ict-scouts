@@ -22,27 +22,22 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class ProfileController extends Controller
 {
     /**
-     * @Route("/{id}", defaults={"id" = null}, name="profile_show")
+     * @Route("/{person}", defaults={"person" = null}, name="profile_show")
      * @Method("GET")
      *
-     * @param $id
+     * @param Person|null $person
      *
      * @return Response
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \LogicException
      */
-    public function showAction($id)
+    public function showAction(Person $person = null)
     {
-        if ($id) {
-            /** @var Person $person */
-            $person = $this->getDoctrine()->getRepository('AppBundle:Person')->find($id);
-        } else {
-            /** @var Person $person */
+        if ( !$person ) {
             $person = $this->getUser()->getPerson();
         }
 
-
-        if (!$person){
+        if ( !$this->isGranted('ROLE_ADMIN') && $person->getId() !== $this->getUser()->getPerson()->getId() ){
             throw $this->createNotFoundException('Person not Found / Access denied');
         }
 
@@ -55,25 +50,22 @@ class ProfileController extends Controller
     }
 
     /**
-     * @Route("/edit/{id}", name="profile_edit")
+     * @Route("/edit/{person}", name="profile_edit")
      * @Method({"GET","POST"})
      *
      * @param Request $request
-     * @param         $id
+     * @param Person  $person
      *
      * @return Response
      * @throws \InvalidArgumentException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \LogicException
+     * @internal param $id
+     *
      */
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request, Person $person)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-
-        /** @var Person $person */
-        $person = $entityManager->getRepository('AppBundle:Person')->find($id);
-
-        if (!$person || ($person->getId() !== $this->getUser()->getPerson()->getId() && !$this->isGranted('ROLE_ADMIN'))){
+        if ( !$this->isGranted('ROLE_ADMIN') && $person->getId() !== $this->getUser()->getPerson()->getId() ){
             throw $this->createNotFoundException('Person not Found / Access denied');
         }
 
@@ -82,6 +74,7 @@ class ProfileController extends Controller
         if ($request->isMethod('post')) {
             $form->handleRequest($request);
             if ($form->isValid()) {
+                $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($person);
                 $entityManager->flush();
 
@@ -115,40 +108,10 @@ class ProfileController extends Controller
             throw $this->createNotFoundException(sprintf('Person %s %s (ID: %d) is not a Talent', $person->getGivenName(), $person->getFamilyName(), $person->getId()));
         }
 
-        $pdf = $this->get( 'white_october.tcpdf' )->create(
-            'PORTRAIT',
-            PDF_UNIT,
-            PDF_PAGE_FORMAT,
-            true,
-            'UTF-8',
-            false
-        );
-        $pdf->SetAuthor( 'ICT Scouts / Campus' );
-        $pdf->SetTitle( 'Portfolio - '.$person->getGivenName().' '.$person->getFamilyName());
-        $pdf->SetSubject( 'Your client' );
-        $pdf->SetKeywords( 'ICT Scouts, Talent, Portfolio' );
-        $pdf->setFontSubsetting( true );
-
-        $pdf->SetFont( 'helvetica', '', 11, '', true );
-        $pdf->AddPage();
-
-        $html = '<h1>ICT Scouts / Campus</h1><h2>'.$person->getGivenName().' '.$person->getFamilyName().'</h2>';
-
-        $html .= '<table><tr><th><b>Modul</b></th><th><b>Datum</b></th><th><b>Kommentar</b></th></tr><tr><td>Scratch - Tutorial</td><td>28.02.2017</td><td>-</td></tr><tr><td>Scratch - Spiel</td><td>28.02.2017</td><td>-</td></tr><tr><td>Scratch - Fussball</td><td>28.02.2017</td><td>-</td></tr><tr><td>HTML - Tutorial</td><td>01.04.2017</td><td>-</td></tr>';
-
-        $pdf->writeHTMLCell(
-            $w = 0,
-            $h = 0,
-            $x = '',
-            $y = '',
-            $html,
-            $border = 0,
-            $ln = 1,
-            $fill = 0,
-            $reseth = true,
-            $align = '',
-            $autopadding = true
-        );
+        $portfolioPdfService = $this->get('app.service.portfolio.pdf');
+        /** @var \TCPDF $pdf */
+        $pdf = $portfolioPdfService->initPdf('Portfolio - '.$person->getGivenName().' '.$person->getFamilyName());
+        $pdf = $portfolioPdfService->createPortfolio($pdf, $person);
 
         return new StreamedResponse($pdf->Output( 'ict_scouts-portfolio.pdf', 'I'));
     }

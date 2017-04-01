@@ -110,4 +110,32 @@ class Zip
     {
         return $this->zip.' '.$this->city;
     }
+
+    /**
+     * Set zip
+     *
+     * @param string $zip
+     *
+     * @return Zip
+     */
+    public function setZip($zip)
+    {
+        $this->zip = $zip;
+
+        return $this;
+    }
+
+    /**
+     * Set city
+     *
+     * @param string $city
+     *
+     * @return Zip
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
 }
