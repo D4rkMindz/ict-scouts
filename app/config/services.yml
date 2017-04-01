@@ -12,3 +12,8 @@ services:
     app.service.google.user:
         class: AppBundle\Service\GoogleUserService
         arguments: ['@kernel', '@doctrine.orm.entity_manager']
+    app.twig_extension.person:
+        class: AppBundle\Twig\Extension\PersonTwigExtension
+        public: false
+        tags:
+            - {name: twig.extension}

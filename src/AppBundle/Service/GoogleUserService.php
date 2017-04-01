@@ -8,8 +8,10 @@ use AppBundle\Entity\Scout;
 use AppBundle\Entity\Talent;
 use AppBundle\Entity\TalentStatusHistory;
 use AppBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Ldap\Adapter\ExtLdap\Collection;
 
 /**
  * Class GoogleUserService.
@@ -120,7 +122,6 @@ class GoogleUserService
                 $scout = new Scout($user->getPerson());
 
                 $this->entityManager->persist($scout);
-                $this->entityManager->flush();
             }
         }
 
@@ -136,9 +137,10 @@ class GoogleUserService
                 $talentStatusHistory = new TalentStatusHistory($talent, Talent::ACTIVE);
 
                 $this->entityManager->persist($talentStatusHistory);
-                $this->entityManager->flush();
             }
         }
+
+        $this->entityManager->flush();
     }
 
     /**
@@ -152,7 +154,7 @@ class GoogleUserService
     public function updateUserGroups(User $user, string $organisationUnit)
     {
         $group = null;
-        $userGroups = (!$user->getGroups() ? 'foo' : $user->getGroups());
+        $userGroups = (!$user->getGroups() ? new ArrayCollection() : $user->getGroups());
 
         if ('/Support' === $organisationUnit && !$userGroups->contains($this->adminGroup)) {
             $group = $this->adminGroup;

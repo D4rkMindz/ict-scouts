@@ -7,6 +7,9 @@
                 {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     <li><a href="{{ url('login') }}">Login</a></li>
                 {% else %}
+                    {% if is_granted('ROLE_TALENT') %}
+                        <li {% if app.request.get('_route') == 'profile_show' %}class="active"{% endif %}><a href="{{ path('profile_show') }}">Profil</a></li>
+                    {% endif %}
                     {% if is_granted('ROLE_ADMIN') %}
                         <li {% if app.request.get('_route') == 'admin_home' %}class="active"{% endif %}><a href="{{ path('admin_home') }}">Admin</a></li>
                     {% endif %}

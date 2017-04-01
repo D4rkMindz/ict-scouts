@@ -22,18 +22,10 @@ class WorkshopTest extends KernelTest
     {
         $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $province = new Province('Baselland', 'BL');
-        $zip = new Zip('4410', 'Liestal');
-        $address = new Address('Hauptstrasse 11', $zip, $province);
-        $entityManager->persist($province);
-        $entityManager->persist($address);
-        $entityManager->flush();
-
-        $workshop = new Workshop('Great Workshop', $address);
+        $workshop = new Workshop('Great Workshop');
 
         $this->assertNull($workshop->getId());
         $this->assertEquals('Great Workshop', $workshop->getName());
-        $this->assertEquals($address, $workshop->getAddress());
 
         $entityManager->persist($workshop);
         $entityManager->flush();
@@ -41,7 +33,6 @@ class WorkshopTest extends KernelTest
         $this->assertNotNull($workshop->getId());
 
         $this->assertEquals('Great Workshop', $workshop->getName());
-        $this->assertEquals($address, $workshop->getAddress());
     }
 
     /**
@@ -49,25 +40,15 @@ class WorkshopTest extends KernelTest
      */
     public function testSerialization()
     {
-        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
-
-        $province = new Province('Baselland', 'BL');
-        $zip = new Zip('4410', 'Liestal');
-        $address = new Address('Hauptstrasse 11', $zip, $province);
-        $entityManager->persist($province);
-        $entityManager->persist($address);
-        $entityManager->flush();
-
-        $workshop = new Workshop('Great Workshop', $address);
+        $workshop = new Workshop('Great Workshop');
         $serialized = $workshop->serialize();
 
         $this->assertTrue(is_string($serialized));
 
-        $workshop1 = new Workshop('Greatest Workshop', $address);
+        $workshop1 = new Workshop('Greatest Workshop');
         $workshop1->unserialize($serialized);
 
         $this->assertNull($workshop1->getId());
         $this->assertEquals('Great Workshop', $workshop1->getName());
-        $this->assertEquals($address, $workshop1->getAddress());
     }
 }

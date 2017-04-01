@@ -100,4 +100,14 @@ class Zip
     {
         list($this->id, $this->zip, $this->city) = unserialize($serialized);
     }
+
+    /**
+     * String return value of class.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->zip.' '.$this->city;
+    }
 }

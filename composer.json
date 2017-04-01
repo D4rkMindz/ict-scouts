@@ -49,7 +49,8 @@
     "symfony/swiftmailer-bundle": "^2.3",
     "symfony/monolog-bundle": "^3.0",
     "symfony/polyfill-apcu": "^1.0",
-    "symfony/symfony": "3.2.*"
+    "symfony/symfony": "3.2.*",
+    "whiteoctober/tcpdf-bundle": "^1.0"
   },
   "require-dev": {
     "codacy/coverage": "^1.0",

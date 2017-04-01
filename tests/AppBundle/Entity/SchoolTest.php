@@ -22,20 +22,12 @@ class SchoolTest extends KernelTest
     {
         $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $province = new Province('Baselland', 'BL');
-        $zip = new Zip('4133', 'Pratteln');
-        $address = new Address('Hauptstrasse 11', $zip, $province);
-
         $school = new School('Global School');
         $school->setName('Global School');
-        $school->setAddress($address);
 
         $this->assertNull($school->getId());
         $this->assertEquals('Global School', $school->getName());
-        $this->assertEquals($address, $school->getAddress());
 
-        $entityManager->persist($province);
-        $entityManager->persist($address);
         $entityManager->persist($school);
         $entityManager->flush();
 
@@ -47,12 +39,7 @@ class SchoolTest extends KernelTest
      */
     public function testSerialization()
     {
-        $province = new Province('Baselland', 'BL');
-        $zip = new Zip('4133', 'Pratteln');
-        $address = new Address('Hauptstrasse 11', $zip, $province);
-
         $school = new School('Global School');
-        $school->setAddress($address);
 
         $serialized = $school->serialize();
 

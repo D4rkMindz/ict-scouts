@@ -2,10 +2,7 @@
 
 namespace Tests\AppBundle\Entity;
 
-use AppBundle\Entity\Address;
 use AppBundle\Entity\Person;
-use AppBundle\Entity\Province;
-use AppBundle\Entity\Zip;
 use Tests\AppBundle\KernelTest;
 
 /**
@@ -35,28 +32,6 @@ class PersonTest extends KernelTest
         $person->setFamilyName('Doe');
 
         $this->assertEquals('Doe', $person->getFamilyName());
-    }
-
-    public function testAddress()
-    {
-        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
-
-        $province = new Province('Baselland', 'BL');
-        $zip = new Zip('4410', 'Liestal');
-        $address = new Address('Hauptstrasse 11', $zip, $province);
-
-        $entityManager->persist($zip);
-        $entityManager->persist($province);
-        $entityManager->persist($address);
-        $entityManager->flush();
-
-        $person = new Person('', '');
-
-        $this->assertNull($person->getAddress());
-
-        $person->setAddress($address);
-
-        $this->assertEquals($address, $person->getAddress());
     }
 
     public function testPhone()

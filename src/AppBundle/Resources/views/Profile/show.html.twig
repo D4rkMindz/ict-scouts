@@ -1,0 +1,126 @@
+{% extends '@App/base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row valign-wrapper">
+            <div class="col s6">
+                <h2>{{ person.givenName ~ ' ' ~ person.familyName }}</h2>
+            </div>
+            <div class="col s6 valign right-align">
+                {% if app.user.person.id == person.id or is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('profile_edit', {id: person.id}) }}" class="btn waves-effect waves-light">Bearbeiten</a>
+                    &nbsp;
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s9">
+                <div class="card ">
+                    <div class="card-content">
+                        <span class="card-title">Persondaten</span>
+                        <table>
+                            {% if person.addressExtra or person.street or person.zip %}
+                            <tr>
+                                <th valign="top">Adresse:</th>
+                                <td>{% if person.addressExtra %}{{ person.addressExtra }}<br />{% endif %}{% if person.street %}{{ person.street }}<br />{% endif %}{% if person.zip %}{{ person.zip.zip }} {{ person.zip.city }}{% endif %}</td>
+                            </tr>
+                            {% endif %}
+                            {% if person.mail %}
+                            <tr>
+                                <th>E-Mail:</th>
+                                <td>{{ person.mail }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if person.phone %}
+                            <tr>
+                                <th>Telefon:</th>
+                                <td><a href="tel:{{ person.phone|replace({' ': ''}) }}">{{ person.phone }}</a></td>
+                            </tr>
+                            {% endif %}
+                            {% if person.birthDate%}
+                                <tr>
+                                    <th>Geburtstag:</th>
+                                    <td>{{ person.birthDate|date('d. M Y') }} ({{ person.birthDate|calculateAge }})</td>
+                                </tr>
+                            {% endif %}
+                        </table>
+                    </div>
+                </div>
+
+                {% if person.talent and person.talent.school %}
+                    <div class="card ">
+                        <div class="card-content">
+                            <span class="card-title">Schule</span>
+                            <table>
+                                <tr>
+                                    <th valign="top">Schule:</th>
+                                    <td>{{ person.talent.school.name }}<br />{{ person.talent.school.street }}<br />{{ person.talent.school
+                                        .zip.zip}} {{ person.talent.school
+                                        .zip.city}}</td>
+                                </tr>
+                                <tr>
+                                    <th>LehrerIn:</th>
+                                    <td>-</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col s3">
+                <div class="card ">
+                    <div class="card-content">
+                        <img class="circle responsive-img" src="https://placehold.it/350">
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if person.talent %}
+        <div class="row">
+            <div class="col s12">
+                <div class="card ">
+                    <div class="card-content">
+                        <div class="col s6 left-align">
+                            <span class="card-title">Portfolio</span>
+                        </div>
+                        <div class="col s6 valign right-align">
+                            <a href="{{ path('profile_portfolio_pdf') }}" class="btn waves-effect waves-light">Exportieren</a>
+                        </div>
+                        <table class="bordered highlight">
+                            <thead>
+                                <tr>
+                                    <th>Modul</th>
+                                    <td>Datum</td>
+                                    <td>Kommentar</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Scratch - Tutorial</td>
+                                    <td>28.02.2017</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Scratch - Spiel</td>
+                                    <td>28.02.2017</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Scratch - Fussball</td>
+                                    <td>28.02.2017</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>HTML - Tutorial</td>
+                                    <td>01.04.2017</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

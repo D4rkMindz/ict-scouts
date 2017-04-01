@@ -85,4 +85,12 @@ class Province
     {
         $this->nameShort = $nameShort;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->name;
+    }
 }

@@ -57,12 +57,34 @@ class Person
     private $givenName;
 
     /**
-     * @var Address
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Address", inversedBy="persons")
-     * @ORM\Column(name="address_id", type="integer", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
-    private $address;
+    private $street;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $addressExtra;
+
+    /**
+     * @var Zip
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Zip", cascade={"persist"})
+     * @ORM\JoinColumn(name="zip_id", nullable=true)
+     */
+    private $zip;
+
+    /**
+     * @var Province
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Province", cascade={"persist"})
+     * @ORM\JoinColumn(name="province_id", nullable=true)
+     */
+    private $province;
 
     /**
      * @var string
@@ -192,25 +214,83 @@ class Person
     }
 
     /**
-     * Set address.
+     * Set street.
      *
-     * @param Address $address
-     *
-     * @return void
+     * @param string $street
      */
-    public function setAddress(Address $address): void
+    public function setStreet(string $street): void
     {
-        $this->address = $address;
+        $this->street = $street;
     }
 
     /**
-     * Get address.
+     * Get street.
      *
-     * @return Address
+     * @return string|null
      */
-    public function getAddress(): ?Address
+    public function getStreet(): ?string
     {
-        return $this->address;
+        return $this->street;
+    }
+
+    /**
+     * Set addressExtra.
+     *
+     * @param string $addressExtra
+     */
+    public function setAddressExtra(string $addressExtra): void
+    {
+        $this->addressExtra = $addressExtra;
+    }
+
+    /**
+     * Get addressExtra.
+     *
+     * @return string|null
+     */
+    public function getAddressExtra(): ?string
+    {
+        return $this->addressExtra;
+    }
+
+    /**
+     * Set zip.
+     *
+     * @param Zip $zip
+     */
+    public function setZip(Zip $zip): void
+    {
+        $this->zip = $zip;
+    }
+
+    /**
+     * Get zip.
+     *
+     * @return Zip|null
+     */
+    public function getZip(): ?Zip
+    {
+        return $this->zip;
+    }
+
+    /**
+     * Set province.
+     *
+     * @param Province $province
+     */
+    public function setProvince(Province $province): void
+    {
+        $this->province = $province;
+    }
+
+    /**
+     * Get province.
+     *
+     * @return Province|null
+     */
+    public function getProvince(): ?Province
+    {
+        return $this->province;
     }
 
     /**
@@ -264,11 +344,11 @@ class Person
     /**
      * Set birthDate.
      *
-     * @param \DateTime $birthDate
+     * @param \DateTime|null $birthDate
      *
      * @return Person
      */
-    public function setBirthDate(\DateTime $birthDate)
+    public function setBirthDate(\DateTime $birthDate=null)
     {
         $this->birthDate = $birthDate;
 
