@@ -109,9 +109,9 @@ class Person
     private $birthDate;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(name="pic", type="string", nullable=true)
      *
-     * @Assert\File(mimeTypes={ "application/png", "application/jpeg" })
+     * @Assert\File(mimeTypes={"application/png", "application/jpeg"})
      */
     private $pic;
 
