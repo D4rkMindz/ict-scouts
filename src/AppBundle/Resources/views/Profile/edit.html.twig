@@ -28,26 +28,17 @@
             <div class="col s3">
                 <div class="card">
                     <div class="card-content center-align">
-                        <img class="circle responsive-img" src="https://placehold.it/350" />
+                        <img class="circle responsive-img" id="person_pic" src="{{ person_pic }}" style="max-height: 350px;" />
                         <br /><br />
-                        <button data-target="modal1" class="btn waves-effect waves-light grey">Ändern</a>
+                        <button data-target="modal1" class="btn waves-effect waves-light grey">Ändern</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal Structure -->
-    <div id="modal1" class="modal">
-        <div class="modal-content">
-            <h4>Profilbild ändern</h4>
-            {% include('@App/Profile/edit_profilepic.html.twig') %}
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="btn modal-action modal-close waves-effect waves-light green">Speichern</a>&nbsp;
-            <a href="#!" class="btn modal-action modal-close waves-effect waves-light red">Abbrechen</a>&nbsp;
-        </div>
-    </div>
+    {% include('@App/Profile/edit_profilepic_modal.html.twig') %}
+
 {% endblock %}
 
 {% block javascripts %}
@@ -56,6 +47,31 @@
     $(document).ready(function() {
         $('select').material_select();
         $('.modal').modal();
+
+        $('#appbundle_person_pic').change(function (){
+            $('#person_pic_error_panel').hide();
+            var form = $('#person_pic_form');
+            var formData = new FormData(form[0]);
+            console.log(formData);
+            $.ajax({
+                type: 'POST',
+                url: '{{ path('ajax_upload_profile_pic', {person: person.id}) }}',
+                data: formData,
+                processData: false,
+                contentType: false,
+                cache: false,
+                dataType: 'json',
+                success: function(response) {
+                    if ('success' === response.status) {
+                        $('#person_person_pic').attr('src', response.pic);
+                        $('#person_pic').attr('src', response.pic);
+                    } else {
+                        $('#person_pic_error').html(response.error);
+                        $('#person_pic_error_panel').show();
+                    }
+                }
+            });
+        });
     });
 </script>
 {% endblock %}

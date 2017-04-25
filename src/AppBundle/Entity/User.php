@@ -245,7 +245,6 @@ class User implements UserInterface, \Serializable
         return serialize(
             [
                 'id'        => $this->id,
-                'person'    => $this->person,
                 'googleId'  => $this->googleId,
                 'email'     => $this->email,
             ]
@@ -263,7 +262,6 @@ class User implements UserInterface, \Serializable
     {
         $userArray = unserialize($serialized);
         $this->id = $userArray['id'];
-        $this->person = $userArray['person'];
         $this->googleId = $userArray['googleId'];
         $this->email = $userArray['email'];
     }

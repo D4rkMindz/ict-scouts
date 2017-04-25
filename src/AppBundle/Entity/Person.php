@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Person.
@@ -108,11 +109,18 @@ class Person
     private $birthDate;
 
     /**
+     * @ORM\Column(type="string")
+     *
+     * @Assert\File(mimeTypes={ "application/png", "application/jpeg" })
+     */
+    private $pic;
+
+    /**
      * Person constructor.
      *
      * @param string         $familyName
      * @param string         $givenName
-     * @param Address|null   $address
+     * @param string|null    $street
      * @param string|null    $phone
      * @param string|null    $mail
      * @param \DateTime|null $birthDate
@@ -120,14 +128,14 @@ class Person
     public function __construct(
         string $familyName,
         string $givenName,
-        Address $address = null,
+        string $street = null,
         string $phone = null,
         string $mail = null,
         \DateTime $birthDate = null
     ) {
         $this->familyName = $familyName;
         $this->givenName = $givenName;
-        $this->address = $address;
+        $this->street = $street;
         $this->phone = $phone;
         $this->mail = $mail;
         $this->birthDate = $birthDate;
@@ -300,7 +308,7 @@ class Person
      *
      * @return Person
      */
-    public function setPhone(string $phone)
+    public function setPhone(string $phone): Person
     {
         $this->phone = $phone;
 
@@ -324,7 +332,7 @@ class Person
      *
      * @return Person
      */
-    public function setMail(string $mail)
+    public function setMail(string $mail): Person
     {
         $this->mail = $mail;
 
@@ -348,7 +356,7 @@ class Person
      *
      * @return Person
      */
-    public function setBirthDate(\DateTime $birthDate=null)
+    public function setBirthDate(\DateTime $birthDate=null): Person
     {
         $this->birthDate = $birthDate;
 
@@ -366,6 +374,22 @@ class Person
     }
 
     /**
+     * @return mixed
+     */
+    public function getPic()
+    {
+        return $this->pic;
+    }
+
+    /**
+     * @param mixed $pic
+     */
+    public function setPic( $pic ): void
+    {
+        $this->pic = $pic;
+    }
+
+    /**
      * @see \Serializable::serialize()
      */
     public function serialize(): string
@@ -375,7 +399,7 @@ class Person
                 $this->id,
                 $this->familyName,
                 $this->givenName,
-                $this->address,
+                $this->street,
                 $this->phone,
                 $this->mail,
                 $this->birthDate,
@@ -394,7 +418,7 @@ class Person
             $this->id,
             $this->familyName,
             $this->givenName,
-            $this->address,
+            $this->street,
             $this->phone,
             $this->mail,
             $this->birthDate
@@ -404,11 +428,11 @@ class Person
     /**
      * Set scout
      *
-     * @param \AppBundle\Entity\Scout $scout
+     * @param Scout $scout
      *
      * @return Person
      */
-    public function setScout(\AppBundle\Entity\Scout $scout = null)
+    public function setScout( Scout $scout = null): Person
     {
         $this->scout = $scout;
 
@@ -418,11 +442,11 @@ class Person
     /**
      * Set talent
      *
-     * @param \AppBundle\Entity\Talent $talent
+     * @param Talent $talent
      *
      * @return Person
      */
-    public function setTalent(\AppBundle\Entity\Talent $talent = null)
+    public function setTalent( Talent $talent = null): Person
     {
         $this->talent = $talent;
 
@@ -432,11 +456,11 @@ class Person
     /**
      * Set user
      *
-     * @param \AppBundle\Entity\User $user
+     * @param User $user
      *
      * @return Person
      */
-    public function setUser(\AppBundle\Entity\User $user = null)
+    public function setUser( User $user = null): Person
     {
         $this->user = $user;
 

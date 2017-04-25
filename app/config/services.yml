@@ -15,6 +15,9 @@ services:
     app.service.portfolio.pdf:
         class: AppBundle\Service\PortfolioPdfService
         arguments: ['@doctrine.orm.default_entity_manager', '@white_october.tcpdf']
+    app.service.person_pic_uploader:
+            class: AppBundle\Service\FileUploadService
+            arguments: ['%person_pic_location%']
     app.twig_extension.person:
         class: AppBundle\Twig\Extension\PersonTwigExtension
         public: false

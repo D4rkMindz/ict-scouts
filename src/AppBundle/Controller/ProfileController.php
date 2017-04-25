@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Person;
+use AppBundle\Form\Type\PersonPicType;
 use AppBundle\Form\Type\PersonType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -31,7 +32,7 @@ class ProfileController extends Controller
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \LogicException
      */
-    public function showAction(Person $person = null)
+    public function showAction(Person $person = null): Response
     {
         if ( !$person ) {
             $person = $this->getUser()->getPerson();
@@ -63,7 +64,7 @@ class ProfileController extends Controller
      * @internal param $id
      *
      */
-    public function editAction(Request $request, Person $person)
+    public function editAction(Request $request, Person $person): Response
     {
         if ( !$this->isGranted('ROLE_ADMIN') && $person->getId() !== $this->getUser()->getPerson()->getId() ){
             throw $this->createNotFoundException('Person not Found / Access denied');
@@ -82,11 +83,17 @@ class ProfileController extends Controller
             }
         }
 
+        $personPic = 'https://placehold.it/350';
+        if ($person->getPic() && file_exists($this->getParameter('person_pic_location').'/'.$person->getPic())) {
+            $personPic = 'data:image/gif;base64,'.base64_encode(file_get_contents($this->getParameter('person_pic_location').'/'.$person->getPic()));
+        }
+
         return $this->render(
             '@App/Profile/edit.html.twig',
             [
                 'person' => $person,
                 'form'   => $form->createView(),
+                'person_pic'    => $personPic,
             ]
         );
     }
@@ -95,11 +102,11 @@ class ProfileController extends Controller
      * @Route("/portfolio/pdf", name="profile_portfolio_pdf")
      * @Method("GET")
      *
-     * @return Response
+     * @return StreamedResponse
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \LogicException
      */
-    public function portfolioPdfAction()
+    public function portfolioPdfAction(): StreamedResponse
     {
         /** @var Person $person */
         $person = $this->getUser()->getPerson();

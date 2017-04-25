@@ -1,0 +1,27 @@
+<!-- Modal Structure -->
+<div id="modal1" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4>Profilbild ändern</h4>
+        <div class="card-content center-align">
+            <img class="circle" id="person_person_pic"  src="{{ person_pic }}" style="max-height: 250px; max-width: 250px;" />
+        </div>
+        <div class="card-panel white-text text-darken-2 red darken-2" id="person_pic_error_panel" style="display: none;">
+            <span><strong>Fehler:</strong></span>&nbsp;
+            <span id="person_pic_error"></span>
+        </div>
+        <form id="person_pic_form">
+            <div class="file-field input-field">
+                <div class="btn">
+                    <span>File</span>
+                    <input id="appbundle_person_pic" name="appbundle_person_pic[pic]" type="file" accept="image/jpeg,image/png">
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text" accept="image/jpeg,image/png">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="btn modal-action modal-close waves-effect waves-light grey">Schliessen</a>
+    </div>
+</div>
