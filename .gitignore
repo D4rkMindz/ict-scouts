@@ -20,3 +20,4 @@
 /vendor/
 /web/bundles/
 .gitignore
+/src/AppBundle/Resources/data/fixtures/Post_Adressdaten.csv
