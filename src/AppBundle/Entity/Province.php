@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,6 +37,13 @@ class Province
     private $nameShort;
 
     /**
+     * @var Zip|Collection $zips
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Zip", mappedBy="province", cascade={"persist"})
+     */
+    private $zips;
+
+    /**
      * Province constructor.
      *
      * @param string $name
@@ -42,6 +51,7 @@ class Province
      */
     public function __construct(string $name, string $nameShort)
     {
+        $this->zips = new ArrayCollection();
         $this->name = $name;
         $this->nameShort = $nameShort;
     }
@@ -84,6 +94,33 @@ class Province
     public function setNameShort(string $nameShort): void
     {
         $this->nameShort = $nameShort;
+    }
+
+    /**
+     * @return Zip
+     */
+    public function getZips()
+    {
+       return $this->zips;
+    }
+
+    /**
+     * @param Zip $zip
+     */
+    public function addZip(Zip $zip)
+    {
+        if (!$this->zips->contains($zip)) {
+            $this->zips->add($zip);
+            $zip->setProvince($this);
+        }
+    }
+
+    /**
+     * @param Zip $zip
+     */
+    public function removeZip(Zip $zip)
+    {
+        $this->zips->removeElement($zip);
     }
 
     /**
