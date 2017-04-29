@@ -42,10 +42,16 @@ class ProfileController extends Controller
             throw $this->createNotFoundException('Person not Found / Access denied');
         }
 
+        $personPic = 'https://placehold.it/350';
+        if ($person->getPic() && file_exists($this->getParameter('person_pic_location').'/'.$person->getPic())) {
+            $personPic = 'data:image/gif;base64,'.base64_encode(file_get_contents($this->getParameter('person_pic_location').'/'.$person->getPic()));
+        }
+
         return $this->render(
             '@App/Profile/show.html.twig',
             [
                 'person' => $person,
+                'person_pic' => $personPic,
             ]
         );
     }
