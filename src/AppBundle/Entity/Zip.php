@@ -15,9 +15,10 @@ class Zip
     /**
      * @var int
      *
+     * ONRP from the official swiss-post database.
+     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -36,13 +37,23 @@ class Zip
     private $city;
 
     /**
+     * @var Province $province
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Province", inversedBy="zips", cascade={"persist"})
+     * @ORM\JoinColumn(name="province_id", referencedColumnName="id")
+     */
+    private $province;
+
+    /**
      * Zip constructor.
      *
+     * @param int    $id
      * @param string $zip
      * @param string $city
      */
-    public function __construct(string $zip, string $city)
+    public function __construct(int $id, string $zip, string $city)
     {
+        $this->id = $id;
         $this->zip = $zip;
         $this->city = $city;
     }
@@ -52,7 +63,7 @@ class Zip
      *
      * @return int
      */
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -137,5 +148,21 @@ class Zip
         $this->city = $city;
 
         return $this;
+    }
+
+    /**
+     * @return Province
+     */
+    public function getProvince(): ?Province
+    {
+        return $this->province;
+    }
+
+    /**
+     * @param Province $province
+     */
+    public function setProvince(Province $province)
+    {
+        $this->province = $province;
     }
 }
