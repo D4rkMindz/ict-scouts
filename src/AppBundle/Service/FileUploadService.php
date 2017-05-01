@@ -37,7 +37,7 @@ class FileUploadService
             $fileName = $fileName.'.'.$file->guessExtension();
         }
 
-        if (file_exists($this->targetDir.'/'.$oldFile)) {
+        if (!empty($oldFile) && file_exists($this->targetDir.'/'.$oldFile)) {
             unlink($this->targetDir.'/'.$oldFile);
         }
 

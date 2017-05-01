@@ -48,7 +48,7 @@ class ProfileController extends Controller
         $entityManager = $this->getDoctrine()->getManager();
 
         /** @var UploadedFile $file */
-        $file = $request->files->get('appbundle_person_pic')['pic'];
+        $file = $request->files->get('person_pic')['pic'];
 
         if (!$file instanceof UploadedFile) {
             return new JsonResponse([
@@ -59,7 +59,7 @@ class ProfileController extends Controller
 
         /** @var FileUploadService $fileUploader */
         $fileUploader = $this->get('app.service.person_pic_uploader');
-        $fileName = $fileUploader->upload($file, $person->getId(), $person->getPic());
+        $fileName = $fileUploader->upload($file, $person->getId(), $person->getPic() ?? '');
 
         $person->setPic($fileName);
 

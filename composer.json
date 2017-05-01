@@ -50,7 +50,8 @@
     "symfony/monolog-bundle": "^3.0",
     "symfony/polyfill-apcu": "^1.0",
     "symfony/symfony": "3.2.*",
-    "whiteoctober/tcpdf-bundle": "^1.0"
+    "whiteoctober/tcpdf-bundle": "^1.0",
+    "league/csv": "^8.2"
   },
   "require-dev": {
     "codacy/coverage": "^1.0",

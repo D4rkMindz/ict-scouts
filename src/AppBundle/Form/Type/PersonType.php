@@ -37,10 +37,6 @@ class PersonType extends AbstractType
                 'label'     => 'Ort',
                 'required'  => false,
             ])
-            ->add('province', null, [
-                'label'     => 'Kanton',
-                'required'  => true,
-            ])
             ->add('phone', null, [
                 'label'     => 'Telefon',
                 'required'  => false,

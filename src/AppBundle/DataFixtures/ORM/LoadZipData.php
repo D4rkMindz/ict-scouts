@@ -32,10 +32,10 @@ class LoadZipData extends AbstractFixture
         $csvReader->setDelimiter(';');
         $csvReader->addFilter(function($row) use ($provRepo, $zipRepo, $manager) {
             switch ($row[0]) {
-                case '0':
+                case '00':
                     // Info table
                     break;
-                case '1':
+                case '01':
                     // Zip-Codes
                     $existingZip = $zipRepo->find($row[1]);
                     if ($existingZip) { // Update existing zip
@@ -64,25 +64,25 @@ class LoadZipData extends AbstractFixture
 
                     return true;
                     break;
-                case '2':
+                case '02':
                     // Alternative names for zips
                     break;
-                case '3':
+                case '03':
                     // Political villages
                     break;
-                case '4':
+                case '04':
                     // Streets
                     break;
-                case '5':
+                case '05':
                     // Alternative names for streets
                     break;
-                case '6':
+                case '06':
                     // Building
                     break;
-                case '7':
+                case '07':
                     // Alternative names for buildings
                     break;
-                case '8':
+                case '08':
                     // Postman information for delivery
                     break;
                 case '12':
@@ -92,8 +92,9 @@ class LoadZipData extends AbstractFixture
 
             return false;
         });
-        $manager->flush();
 
         $csvReader->fetchAll();
+
+        $manager->flush();
     }
 }

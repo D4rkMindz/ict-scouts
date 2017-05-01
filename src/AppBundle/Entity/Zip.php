@@ -30,9 +30,9 @@ class Zip
     private $zip;
 
     /**
-     * @var string
+     * @var resource
      *
-     * @ORM\Column(name="city", type="string")
+     * @ORM\Column(name="city", type="blob")
      */
     private $city;
 
@@ -85,7 +85,7 @@ class Zip
      */
     public function getCity(): string
     {
-        return $this->city;
+        return utf8_encode(stream_get_contents($this->city));
     }
 
     /**
@@ -119,7 +119,7 @@ class Zip
      */
     public function __toString()
     {
-        return $this->zip.' '.$this->city;
+        return $this->zip.' '.$this->getCity();
     }
 
     /**

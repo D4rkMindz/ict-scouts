@@ -2,7 +2,10 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Service\FileUploadService;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -78,14 +81,6 @@ class Person
      * @ORM\JoinColumn(name="zip_id", nullable=true)
      */
     private $zip;
-
-    /**
-     * @var Province
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Province", cascade={"persist"})
-     * @ORM\JoinColumn(name="province_id", nullable=true)
-     */
-    private $province;
 
     /**
      * @var string
@@ -279,26 +274,6 @@ class Person
     public function getZip(): ?Zip
     {
         return $this->zip;
-    }
-
-    /**
-     * Set province.
-     *
-     * @param Province $province
-     */
-    public function setProvince(Province $province): void
-    {
-        $this->province = $province;
-    }
-
-    /**
-     * Get province.
-     *
-     * @return Province|null
-     */
-    public function getProvince(): ?Province
-    {
-        return $this->province;
     }
 
     /**
