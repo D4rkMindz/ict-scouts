@@ -104,7 +104,7 @@ class Scout
     }
 
     /**
-     * Set person
+     * Set person.
      *
      * @param \AppBundle\Entity\Person $person
      *

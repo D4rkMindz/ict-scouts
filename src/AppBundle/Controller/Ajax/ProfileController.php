@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Ajax;
 
 use AppBundle\Entity\Person;
-use AppBundle\Form\Type\PersonPicType;
 use AppBundle\Service\FileUploadService;
 use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -30,17 +29,18 @@ class ProfileController extends Controller
      * @param Request $request
      * @param Person  $person
      *
-     * @return JsonResponse
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Symfony\Component\HttpFoundation\File\Exception\FileException
      * @throws \InvalidArgumentException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \LogicException
+     *
+     * @return JsonResponse
      */
     public function editAction(Request $request, Person $person): JsonResponse
     {
-        if ( !$this->isGranted('ROLE_ADMIN') && $person->getId() !== $this->getUser()->getPerson()->getId() ){
+        if (!$this->isGranted('ROLE_ADMIN') && $person->getId() !== $this->getUser()->getPerson()->getId()) {
             throw $this->createNotFoundException('Person not Found / Access denied');
         }
 
@@ -68,7 +68,7 @@ class ProfileController extends Controller
 
         return new JsonResponse([
             'status' => 'success',
-            'pic' => 'data:image/gif;base64,'.base64_encode(file_get_contents($this->getParameter('person_pic_location').'/'.$person->getPic())),
+            'pic'    => 'data:image/gif;base64,'.base64_encode(file_get_contents($this->getParameter('person_pic_location').'/'.$person->getPic())),
         ]);
     }
 }

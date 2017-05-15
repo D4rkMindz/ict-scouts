@@ -61,7 +61,7 @@ class Camp
     /**
      * Camp constructor.
      *
-     * @param string  $name
+     * @param string $name
      *
      * @internal param Zip $zip
      */

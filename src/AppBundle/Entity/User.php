@@ -283,7 +283,7 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Set googleId
+     * Set googleId.
      *
      * @param string $googleId
      *
@@ -297,7 +297,7 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Set email
+     * Set email.
      *
      * @param string $email
      *
@@ -311,7 +311,7 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Set person
+     * Set person.
      *
      * @param \AppBundle\Entity\Person $person
      *

@@ -7,8 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use WhiteOctober\TCPDFBundle\Controller\TCPDFController;
 
 /**
- * Class PortfolioPdfService
- * @package AppBundle\Service
+ * Class PortfolioPdfService.
  */
 class PortfolioPdfService
 {
@@ -45,12 +44,12 @@ class PortfolioPdfService
             'UTF-8',
             false
         );
-        $pdf->SetAuthor( 'ICT Scouts / Campus' );
+        $pdf->SetAuthor('ICT Scouts / Campus');
         $pdf->SetTitle($title);
-        $pdf->SetKeywords( 'ICT Scouts, Talent, Portfolio' );
-        $pdf->setFontSubsetting( true );
+        $pdf->SetKeywords('ICT Scouts, Talent, Portfolio');
+        $pdf->setFontSubsetting(true);
 
-        $pdf->SetFont( 'helvetica', '', 11, '', true );
+        $pdf->SetFont('helvetica', '', 11, '', true);
         $pdf->AddPage();
 
         return $pdf;

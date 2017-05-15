@@ -2,10 +2,7 @@
 
 namespace AppBundle\Entity;
 
-use AppBundle\Service\FileUploadService;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -331,7 +328,7 @@ class Person
      *
      * @return Person
      */
-    public function setBirthDate(\DateTime $birthDate=null): Person
+    public function setBirthDate(\DateTime $birthDate = null): Person
     {
         $this->birthDate = $birthDate;
 
@@ -359,7 +356,7 @@ class Person
     /**
      * @param mixed $pic
      */
-    public function setPic( $pic ): void
+    public function setPic($pic): void
     {
         $this->pic = $pic;
     }
@@ -401,13 +398,13 @@ class Person
     }
 
     /**
-     * Set scout
+     * Set scout.
      *
      * @param Scout $scout
      *
      * @return Person
      */
-    public function setScout( Scout $scout = null): Person
+    public function setScout(Scout $scout = null): Person
     {
         $this->scout = $scout;
 
@@ -415,13 +412,13 @@ class Person
     }
 
     /**
-     * Set talent
+     * Set talent.
      *
      * @param Talent $talent
      *
      * @return Person
      */
-    public function setTalent( Talent $talent = null): Person
+    public function setTalent(Talent $talent = null): Person
     {
         $this->talent = $talent;
 
@@ -429,13 +426,13 @@ class Person
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param User $user
      *
      * @return Person
      */
-    public function setUser( User $user = null): Person
+    public function setUser(User $user = null): Person
     {
         $this->user = $user;
 

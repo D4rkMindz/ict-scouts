@@ -2,7 +2,6 @@
 
 namespace Tests\AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Client;
 use Tests\AppBundle\KernelTest;
 
 /**

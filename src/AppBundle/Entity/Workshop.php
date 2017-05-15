@@ -61,7 +61,7 @@ class Workshop
     /**
      * Workshop constructor.
      *
-     * @param string         $name
+     * @param string $name
      */
     public function __construct(string $name)
     {
@@ -192,7 +192,7 @@ class Workshop
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *

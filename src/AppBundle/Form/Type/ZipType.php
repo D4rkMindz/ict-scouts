@@ -36,7 +36,8 @@ class ZipType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Zip::class,
             'empty_data' => function (FormInterface $form) {
-            var_dump($form->getData());
+                var_dump($form->getData());
+
                 return new Zip(
                     $form->getData()['zip'],
                     $form->getData()['city']

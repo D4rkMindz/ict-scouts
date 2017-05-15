@@ -153,9 +153,9 @@ class Talent
     }
 
     /**
-     * Get veggie
+     * Get veggie.
      *
-     * @return boolean
+     * @return bool
      */
     public function getVeggie()
     {
@@ -163,7 +163,7 @@ class Talent
     }
 
     /**
-     * Set person
+     * Set person.
      *
      * @param \AppBundle\Entity\Person $person
      *
@@ -177,7 +177,7 @@ class Talent
     }
 
     /**
-     * Remove talentStatusHistory
+     * Remove talentStatusHistory.
      *
      * @param \AppBundle\Entity\TalentStatusHistory $talentStatusHistory
      */

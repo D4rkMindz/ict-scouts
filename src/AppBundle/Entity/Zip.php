@@ -37,7 +37,7 @@ class Zip
     private $city;
 
     /**
-     * @var Province $province
+     * @var Province
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Province", inversedBy="zips", cascade={"persist"})
      * @ORM\JoinColumn(name="province_id", referencedColumnName="id")
@@ -123,7 +123,7 @@ class Zip
     }
 
     /**
-     * Set zip
+     * Set zip.
      *
      * @param string $zip
      *
@@ -137,7 +137,7 @@ class Zip
     }
 
     /**
-     * Set city
+     * Set city.
      *
      * @param string $city
      *

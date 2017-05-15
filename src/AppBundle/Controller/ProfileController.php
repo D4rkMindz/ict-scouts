@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Person;
-use AppBundle\Form\Type\PersonPicType;
 use AppBundle\Form\Type\PersonType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -28,17 +27,18 @@ class ProfileController extends Controller
      *
      * @param Person|null $person
      *
-     * @return Response
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \LogicException
+     *
+     * @return Response
      */
     public function showAction(Person $person = null): Response
     {
-        if ( !$person ) {
+        if (!$person) {
             $person = $this->getUser()->getPerson();
         }
 
-        if ( !$this->isGranted('ROLE_ADMIN') && $person->getId() !== $this->getUser()->getPerson()->getId() ){
+        if (!$this->isGranted('ROLE_ADMIN') && $person->getId() !== $this->getUser()->getPerson()->getId()) {
             throw $this->createNotFoundException('Person not Found / Access denied');
         }
 
@@ -50,7 +50,7 @@ class ProfileController extends Controller
         return $this->render(
             '@App/Profile/show.html.twig',
             [
-                'person' => $person,
+                'person'     => $person,
                 'person_pic' => $personPic,
             ]
         );
@@ -63,16 +63,17 @@ class ProfileController extends Controller
      * @param Request $request
      * @param Person  $person
      *
-     * @return Response
      * @throws \InvalidArgumentException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \LogicException
-     * @internal param $id
      *
+     * @return Response
+     *
+     * @internal param $id
      */
     public function editAction(Request $request, Person $person): Response
     {
-        if ( !$this->isGranted('ROLE_ADMIN') && $person->getId() !== $this->getUser()->getPerson()->getId() ){
+        if (!$this->isGranted('ROLE_ADMIN') && $person->getId() !== $this->getUser()->getPerson()->getId()) {
             throw $this->createNotFoundException('Person not Found / Access denied');
         }
 
@@ -85,7 +86,7 @@ class ProfileController extends Controller
                 $entityManager->persist($person);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('profile_show', ['id' => $this->getUser()->getPerson()->getId() === $person->getId() ? null : $person->getId() ]);
+                return $this->redirectToRoute('profile_show', ['id' => $this->getUser()->getPerson()->getId() === $person->getId() ? null : $person->getId()]);
             }
         }
 
@@ -97,8 +98,8 @@ class ProfileController extends Controller
         return $this->render(
             '@App/Profile/edit.html.twig',
             [
-                'person' => $person,
-                'form'   => $form->createView(),
+                'person'        => $person,
+                'form'          => $form->createView(),
                 'person_pic'    => $personPic,
             ]
         );
@@ -108,9 +109,10 @@ class ProfileController extends Controller
      * @Route("/portfolio/pdf", name="profile_portfolio_pdf")
      * @Method("GET")
      *
-     * @return StreamedResponse
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \LogicException
+     *
+     * @return StreamedResponse
      */
     public function portfolioPdfAction(): StreamedResponse
     {
@@ -126,6 +128,6 @@ class ProfileController extends Controller
         $pdf = $portfolioPdfService->initPdf('Portfolio - '.$person->getGivenName().' '.$person->getFamilyName());
         $pdf = $portfolioPdfService->createPortfolio($pdf, $person);
 
-        return new StreamedResponse($pdf->Output( 'ict_scouts-portfolio.pdf', 'I'));
+        return new StreamedResponse($pdf->Output('ict_scouts-portfolio.pdf', 'I'));
     }
 }

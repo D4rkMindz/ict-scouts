@@ -134,7 +134,7 @@ class Group implements RoleInterface, \Serializable
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -148,7 +148,7 @@ class Group implements RoleInterface, \Serializable
     }
 
     /**
-     * Set role
+     * Set role.
      *
      * @param string $role
      *

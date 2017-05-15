@@ -11,7 +11,6 @@ use AppBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\Ldap\Adapter\ExtLdap\Collection;
 
 /**
  * Class GoogleUserService.

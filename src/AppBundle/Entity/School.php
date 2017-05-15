@@ -30,10 +30,10 @@ class School
     private $name;
 
     /**
- * @var string
- *
- * @ORM\Column(type="string", nullable=true)
- */
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
     private $street;
 
     /**
@@ -216,7 +216,7 @@ class School
     }
 
     /**
-     * Add talent
+     * Add talent.
      *
      * @param \AppBundle\Entity\Talent $talent
      *
@@ -230,7 +230,7 @@ class School
     }
 
     /**
-     * Remove talent
+     * Remove talent.
      *
      * @param \AppBundle\Entity\Talent $talent
      */

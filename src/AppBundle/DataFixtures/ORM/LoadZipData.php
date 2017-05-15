@@ -30,7 +30,7 @@ class LoadZipData extends AbstractFixture
             throw $e;
         }
         $csvReader->setDelimiter(';');
-        $csvReader->addFilter(function($row) use ($provRepo, $zipRepo, $manager) {
+        $csvReader->addFilter(function ($row) use ($provRepo, $zipRepo, $manager) {
             switch ($row[0]) {
                 case '00':
                     // Info table

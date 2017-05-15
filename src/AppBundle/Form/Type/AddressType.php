@@ -45,6 +45,7 @@ class AddressType extends AbstractType
             'data_class' => Address::class,
             'empty_data' => function (FormInterface $form) {
                 var_dump($form->getData());
+
                 return new Address(
                     $form->getData()['street'],
                     $form->getData()['zip'],

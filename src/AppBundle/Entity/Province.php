@@ -37,7 +37,7 @@ class Province
     private $nameShort;
 
     /**
-     * @var Zip|Collection $zips
+     * @var Zip|Collection
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Zip", mappedBy="province", cascade={"persist"})
      */
@@ -101,7 +101,7 @@ class Province
      */
     public function getZips()
     {
-       return $this->zips;
+        return $this->zips;
     }
 
     /**

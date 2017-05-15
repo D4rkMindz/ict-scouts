@@ -98,7 +98,7 @@ class TalentStatusHistory
     }
 
     /**
-     * Set status
+     * Set status.
      *
      * @param string $status
      *
@@ -112,7 +112,7 @@ class TalentStatusHistory
     }
 
     /**
-     * Set changeDate
+     * Set changeDate.
      *
      * @param \DateTime $changeDate
      *
@@ -126,7 +126,7 @@ class TalentStatusHistory
     }
 
     /**
-     * Set talent
+     * Set talent.
      *
      * @param \AppBundle\Entity\Talent $talent
      *

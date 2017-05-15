@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileUploadService
 {
-    /** @var  string $targetDir */
+    /** @var string $targetDir */
     private $targetDir;
 
     /**
@@ -20,19 +20,20 @@ class FileUploadService
     }
 
     /**
-     * Upload a given file
+     * Upload a given file.
      *
      * @param UploadedFile $file
      * @param string       $fileName (optional)
      * @param string       $oldFile  (optional)
      *
-     * @return string
      * @throws \Symfony\Component\HttpFoundation\File\Exception\FileException
+     *
+     * @return string
      */
-    public function upload(UploadedFile $file, string $fileName='', string $oldFile=''): string
+    public function upload(UploadedFile $file, string $fileName = '', string $oldFile = ''): string
     {
         if (empty($fileName)) {
-            $fileName = md5(uniqid( '', true )) . '.' . $file->guessExtension();
+            $fileName = md5(uniqid('', true)).'.'.$file->guessExtension();
         } else {
             $fileName = $fileName.'.'.$file->guessExtension();
         }

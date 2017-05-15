@@ -2,10 +2,7 @@
 
 namespace Tests\AppBundle\Entity;
 
-use AppBundle\Entity\Address;
-use AppBundle\Entity\Province;
 use AppBundle\Entity\School;
-use AppBundle\Entity\Zip;
 use Tests\AppBundle\KernelTest;
 
 /**

@@ -6,7 +6,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -22,8 +21,9 @@ class UserController extends Controller
      * @Route("/", name="admin_user_index")
      * @Method("GET")
      *
-     * @return Response
      * @throws \LogicException
+     *
+     * @return Response
      */
     public function indexAction(): Response
     {
