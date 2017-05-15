@@ -5,7 +5,6 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @TODO: Include this into Address entity.
  * Zip.
  *
  * @ORM\Table(name="zip")
@@ -16,9 +15,10 @@ class Zip
     /**
      * @var int
      *
+     * ONRP from the official swiss-post database.
+     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -30,20 +30,30 @@ class Zip
     private $zip;
 
     /**
-     * @var string
+     * @var resource
      *
-     * @ORM\Column(name="city", type="string")
+     * @ORM\Column(name="city", type="blob")
      */
     private $city;
 
     /**
+     * @var Province
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Province", inversedBy="zips", cascade={"persist"})
+     * @ORM\JoinColumn(name="province_id", referencedColumnName="id")
+     */
+    private $province;
+
+    /**
      * Zip constructor.
      *
+     * @param int    $id
      * @param string $zip
      * @param string $city
      */
-    public function __construct(string $zip, string $city)
+    public function __construct(int $id, string $zip, string $city)
     {
+        $this->id = $id;
         $this->zip = $zip;
         $this->city = $city;
     }
@@ -53,7 +63,7 @@ class Zip
      *
      * @return int
      */
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -75,7 +85,7 @@ class Zip
      */
     public function getCity(): string
     {
-        return $this->city;
+        return utf8_encode(stream_get_contents($this->city));
     }
 
     /**
@@ -100,5 +110,59 @@ class Zip
     public function unserialize($serialized)
     {
         list($this->id, $this->zip, $this->city) = unserialize($serialized);
+    }
+
+    /**
+     * String return value of class.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->zip.' '.$this->getCity();
+    }
+
+    /**
+     * Set zip.
+     *
+     * @param string $zip
+     *
+     * @return Zip
+     */
+    public function setZip($zip)
+    {
+        $this->zip = $zip;
+
+        return $this;
+    }
+
+    /**
+     * Set city.
+     *
+     * @param string $city
+     *
+     * @return Zip
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * @return Province
+     */
+    public function getProvince(): ?Province
+    {
+        return $this->province;
+    }
+
+    /**
+     * @param Province $province
+     */
+    public function setProvince(Province $province)
+    {
+        $this->province = $province;
     }
 }

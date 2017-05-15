@@ -2,10 +2,7 @@
 
 namespace Tests\AppBundle\Entity;
 
-use AppBundle\Entity\Address;
-use AppBundle\Entity\Province;
 use AppBundle\Entity\Workshop;
-use AppBundle\Entity\Zip;
 use Tests\AppBundle\KernelTest;
 
 /**
@@ -20,28 +17,19 @@ class WorkshopTest extends KernelTest
      */
     public function testGetterAndSetter()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $province = new Province('Baselland', 'BL');
-        $zip = new Zip('4410', 'Liestal');
-        $address = new Address($province, $zip, 'Hauptstrasse', '11');
-        $em->persist($province);
-        $em->persist($address);
-        $em->flush();
-
-        $workshop = new Workshop('Great Workshop', $address);
+        $workshop = new Workshop('Great Workshop');
 
         $this->assertNull($workshop->getId());
         $this->assertEquals('Great Workshop', $workshop->getName());
-        $this->assertEquals($address, $workshop->getAddress());
 
-        $em->persist($workshop);
-        $em->flush();
+        $entityManager->persist($workshop);
+        $entityManager->flush();
 
         $this->assertNotNull($workshop->getId());
 
         $this->assertEquals('Great Workshop', $workshop->getName());
-        $this->assertEquals($address, $workshop->getAddress());
     }
 
     /**
@@ -49,25 +37,15 @@ class WorkshopTest extends KernelTest
      */
     public function testSerialization()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-
-        $province = new Province('Baselland', 'BL');
-        $zip = new Zip('4410', 'Liestal');
-        $address = new Address($province, $zip, 'Hauptstrasse', '11');
-        $em->persist($province);
-        $em->persist($address);
-        $em->flush();
-
-        $workshop = new Workshop('Great Workshop', $address);
+        $workshop = new Workshop('Great Workshop');
         $serialized = $workshop->serialize();
 
         $this->assertTrue(is_string($serialized));
 
-        $workshop1 = new Workshop('Greatest Workshop', $address);
+        $workshop1 = new Workshop('Greatest Workshop');
         $workshop1->unserialize($serialized);
 
         $this->assertNull($workshop1->getId());
         $this->assertEquals('Great Workshop', $workshop1->getName());
-        $this->assertEquals($address, $workshop1->getAddress());
     }
 }

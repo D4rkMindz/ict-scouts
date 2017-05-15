@@ -17,7 +17,7 @@ class EventTest extends KernelTest
      */
     public function testGetterAndSetter()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $event = new Event();
         $event->setName('Automated-Test-Event');
@@ -27,8 +27,8 @@ class EventTest extends KernelTest
         $this->assertNotNull($event->getStartDate());
         $this->assertNotNull($event->getEndDate());
 
-        $em->persist($event);
-        $em->flush();
+        $entityManager->persist($event);
+        $entityManager->flush();
 
         $this->assertNotNull($event->getId());
 

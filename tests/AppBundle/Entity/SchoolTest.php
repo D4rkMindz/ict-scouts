@@ -2,10 +2,7 @@
 
 namespace Tests\AppBundle\Entity;
 
-use AppBundle\Entity\Address;
-use AppBundle\Entity\Province;
 use AppBundle\Entity\School;
-use AppBundle\Entity\Zip;
 use Tests\AppBundle\KernelTest;
 
 /**
@@ -20,24 +17,16 @@ class SchoolTest extends KernelTest
      */
     public function testGetterAndSetter()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-
-        $province = new Province('Baselland', 'BL');
-        $zip = new Zip('4133', 'Pratteln');
-        $address = new Address($province, $zip, 'Hauptstrasse', '11');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $school = new School('Global School');
         $school->setName('Global School');
-        $school->setAddress($address);
 
         $this->assertNull($school->getId());
         $this->assertEquals('Global School', $school->getName());
-        $this->assertEquals($address, $school->getAddress());
 
-        $em->persist($province);
-        $em->persist($address);
-        $em->persist($school);
-        $em->flush();
+        $entityManager->persist($school);
+        $entityManager->flush();
 
         $this->assertEquals(1, $school->getId());
     }
@@ -47,12 +36,7 @@ class SchoolTest extends KernelTest
      */
     public function testSerialization()
     {
-        $province = new Province('Baselland', 'BL');
-        $zip = new Zip('4133', 'Pratteln');
-        $address = new Address($province, $zip, 'Hauptstrasse', '11');
-
         $school = new School('Global School');
-        $school->setAddress($address);
 
         $serialized = $school->serialize();
 
@@ -61,7 +45,7 @@ class SchoolTest extends KernelTest
         $newSchool = new School('');
         $newSchool->unserialize($serialized);
 
-        $this->assertTrue($newSchool instanceof School);
+        $this->assertInstanceOf(School::class, $newSchool);
         $this->assertEquals(null, $newSchool->getId());
         $this->assertEquals('Global School', $newSchool->getName());
     }

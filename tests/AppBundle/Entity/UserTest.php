@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle\Entity;
 
+use AppBundle\Entity\Person;
 use AppBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Tests\AppBundle\KernelTest;
@@ -15,13 +16,16 @@ class UserTest extends KernelTest
 {
     public function testGetterAndSetter()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $group = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_ADMIN']);
-        $group1 = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_SCOUT']);
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $group = $entityManager->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_ADMIN']);
+        $group1 = $entityManager->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_SCOUT']);
 
-        $user = new User('123456789', 'john.doe@example.com', 'abc123cba');
+        $person = new Person('Doe', 'John');
+        $entityManager->persist($person);
+
+        $user = new User($person, '123456789', 'john.doe@example.com', 'abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
-        $user->setAccessTokenExpireDate($tokenExpireDate);
+        $user->setAccessTokenExpire($tokenExpireDate);
         $user->addGroup($group);
         $user->addGroup($group1);
 
@@ -29,12 +33,12 @@ class UserTest extends KernelTest
         $this->assertEquals(123456789, $user->getGoogleId());
         $this->assertEquals('john.doe@example.com', $user->getEmail());
         $this->assertEquals('abc123cba', $user->getAccessToken());
-        $this->assertEquals($tokenExpireDate, $user->getAccessTokenExpireDate());
+        $this->assertEquals($tokenExpireDate, $user->getAccessTokenExpire());
         $this->assertInstanceOf(ArrayCollection::class, $user->getGroups());
         $this->assertCount(2, $user->getGroups());
 
-        $em->persist($user);
-        $em->flush();
+        $entityManager->persist($user);
+        $entityManager->flush();
 
         $this->assertTrue(is_array($user->getRoles()));
         $this->assertCount(2, $user->getRoles());
@@ -47,16 +51,24 @@ class UserTest extends KernelTest
 
     public function testSerialization()
     {
-        $user = new User('123456789', 'john.doe@example.com');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
+
+        $person = new Person('Doe', 'John');
+        $entityManager->persist($person);
+
+        $user = new User($person, '123456789', 'john.doe@example.com');
         $user->setAccessToken('abc123cba');
         $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
-        $user->setAccessTokenExpireDate($tokenExpireDate);
+        $user->setAccessTokenExpire($tokenExpireDate);
 
         $serialized = $user->serialize();
 
         $this->assertTrue(is_string($serialized));
 
-        $newUser = new User('', '');
+        $person2 = new Person('Doe', 'Jane');
+        $entityManager->persist($person);
+
+        $newUser = new User($person2, '', '');
         $newUser->unserialize($serialized);
 
         $this->assertInstanceOf(User::class, $newUser);

@@ -76,6 +76,8 @@ Inhalt dieses Ordners für das Frontend zugänglich sein.
 
 ``/var``: Cache und Logs des Backends.
 
+``/var/storage``: Von Usern hochgeladene Dateien.
+
 ``/vendor``: Composer-Dependencies und PSR-4-Autoloader.
 
 ``/web``: Document-Root der Webapplikation.

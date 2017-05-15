@@ -2,12 +2,9 @@
 
 namespace Tests\AppBundle\Security;
 
-use AppBundle\Entity\User;
 use AppBundle\Security\GoogleAuthenticator;
-use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Tests\AppBundle\KernelTest;
 
 /**
@@ -18,9 +15,6 @@ use Tests\AppBundle\KernelTest;
  */
 class GoogleAuthenticatorTest extends KernelTest
 {
-    /** @var Client */
-    private $client = null;
-
     /** @var GoogleAuthenticator */
     private $authenticator = null;
 
@@ -43,7 +37,7 @@ class GoogleAuthenticatorTest extends KernelTest
     {
         $this->failingLogIn();
 
-        $crawler = $this->client->request('GET', '/admin/');
+        $this->client->request('GET', '/admin/');
 
         $this->assertFalse($this->authenticator->supportsRememberMe());
     }
@@ -57,35 +51,11 @@ class GoogleAuthenticatorTest extends KernelTest
 
     public function testSupportsRememberMe()
     {
-        $this->logIn();
+        $this->logIn('ROLE_ADMIN');
 
-        $crawler = $this->client->request('GET', '/');
+        $this->client->request('GET', '/');
 
         $this->assertFalse($this->authenticator->supportsRememberMe());
-    }
-
-    private function logIn()
-    {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $group = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_ADMIN']);
-        $firewall = 'main';
-        $session = $this->getContainer()->get('session');
-
-        /** @var User $user */
-        $user = new User(123456789, 'john.doe@'.$this->getContainer()->getParameter('google_apps_domain'), 'abc123cba');
-        $user->setAccessTokenExpireDate((new \DateTime())->add(new \DateInterval('PT3595S')));
-        $user->addGroup($group);
-
-        $em->persist($user);
-        $em->flush();
-
-        $token = new UsernamePasswordToken($user->getUsername(), ['accessToken' => 'abc123cba'], $firewall, ['ROLE_ADMIN']);
-        $session->set('_security_'.$firewall, serialize($token));
-        $session->set('access_token', 'abc123cba');
-        $session->save();
-
-        $cookie = new Cookie($session->getName(), $session->getId());
-        $this->client->getCookieJar()->set($cookie);
     }
 
     private function failingLogIn()

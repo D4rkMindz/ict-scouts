@@ -5,8 +5,7 @@ namespace Tests\AppBundle\Entity;
 use AppBundle\Entity\Person;
 use AppBundle\Entity\School;
 use AppBundle\Entity\Talent;
-use AppBundle\Entity\User;
-use AppBundle\Entity\Zip;
+use AppBundle\Entity\TalentStatusHistory;
 use Tests\AppBundle\KernelTest;
 
 /**
@@ -16,43 +15,59 @@ use Tests\AppBundle\KernelTest;
  */
 class TalentTest extends KernelTest
 {
-    /**
-     * Tests getters and setters of Talent class.
-     */
-    public function testGetterAndSetter()
+    public function testSchool()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $group = $em->getRepository('AppBundle:Group')->findOneBy(['role' => 'ROLE_TALENT']);
+        $talent = $this->createTalent();
+        $school = new School('Fancy Test School');
 
-        $zip = new Zip('0101', 'TestCity');
-        $em->persist($zip);
-        $em->flush();
-
-        $school = new School('Global School');
-
-        $em->persist($school);
-
-        $person = new Person('Doe', 'John', 'Address');
-        $person->setPhone('+41 79 123 45 67');
-        $person->setMail('john.doe@example.com');
-
-        $em->persist($person);
-
-        $user = new User('123456789', 'john.doe@example.com', 'abc123cba');
-        $tokenExpireDate = (new \DateTime())->add(new \DateInterval('PT3595S'));
-        $user->setAccessTokenExpireDate($tokenExpireDate);
-        $user->addGroup($group);
-
-        $em->persist($user);
-        $em->flush();
-
-        $talent = new Talent($person, $user);
         $talent->setSchool($school);
+
+        $this->assertEquals($school, $talent->getSchool());
+    }
+
+    public function testVeggie()
+    {
+        $talent = $this->createTalent();
         $talent->setVeggie(true);
 
-        $this->assertEquals($person->getFamilyName(), $talent->getPerson()->getFamilyName());
-        $this->assertEquals($user->getEmail(), $talent->getUser()->getEmail());
-        $this->assertEquals($school->getName(), $talent->getSchool()->getName());
         $this->assertTrue($talent->isVeggie());
+    }
+
+    public function testTalentStatusHiostory()
+    {
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
+
+        $talent = $this->createTalent();
+
+        $talentStatusHistory = new TalentStatusHistory($talent, Talent::ACTIVE);
+
+        $entityManager->persist($talentStatusHistory);
+
+        $talent->addTalentStatusHistory($talentStatusHistory);
+
+        $this->assertCount(1, $talent->getTalentStatusHistory());
+    }
+
+    private function createTalent()
+    {
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
+
+        $school = new School('Global School');
+        $person = new Person('Doe', 'John');
+
+        $entityManager->persist($school);
+        $entityManager->persist($person);
+
+        $talent = new Talent($person);
+
+        $this->assertNull($talent->getId());
+        $this->assertEquals($person, $talent->getPerson());
+
+        $entityManager->persist($talent);
+        $entityManager->flush();
+
+        $this->assertEquals(1, $talent->getId());
+
+        return $talent;
     }
 }

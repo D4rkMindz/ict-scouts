@@ -132,4 +132,32 @@ class Group implements RoleInterface, \Serializable
     {
         list($this->id, $this->name, $this->role, $this->users) = unserialize($serialized);
     }
+
+    /**
+     * Set name.
+     *
+     * @param string $name
+     *
+     * @return Group
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Set role.
+     *
+     * @param string $role
+     *
+     * @return Group
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
 }

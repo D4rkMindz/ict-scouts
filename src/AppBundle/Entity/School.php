@@ -2,12 +2,11 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Schools that the scouts visit to gather more talents.
- *
- * @TODO: Maybe get dataset from examina.
  *
  * @ORM\Table(name="school")
  * @ORM\Entity
@@ -31,12 +30,41 @@ class School
     private $name;
 
     /**
-     * @var Address
+     * @var string
      *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Address")
-     * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      */
-    private $address;
+    private $street;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $addressExtra;
+
+    /**
+     * @var Zip
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Zip", cascade={"persist"})
+     * @ORM\JoinColumn(name="zip_id", nullable=true)
+     */
+    private $zip;
+
+    /**
+     * @var Province
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Province", cascade={"persist"})
+     * @ORM\JoinColumn(name="province_id", nullable=true)
+     */
+    private $province;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Talent", mappedBy="school")
+     */
+    private $talents;
 
     /**
      * School constructor.
@@ -77,19 +105,91 @@ class School
     }
 
     /**
-     * @return Address
+     * Set street.
+     *
+     * @param string $street
      */
-    public function getAddress(): Address
+    public function setStreet(string $street): void
     {
-        return $this->address;
+        $this->street = $street;
     }
 
     /**
-     * @param Address $address
+     * Get street.
+     *
+     * @return string
      */
-    public function setAddress(Address $address): void
+    public function getStreet(): string
     {
-        $this->address = $address;
+        return $this->street;
+    }
+
+    /**
+     * Set addressExtra.
+     *
+     * @param string $addressExtra
+     */
+    public function setAddressExtra(string $addressExtra): void
+    {
+        $this->addressExtra = $addressExtra;
+    }
+
+    /**
+     * Get addressExtra.
+     *
+     * @return string
+     */
+    public function getAddressExtra(): ?string
+    {
+        return $this->addressExtra;
+    }
+
+    /**
+     * Set zip.
+     *
+     * @param Zip $zip
+     */
+    public function setZip(Zip $zip): void
+    {
+        $this->zip = $zip;
+    }
+
+    /**
+     * Get zip.
+     *
+     * @return Zip
+     */
+    public function getZip(): Zip
+    {
+        return $this->zip;
+    }
+
+    /**
+     * Set province.
+     *
+     * @param Province $province
+     */
+    public function setProvince(Province $province): void
+    {
+        $this->province = $province;
+    }
+
+    /**
+     * Get province.
+     *
+     * @return Province
+     */
+    public function getProvince(): Province
+    {
+        return $this->province;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getTalents(): Collection
+    {
+        return $this->talents;
     }
 
     /**
@@ -101,7 +201,6 @@ class School
             [
                 $this->id,
                 $this->name,
-                $this->address,
             ]
         );
     }
@@ -113,6 +212,30 @@ class School
      */
     public function unserialize($serialized)
     {
-        list($this->id, $this->name, $this->address) = unserialize($serialized);
+        list($this->id, $this->name) = unserialize($serialized);
+    }
+
+    /**
+     * Add talent.
+     *
+     * @param \AppBundle\Entity\Talent $talent
+     *
+     * @return School
+     */
+    public function addTalent(\AppBundle\Entity\Talent $talent)
+    {
+        $this->talents[] = $talent;
+
+        return $this;
+    }
+
+    /**
+     * Remove talent.
+     *
+     * @param \AppBundle\Entity\Talent $talent
+     */
+    public function removeTalent(\AppBundle\Entity\Talent $talent)
+    {
+        $this->talents->removeElement($talent);
     }
 }

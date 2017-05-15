@@ -3,14 +3,13 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Person.
  *
- * @TODO: Make this extendable.
- *
  * @ORM\Table(name="person")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PersonRepository")
  */
 class Person
 {
@@ -22,6 +21,27 @@ class Person
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var Scout
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Scout", mappedBy="person")
+     */
+    private $scout;
+
+    /**
+     * @var Talent
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Talent", mappedBy="person")
+     */
+    private $talent;
+
+    /**
+     * @var User
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User", mappedBy="person")
+     */
+    private $user;
 
     /**
      * @var string
@@ -38,13 +58,26 @@ class Person
     private $givenName;
 
     /**
-     * @TODO: Change this to address entity.
-     *
      * @var string
      *
-     * @ORM\Column(name="address", type="string", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
-    private $address;
+    private $street;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $addressExtra;
+
+    /**
+     * @var Zip
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Zip", cascade={"persist"})
+     * @ORM\JoinColumn(name="zip_id", nullable=true)
+     */
+    private $zip;
 
     /**
      * @var string
@@ -68,11 +101,18 @@ class Person
     private $birthDate;
 
     /**
+     * @ORM\Column(name="pic", type="string", nullable=true)
+     *
+     * @Assert\File(mimeTypes={"application/png", "application/jpeg"})
+     */
+    private $pic;
+
+    /**
      * Person constructor.
      *
      * @param string         $familyName
      * @param string         $givenName
-     * @param string         $address
+     * @param string|null    $street
      * @param string|null    $phone
      * @param string|null    $mail
      * @param \DateTime|null $birthDate
@@ -80,14 +120,14 @@ class Person
     public function __construct(
         string $familyName,
         string $givenName,
-        string $address = null,
+        string $street = null,
         string $phone = null,
         string $mail = null,
         \DateTime $birthDate = null
     ) {
         $this->familyName = $familyName;
         $this->givenName = $givenName;
-        $this->address = $address;
+        $this->street = $street;
         $this->phone = $phone;
         $this->mail = $mail;
         $this->birthDate = $birthDate;
@@ -104,6 +144,46 @@ class Person
     }
 
     /**
+     * Get scout.
+     *
+     * @return Scout
+     */
+    public function getScout(): ?Scout
+    {
+        return $this->scout;
+    }
+
+    /**
+     * Get talent.
+     *
+     * @return Talent
+     */
+    public function getTalent(): ?Talent
+    {
+        return $this->talent;
+    }
+
+    /**
+     * Get user.
+     *
+     * @return User
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set familyName.
+     *
+     * @param string $familyName
+     */
+    public function setFamilyName(string $familyName): void
+    {
+        $this->familyName = $familyName;
+    }
+
+    /**
      * Get familyName.
      *
      * @return string
@@ -114,11 +194,13 @@ class Person
     }
 
     /**
-     * @param string $familyName
+     * Set givenName.
+     *
+     * @param string $givenName
      */
-    public function setFamilyName(string $familyName): void
+    public function setGivenName(string $givenName): void
     {
-        $this->familyName = $familyName;
+        $this->givenName = $givenName;
     }
 
     /**
@@ -132,21 +214,63 @@ class Person
     }
 
     /**
-     * @param string $givenName
+     * Set street.
+     *
+     * @param string $street
      */
-    public function setGivenName(string $givenName): void
+    public function setStreet(string $street): void
     {
-        $this->givenName = $givenName;
+        $this->street = $street;
     }
 
     /**
-     * Get address.
+     * Get street.
      *
-     * @return string
+     * @return string|null
      */
-    public function getAddress(): string
+    public function getStreet(): ?string
     {
-        return $this->address;
+        return $this->street;
+    }
+
+    /**
+     * Set addressExtra.
+     *
+     * @param string $addressExtra
+     */
+    public function setAddressExtra(string $addressExtra): void
+    {
+        $this->addressExtra = $addressExtra;
+    }
+
+    /**
+     * Get addressExtra.
+     *
+     * @return string|null
+     */
+    public function getAddressExtra(): ?string
+    {
+        return $this->addressExtra;
+    }
+
+    /**
+     * Set zip.
+     *
+     * @param Zip $zip
+     */
+    public function setZip(Zip $zip): void
+    {
+        $this->zip = $zip;
+    }
+
+    /**
+     * Get zip.
+     *
+     * @return Zip|null
+     */
+    public function getZip(): ?Zip
+    {
+        return $this->zip;
     }
 
     /**
@@ -156,7 +280,7 @@ class Person
      *
      * @return Person
      */
-    public function setPhone(string $phone)
+    public function setPhone(string $phone): Person
     {
         $this->phone = $phone;
 
@@ -180,7 +304,7 @@ class Person
      *
      * @return Person
      */
-    public function setMail(string $mail)
+    public function setMail(string $mail): Person
     {
         $this->mail = $mail;
 
@@ -200,11 +324,11 @@ class Person
     /**
      * Set birthDate.
      *
-     * @param \DateTime $birthDate
+     * @param \DateTime|null $birthDate
      *
      * @return Person
      */
-    public function setBirthDate(\DateTime $birthDate)
+    public function setBirthDate(\DateTime $birthDate = null): Person
     {
         $this->birthDate = $birthDate;
 
@@ -222,16 +346,32 @@ class Person
     }
 
     /**
+     * @return mixed
+     */
+    public function getPic()
+    {
+        return $this->pic;
+    }
+
+    /**
+     * @param mixed $pic
+     */
+    public function setPic($pic): void
+    {
+        $this->pic = $pic;
+    }
+
+    /**
      * @see \Serializable::serialize()
      */
-    public function serialize()
+    public function serialize(): string
     {
         return serialize(
             [
                 $this->id,
                 $this->familyName,
                 $this->givenName,
-                $this->address,
+                $this->street,
                 $this->phone,
                 $this->mail,
                 $this->birthDate,
@@ -244,10 +384,58 @@ class Person
      *
      * @param string $serialized
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
-        list($this->id, $this->familyName, $this->givenName, $this->address, $this->phone, $this->mail, $this->birthDate) = unserialize(
-            $serialized
-        );
+        list(
+            $this->id,
+            $this->familyName,
+            $this->givenName,
+            $this->street,
+            $this->phone,
+            $this->mail,
+            $this->birthDate
+        ) = unserialize($serialized);
+    }
+
+    /**
+     * Set scout.
+     *
+     * @param Scout $scout
+     *
+     * @return Person
+     */
+    public function setScout(Scout $scout = null): Person
+    {
+        $this->scout = $scout;
+
+        return $this;
+    }
+
+    /**
+     * Set talent.
+     *
+     * @param Talent $talent
+     *
+     * @return Person
+     */
+    public function setTalent(Talent $talent = null): Person
+    {
+        $this->talent = $talent;
+
+        return $this;
+    }
+
+    /**
+     * Set user.
+     *
+     * @param User $user
+     *
+     * @return Person
+     */
+    public function setUser(User $user = null): Person
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }

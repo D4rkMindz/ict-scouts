@@ -1,0 +1,77 @@
+{% extends '@App/base.html.twig' %}
+
+{% block body %}
+    {{ form_start(form) }}
+    <div class="container">
+        <div class="row valign-wrapper">
+            <div class="col s6">
+                <h2>{{ person.givenName ~ ' ' ~ person.familyName }}</h2>
+            </div>
+            <div class="col s6 valign right-align">
+                {% if person.id == app.user.person.id %}
+                <a href="{{ path('profile_show') }}" class="btn waves-effect waves-light red">Abbrechen</a>&nbsp;
+                {% else %}
+                <a href="{{ path('profile_show', {person: person.id}) }}" class="btn waves-effect waves-light red">Abbrechen</a>&nbsp;
+                {% endif %}
+                <button type="submit" class="btn waves-effect waves-light">Speichern</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s9">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Persondaten</span>
+                        {{ form(form) }}
+                    </div>
+                </div>
+            </div>
+            <div class="col s3">
+                <div class="card">
+                    <div class="card-content center-align">
+                        <img class="circle responsive-img" id="person_pic" src="{{ person_pic }}" style="max-height: 350px;" />
+                        <br /><br />
+                        <button data-target="modal1" class="btn waves-effect waves-light grey">Ändern</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include('@App/Profile/edit_profilepic_modal.html.twig') %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('select').material_select();
+        $('.modal').modal();
+
+        $('#person_pic').change(function (){
+            $('#person_pic_error_panel').hide();
+            var form = $('#person_pic_form');
+            var formData = new FormData(form[0]);
+            console.log(formData);
+            $.ajax({
+                type: 'POST',
+                url: '{{ path('ajax_upload_profile_pic', {person: person.id}) }}',
+                data: formData,
+                processData: false,
+                contentType: false,
+                cache: false,
+                dataType: 'json',
+                success: function(response) {
+                    if ('success' === response.status) {
+                        $('#person_person_pic').attr('src', response.pic);
+                        $('#person_pic').attr('src', response.pic);
+                    } else {
+                        $('#person_pic_error').html(response.error);
+                        $('#person_pic_error_panel').show();
+                    }
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

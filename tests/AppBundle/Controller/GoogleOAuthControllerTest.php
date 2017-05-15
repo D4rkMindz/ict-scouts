@@ -2,7 +2,6 @@
 
 namespace Tests\AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Client;
 use Tests\AppBundle\KernelTest;
 
 /**
@@ -13,9 +12,6 @@ use Tests\AppBundle\KernelTest;
  */
 class GoogleOAuthControllerTest extends KernelTest
 {
-    /** @var Client */
-    private $client = null;
-
     public function setUp()
     {
         parent::setup();

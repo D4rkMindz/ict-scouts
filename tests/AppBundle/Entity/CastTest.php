@@ -22,10 +22,10 @@ class CastTest extends KernelTest
         $this->assertNull($cast->getId());
         $this->assertEquals('https://hangouts.google.com', $cast->getUrl());
 
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $em->persist($cast);
-        $em->flush();
+        $entityManager->persist($cast);
+        $entityManager->flush();
 
         $cast->setUrl('https://example.com');
 

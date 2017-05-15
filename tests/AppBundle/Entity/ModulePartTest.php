@@ -2,14 +2,11 @@
 
 namespace Tests\AppBundle\Entity;
 
-use AppBundle\Entity\Address;
 use AppBundle\Entity\Camp;
 use AppBundle\Entity\Cast;
 use AppBundle\Entity\Module;
 use AppBundle\Entity\ModulePart;
-use AppBundle\Entity\Province;
 use AppBundle\Entity\Workshop;
-use AppBundle\Entity\Zip;
 use Tests\AppBundle\KernelTest;
 
 /**
@@ -24,24 +21,18 @@ class ModulePartTest extends KernelTest
      */
     public function testGetterAndSetter()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $province = new Province('Baselland', 'BL');
-        $zip = new Zip('4133', 'Pratteln');
-        $address = new Address($province, $zip, 'Hauptstrasse', '11');
-        $address1 = new Address($province, $zip, 'Hauptstrasse', '11');
         $module = new Module();
         $module->setName('Module 1');
-        $workshop = new Workshop('Great Workshop', $address1);
-        $camp = new Camp('Great Camp', $address);
-        $cast = new Cast('https://www.google.com');
+        $workshop = new Workshop('Great Workshop');
+        $camp = new Camp('Great Camp');
+        $cast = new Cast('https://hangouts.google.com');
 
-        $em->persist($address);
-        $em->persist($address1);
-        $em->persist($workshop);
-        $em->persist($camp);
-        $em->persist($cast);
-        $em->flush();
+        $entityManager->persist($workshop);
+        $entityManager->persist($camp);
+        $entityManager->persist($cast);
+        $entityManager->flush();
 
         $modulePart = new ModulePart();
         $modulePart->setName('Module 1 - Part 1');
@@ -57,8 +48,8 @@ class ModulePartTest extends KernelTest
         $this->assertEquals($camp, $modulePart->getCamp());
         $this->assertEquals($cast, $modulePart->getCast());
 
-        $em->persist($modulePart);
-        $em->flush();
+        $entityManager->persist($modulePart);
+        $entityManager->flush();
 
         $modulePart->setName('Module 1 - Part 1.1');
 

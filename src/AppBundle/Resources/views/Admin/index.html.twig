@@ -16,27 +16,15 @@
                     {#</div>#}
                 {#</div>#}
             {#</div>#}
-            <!-- Manage Modules -->
+            <!-- Userlist -->
             <div class="col s12 m4">
                 <div class="card blue-grey darken-1">
                     <div class="card-content white-text">
-                        <span class="card-title">Module Verwalten</span>
-                        <p>Verwalten der Module</p>
+                        <span class="card-title">Benutzer</span>
+                        <p>Zeigt eine Liste aller Benutzer.</p>
                     </div>
                     <div class="card-action">
-                        <a href="{{ url('admin.module.index') }}">Aktion ausführen</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Manage Schools -->
-            <div class="col s12 m4">
-                <div class="card blue-grey darken-1">
-                    <div class="card-content white-text">
-                        <span class="card-title">Schulen Verwalten</span>
-                        <p>Verwalten der Schulen</p>
-                    </div>
-                    <div class="card-action">
-                        <a href="{{ url('admin.school.index') }}">Aktion ausführen</a>
+                        <a href="{{ url('admin_user_index') }}">Aktion ausführen</a>
                     </div>
                 </div>
             </div>
@@ -44,7 +32,7 @@
             <div class="col s12 m4">
                 <div class="card blue-grey darken-1">
                     <div class="card-content white-text">
-                        <span class="card-title">Events Verwalten</span>
+                        <span class="card-title">Events</span>
                         <p>Verwalten der Events</p>
                     </div>
                     <div class="card-action">
@@ -52,20 +40,31 @@
                     </div>
                 </div>
             </div>
-            <!-- /Uspate users -->
-            {#<!-- Userlist -->#}
-            {#<div class="col s12 m4">#}
-                {#<div class="card blue-grey darken-1">#}
-                    {#<div class="card-content white-text">#}
-                        {#<span class="card-title">Benutzer Anzeigen</span>#}
-                        {#<p>Zeigt eine Liste aller Benutzer.</p>#}
-                    {#</div>#}
-                    {#<div class="card-action">#}
-                        {#<a href="{{ url('admin_user_sync') }}">Aktion ausführen</a>#}
-                    {#</div>#}
-                {#</div>#}
-            {#</div>#}
-            {#<!-- /Userlist -->#}
+            <!-- Manage Schools -->
+            <div class="col s12 m4">
+                <div class="card blue-grey darken-1">
+                    <div class="card-content white-text">
+                        <span class="card-title">Schulen</span>
+                        <p>Verwalten der Schulen</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="{{ url('admin.school.index') }}">Aktion ausführen</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Manage Modules -->
+            <div class="col s12 m4">
+                <div class="card blue-grey darken-1">
+                    <div class="card-content white-text">
+                        <span class="card-title">Module</span>
+                        <p>Verwalten der Module</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="{{ url('admin.module.index') }}">Aktion ausführen</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 {% endblock %}

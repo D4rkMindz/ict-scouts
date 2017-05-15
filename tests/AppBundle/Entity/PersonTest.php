@@ -9,36 +9,79 @@ use Tests\AppBundle\KernelTest;
  * Class PersonTest.
  *
  * @covers \AppBundle\Entity\Person
- *
- * @TODO: Rewrite test after rewriting Person-Entity.
  */
 class PersonTest extends KernelTest
 {
+    public function testGivenName()
+    {
+        $person = new Person('', '');
+
+        $this->assertEmpty($person->getGivenName());
+
+        $person->setGivenName('John');
+
+        $this->assertEquals('John', $person->getGivenName());
+    }
+
+    public function testFamilyName()
+    {
+        $person = new Person('', '');
+
+        $this->assertEmpty($person->getFamilyName());
+
+        $person->setFamilyName('Doe');
+
+        $this->assertEquals('Doe', $person->getFamilyName());
+    }
+
+    public function testPhone()
+    {
+        $person = new Person('', '');
+
+        $this->assertNull($person->getPhone());
+
+        $person->setPhone('+41 79 123 45 67');
+
+        $this->assertEquals('+41 79 123 45 67', $person->getPhone());
+    }
+
+    public function testMail()
+    {
+        $person = new Person('', '');
+
+        $this->assertNull($person->getMail());
+
+        $person->setMail('john.doe@example.com');
+
+        $this->assertEquals('john.doe@example.com', $person->getMail());
+    }
+
+    public function testBirthdate()
+    {
+        $birthDate = new \DateTime();
+
+        $person = new Person('', '');
+
+        $this->assertNull($person->getBirthDate());
+
+        $person->setBirthDate($birthDate);
+
+        $this->assertEquals($birthDate, $person->getBirthDate());
+    }
+
     /**
      * Tests getters and setters of Person class.
      */
-    public function testGetterAndSetter()
+    public function testId()
     {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $person = new Person('', '', 'Test Street 101');
-        $person->setGivenName('John');
-        $person->setFamilyName('Doe');
-        $person->setPhone('+41 79 123 45 67');
-        $person->setMail('john.doe@example.com');
-        $birthDate = new \DateTime();
-        $person->setBirthDate($birthDate);
+        $person = new Person('', '');
 
         $this->assertNull($person->getId());
-        $this->assertEquals('John', $person->getGivenName());
-        $this->assertEquals('Doe', $person->getFamilyName());
-        $this->assertEquals('Test Street 101', $person->getAddress());
-        $this->assertEquals('+41 79 123 45 67', $person->getPhone());
-        $this->assertEquals('john.doe@example.com', $person->getMail());
-        $this->assertEquals($birthDate, $person->getBirthDate());
 
-        $em->persist($person);
-        $em->flush();
+        $entityManager->persist($person);
+        $entityManager->flush();
 
         $this->assertEquals(1, $person->getId());
     }
@@ -48,7 +91,7 @@ class PersonTest extends KernelTest
      */
     public function testSerialization()
     {
-        $person = new Person('', '', '');
+        $person = new Person('', '');
         $person->setGivenName('John');
         $person->setFamilyName('Doe');
         $person->setPhone('+41 79 123 45 67');
@@ -60,10 +103,10 @@ class PersonTest extends KernelTest
 
         $this->assertTrue(is_string($serialized));
 
-        $newPerson = new Person('', '', '');
+        $newPerson = new Person('', '');
         $newPerson->unserialize($serialized);
 
-        $this->assertTrue($newPerson instanceof Person);
+        $this->assertInstanceOf(Person::class, $newPerson);
         $this->assertEquals(null, $newPerson->getId());
         $this->assertEquals('Doe', $newPerson->getFamilyName());
     }
