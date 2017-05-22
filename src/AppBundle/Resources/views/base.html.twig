@@ -13,6 +13,8 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="{{ asset('assets/vendor/materialize/dist/css/materialize.min.css') }}"
               type="text/css" media="screen,projection"/>
+        {#<link rel="stylesheet" href="{{ asset('bundles/app/css/select2.css') }}">#}
+        <link rel="stylesheet" href="{{ asset('bundles/app/css/select2-materialize.css') }}">
         {% block predict %}
             {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                 <link rel="preconnect" href="{{ path('login') }}">
@@ -49,8 +51,9 @@
     {% block javascripts %}
         <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
         <script src="{{ asset('assets/vendor/materialize/dist/js/materialize.min.js') }}"></script>
-        <script src="{{ asset('bundles/app/module.js') }}"></script>
-        <script src="{{ asset('bundles/app/app.js') }}"></script>
+        <script src="{{ asset('bundles/app/js/select2.full.min.js') }}"></script>
+        <script src="{{ asset('bundles/app/js/module.js') }}"></script>
+        <script src="{{ asset('bundles/app/js/app.js') }}"></script>
     {% endblock %}
     </body>
     </html>
