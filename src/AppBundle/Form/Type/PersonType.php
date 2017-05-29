@@ -27,7 +27,7 @@ class PersonType extends AbstractType
             ])
             ->add('street', null, [
                 'label'     => 'Adresse',
-                'required'  => true,
+                'required'  => false,
             ])
             ->add('addressExtra', null, [
                 'label'     => 'Adresszusatz',
