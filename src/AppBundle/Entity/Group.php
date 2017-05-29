@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\Role\RoleInterface;
+use Symfony\Component\Security\Core\Role\Role;
 
 /**
  * Class Group.
@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Role\RoleInterface;
  * @ORM\Table(name="app_group")
  * @ORM\Entity
  */
-class Group implements RoleInterface, \Serializable
+class Group extends Role implements \Serializable
 {
     /**
      * @var int
@@ -56,6 +56,7 @@ class Group implements RoleInterface, \Serializable
         $this->name = $name;
         $this->role = $role;
         $this->users = $this->users = new ArrayCollection();
+        parent::__construct($role);
     }
 
     /**
